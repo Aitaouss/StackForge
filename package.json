@@ -1,0 +1,56 @@
+{
+  "name": "create-fullstack-app",
+  "version": "1.0.0",
+  "description": "Scaffold a production-ready full-stack application with Next.js, NestJS, Prisma, Tailwind, shadcn/ui, JWT and Docker.",
+  "main": "dist/src/index.js",
+  "bin": {
+    "create-fullstack-app": "./bin/create-fullstack-app.js"
+  },
+  "files": [
+    "dist/",
+    "bin/",
+    "templates/"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run clean && pnpm run build"
+  },
+  "keywords": [
+    "cli",
+    "fullstack",
+    "nextjs",
+    "nestjs",
+    "prisma",
+    "tailwind",
+    "shadcn",
+    "jwt",
+    "docker",
+    "scaffold"
+  ],
+  "author": "StackForge",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^12.1.0",
+    "ejs": "^3.1.10",
+    "execa": "^5.1.1",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1",
+    "validate-npm-package-name": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.14.0",
+    "@types/validate-npm-package-name": "^4.0.2",
+    "typescript": "^5.4.5"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

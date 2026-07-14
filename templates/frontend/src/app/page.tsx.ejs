@@ -1,0 +1,114 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { usersService, User } from '@/services/users.service';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
+export default function HomePage() {
+  const router = useRouter();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    usersService
+      .getUsers()
+      .then((data) => {
+        setUsers(data);
+      })
+      .catch((err) => {
+        setError(err?.response?.data?.message || 'Failed to load users');
+        if (err?.response?.status === 401) {
+          localStorage.removeItem('token');
+          router.push('/login');
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/login');
+  };
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen items-center justify-center">
+        <p>Loading...</p>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-background p-8">
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold"><%= projectName %></h1>
+            <p className="text-muted-foreground"><%= projectDescription %></p>
+          </div>
+          <div className="flex gap-4">
+            <Link href="/register">
+              <Button variant="outline">Register</Button>
+            </Link>
+            <Button onClick={handleLogout} variant="destructive">
+              Logout
+            </Button>
+          </div>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Users</CardTitle>
+            <CardDescription>
+              List of registered users fetched from the backend.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {error ? (
+              <p className="text-destructive">{error}</p>
+            ) : users.length === 0 ? (
+              <p className="text-muted-foreground">No users found.</p>
+            ) : (
+              <ul className="space-y-3">
+                {users.map((user) => (
+                  <li
+                    key={user.id}
+                    className="flex items-center justify-between rounded-lg border p-4"
+                  >
+                    <div>
+                      <p className="font-medium">{user.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </main>
+  );
+}

@@ -1,0 +1,57 @@
+services:
+<% if (database === 'postgresql') { %>
+  postgres:
+    image: postgres:16-alpine
+    container_name: <%= projectName %>-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+<% } %>
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: <%= projectName %>-backend
+    environment:
+      DATABASE_URL: <%= dockerDatabaseUrl %>
+      JWT_SECRET: <%= jwtSecret %>
+      PORT: 3001
+    ports:
+      - "3001:3001"
+<% if (database === 'postgresql') { %>
+    depends_on:
+      postgres:
+        condition: service_healthy
+<% } %>
+    command: >
+      sh -c "pnpm --filter ./backend run db:deploy && node backend/dist/main"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=http://localhost:3001
+    container_name: <%= projectName %>-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - "3002:3000"
+    depends_on:
+      - backend
+
+<% if (database === 'postgresql') { %>
+volumes:
+  postgres_data:
+<% } %>

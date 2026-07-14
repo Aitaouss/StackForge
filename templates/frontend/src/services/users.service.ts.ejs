@@ -1,0 +1,20 @@
+import api from './api';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
+export const usersService = {
+  async getUsers() {
+    const response = await api.get<User[]>('/users');
+    return response.data;
+  },
+
+  async getUser(id: string) {
+    const response = await api.get<User>(`/users/${id}`);
+    return response.data;
+  },
+};

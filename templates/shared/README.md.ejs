@@ -1,0 +1,131 @@
+# <%= projectName %>
+
+<%= projectDescription %>
+
+## Stack
+
+- **Frontend:** [Next.js](https://nextjs.org/) (App Router) + TypeScript + Tailwind CSS + shadcn/ui
+- **Backend:** [NestJS](https://nestjs.com/) + TypeScript + Prisma + JWT
+- **Database:** <%= database === 'postgresql' ? 'PostgreSQL' : 'SQLite' %>
+- **HTTP Client:** Axios
+- **Package Manager:** pnpm
+- **Containerization:** Docker (optional)
+
+## Project Structure
+
+```
+<%= projectName %>
+├── backend/          # NestJS application
+├── frontend/         # Next.js application
+├── docker-compose.yml
+├── README.md
+└── .env.example
+```
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 18
+- [pnpm](https://pnpm.io/)
+<% if (database === 'postgresql') { %>- [Docker](https://www.docker.com/) (optional, for PostgreSQL)<% } %>
+
+### Install Dependencies
+
+```bash
+pnpm install
+```
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and update the values:
+
+```bash
+cp .env.example .env
+```
+
+<% if (database === 'postgresql') { %>
+### Option 1: Run with Docker
+
+Start all services:
+
+```bash
+docker compose up -d
+```
+
+This starts PostgreSQL, the backend, and the frontend.
+
+### Option 2: Run Locally
+
+1. Start PostgreSQL (or use the Docker Compose file for just the database):
+
+```bash
+docker compose up -d postgres
+```
+
+2. Apply database migrations:
+
+```bash
+cd backend
+pnpm prisma migrate dev
+```
+
+3. Start the development servers:
+
+```bash
+# From the project root
+pnpm dev
+```
+<% } else { %>
+### Run Locally
+
+1. Set up the database:
+
+```bash
+cd backend
+pnpm prisma migrate dev
+```
+
+2. Start the development servers:
+
+```bash
+# From the project root
+pnpm dev
+```
+
+### Run with Docker
+
+```bash
+docker compose up -d
+```
+<% } %>
+
+## Development URLs
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:3001
+- API Docs: http://localhost:3001/docs
+
+## API Endpoints
+
+| Method | Endpoint        | Description              | Protected |
+|--------|----------------|--------------------------|-----------|
+| POST   | /auth/register | Register a new user      | No        |
+| POST   | /auth/login    | Authenticate a user      | No        |
+| GET    | /users         | List all users           | Yes       |
+| GET    | /users/:id     | Get a user by ID         | Yes       |
+
+## Scripts
+
+- `pnpm dev` - Start frontend and backend in development mode
+- `pnpm build` - Build both applications
+- `pnpm docker:up` - Start Docker services
+- `pnpm docker:down` - Stop Docker services
+
+## Authentication
+
+The application uses JWT-based authentication. After logging in, the access token is stored in `localStorage` and automatically attached to API requests via an Axios interceptor.
+
+## License
+
+MIT

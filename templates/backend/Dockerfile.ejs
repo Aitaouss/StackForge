@@ -1,0 +1,34 @@
+FROM node:22-slim AS builder
+
+WORKDIR /app
+
+RUN apt-get update -y && apt-get install -y openssl
+RUN corepack enable && corepack prepare pnpm@9 --activate
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json ./backend/
+RUN pnpm install --frozen-lockfile
+
+COPY backend ./backend
+RUN pnpm --filter ./backend run build
+
+FROM node:22-slim AS runner
+
+WORKDIR /app
+
+RUN apt-get update -y && apt-get install -y openssl
+RUN corepack enable && corepack prepare pnpm@9 --activate
+
+ENV NODE_ENV=production
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json ./backend/
+COPY --from=builder /app/backend/prisma ./backend/prisma
+RUN pnpm install --frozen-lockfile --prod
+RUN pnpm --filter ./backend run db:generate
+
+COPY --from=builder /app/backend/dist ./backend/dist
+
+EXPOSE 3001
+
+CMD ["node", "backend/dist/main"]
