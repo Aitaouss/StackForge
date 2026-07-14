@@ -74,10 +74,12 @@ async function runStep<T>(
 }
 
 async function installDependencies(cwd: string): Promise<void> {
-  await execa('pnpm', ['install'], {
-    cwd,
-    stdio: 'ignore',
-  });
+  try {
+    await execa('corepack', ['enable'], { cwd, stdio: 'ignore' });
+  } catch {
+    // corepack may already be enabled or unavailable; pnpm install below will surface real errors
+  }
+  await execa('pnpm', ['install'], { cwd, stdio: 'ignore' });
 }
 
 async function runPrismaGenerate(cwd: string): Promise<void> {

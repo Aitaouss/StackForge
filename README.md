@@ -19,6 +19,17 @@ A production-ready CLI scaffolding tool that generates a full-stack application 
 npx create-stackforge-app
 ```
 
+### Requirements for generated projects
+
+The generated projects use [pnpm](https://pnpm.io/) workspaces. Node.js includes [corepack](https://nodejs.org/api/corepack.html), which installs pnpm automatically. If you see a "pnpm: command not found" error, run:
+
+```bash
+corepack enable
+corepack prepare pnpm@9 --activate
+```
+
+Then `pnpm install`, `pnpm dev`, etc. will work.
+
 You will be prompted for:
 
 - Project name
@@ -41,6 +52,8 @@ my-app/
 ## Development
 
 ### Install dependencies
+
+Make sure pnpm is available (see [corepack](https://nodejs.org/api/corepack.html)):
 
 ```bash
 pnpm install

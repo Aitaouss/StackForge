@@ -27,8 +27,10 @@
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) >= 18
-- [pnpm](https://pnpm.io/)
+- [pnpm](https://pnpm.io/) (installed automatically via [corepack](https://nodejs.org/api/corepack.html))
 <% if (database === 'postgresql') { %>- [Docker](https://www.docker.com/) (optional, for PostgreSQL)<% } %>
+
+> **Don't have pnpm?** Node.js includes corepack. Run `corepack enable` once, then `pnpm install` will automatically download the correct pnpm version.
 
 ### Install Dependencies
 
@@ -105,6 +107,8 @@ docker compose up -d
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:3001
 - API Docs: http://localhost:3001/docs
+
+> If you changed the frontend port in `docker-compose.yml`, use that port instead.
 
 ## API Endpoints
 
