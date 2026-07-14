@@ -1,4 +1,4 @@
-# create-fullstack-app
+# create-stackforge-app
 
 A production-ready CLI scaffolding tool that generates a full-stack application with Next.js (App Router), NestJS, Prisma, PostgreSQL/SQLite, Tailwind CSS, shadcn/ui, JWT authentication, Axios, Docker, and pnpm.
 
@@ -16,7 +16,7 @@ A production-ready CLI scaffolding tool that generates a full-stack application 
 ## Usage
 
 ```bash
-npx create-fullstack-app
+npx create-stackforge-app
 ```
 
 You will be prompted for:
@@ -55,7 +55,7 @@ pnpm run build
 ### Run locally
 
 ```bash
-node ./bin/create-fullstack-app.js
+node ./bin/create-stackforge-app.js
 ```
 
 ## License

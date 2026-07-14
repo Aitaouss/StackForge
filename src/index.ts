@@ -6,7 +6,7 @@ import { registerCreateCommand } from './commands/create.js';
 const program = new Command();
 
 program
-  .name('create-fullstack-app')
+  .name('create-stackforge-app')
   .description('Scaffold a production-ready full-stack application')
   .version('1.0.0');
 

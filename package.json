@@ -1,10 +1,10 @@
 {
-  "name": "create-fullstack-app",
+  "name": "create-stackforge-app",
   "version": "1.0.0",
   "description": "Scaffold a production-ready full-stack application with Next.js, NestJS, Prisma, Tailwind, shadcn/ui, JWT and Docker.",
   "main": "dist/src/index.js",
   "bin": {
-    "create-fullstack-app": "./bin/create-fullstack-app.js"
+    "create-stackforge-app": "./bin/create-stackforge-app.js"
   },
   "files": [
     "dist/",
