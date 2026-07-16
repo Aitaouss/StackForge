@@ -5,8 +5,8 @@
   "private": true,
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "dev": "concurrently \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\"",
-    "build": "pnpm --filter backend build && pnpm --filter frontend build",
+    "dev": "concurrently \"pnpm --filter ./backend dev\" \"pnpm --filter ./frontend dev\"",
+    "build": "pnpm --filter ./backend build && pnpm --filter ./frontend build",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down"
   },
