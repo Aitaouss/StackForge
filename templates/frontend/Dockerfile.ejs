@@ -23,6 +23,7 @@ RUN corepack enable && corepack prepare pnpm@9 --activate
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3002
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY frontend/package.json ./frontend/
@@ -32,6 +33,6 @@ COPY --from=builder /app/frontend/.next ./frontend/.next
 COPY --from=builder /app/frontend/public ./frontend/public
 COPY --from=builder /app/frontend/package.json ./frontend/package.json
 
-EXPOSE 3000
+EXPOSE 3002
 
 CMD ["pnpm", "--filter", "./frontend", "start"]

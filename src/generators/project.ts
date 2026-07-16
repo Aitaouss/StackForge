@@ -118,7 +118,7 @@ function printSuccess(config: ProjectConfig): void {
 
   info('  pnpm dev');
   info('');
-  info('Frontend: http://localhost:3000');
+  info('Frontend: http://localhost:3002');
   info('Backend API: http://localhost:3001');
   info('API Docs: http://localhost:3001/docs');
 }

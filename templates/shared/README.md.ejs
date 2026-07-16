@@ -55,7 +55,7 @@ Start all services:
 docker compose up -d
 ```
 
-This starts PostgreSQL, the backend, and the frontend.
+This starts PostgreSQL, the backend, and the frontend. The database schema is applied automatically on first start.
 
 ### Option 2: Run Locally
 
@@ -104,11 +104,9 @@ docker compose up -d
 
 ## Development URLs
 
-- Frontend: http://localhost:3000
+- Frontend: http://localhost:3002
 - Backend API: http://localhost:3001
 - API Docs: http://localhost:3001/docs
-
-> If you changed the frontend port in `docker-compose.yml`, use that port instead.
 
 ## API Endpoints
 
