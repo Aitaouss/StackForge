@@ -16,7 +16,7 @@ A production-ready CLI scaffolding tool that generates a full-stack application 
 ## Usage
 
 ```bash
-npx create-stackforge-app
+npx create-stackforge-app@latest
 ```
 
 ### Requirements for generated projects
