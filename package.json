@@ -1,6 +1,6 @@
 {
   "name": "create-stackforge-app",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Scaffold a production-ready full-stack application with Next.js, NestJS, Prisma, Tailwind, shadcn/ui, JWT and Docker.",
   "main": "dist/src/index.js",
   "bin": {
