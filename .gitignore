@@ -21,3 +21,6 @@ Thumbs.db
 # Test artifacts
 /tmp/
 *.tmp
+
+# Local npm registry auth (never commit)
+.npmrc

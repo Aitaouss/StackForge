@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Publish Package
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  publish:
+  publish-npm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,4 +41,50 @@ jobs:
           fi
 
           echo "Publishing $PACKAGE_NAME@$VERSION..."
+          npm publish --access public
+
+  publish-github-packages:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@aitaouss'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          SCOPED_NAME="@${OWNER}/${PACKAGE_NAME}"
+
+          # GitHub Packages requires a scoped package name (change is local to the runner)
+          npm pkg set name="$SCOPED_NAME"
+
+          if npm view "$SCOPED_NAME@$VERSION" version &> /dev/null; then
+            echo "$SCOPED_NAME@$VERSION is already published. Skipping."
+            exit 0
+          fi
+
+          echo "Publishing $SCOPED_NAME@$VERSION..."
           npm publish --access public
