@@ -55,7 +55,9 @@ Start all services:
 docker compose up -d
 ```
 
-This starts PostgreSQL, the backend, and the frontend. The database schema is applied automatically on first start.
+This starts PostgreSQL, Prisma Studio, the backend, and the frontend. The database schema is applied automatically on first start.
+
+> **Prisma Studio** (visual database editor) is available at http://localhost:5555
 
 ### Option 2: Run Locally
 
@@ -95,6 +97,8 @@ pnpm prisma migrate dev
 pnpm dev
 ```
 
+> **Tip:** Run `pnpm db:studio` inside `backend/` to open Prisma Studio (visual database editor) at http://localhost:5555
+
 ### Run with Docker
 
 ```bash
@@ -107,6 +111,7 @@ docker compose up -d
 - Frontend: http://localhost:3002
 - Backend API: http://localhost:3001
 - API Docs: http://localhost:3001/docs
+- Prisma Studio: http://localhost:5555<% if (database === 'postgresql') { %> (with `docker compose up -d`)<% } else { %> (run `pnpm db:studio` in `backend/`)<% } %>
 
 ## API Endpoints
 
