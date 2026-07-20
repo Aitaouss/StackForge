@@ -38,6 +38,23 @@ services:
     command: >
       sh -c "pnpm --filter ./backend run db:push && node backend/dist/main"
 
+<% if (database === 'postgresql') { %>
+  prisma-studio:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: <%= projectName %>-prisma-studio
+    environment:
+      DATABASE_URL: <%= dockerDatabaseUrl %>
+    ports:
+      - "5555:5555"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "pnpm --filter ./backend exec prisma studio --port 5555 --hostname 0.0.0.0 --browser none"
+
+<% } %>
   frontend:
     build:
       context: .
