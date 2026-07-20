@@ -121,4 +121,9 @@ function printSuccess(config: ProjectConfig): void {
   info('Frontend: http://localhost:3002');
   info('Backend API: http://localhost:3001');
   info('API Docs: http://localhost:3001/docs');
+  if (config.database === 'postgresql' && config.docker) {
+    info('Prisma Studio: http://localhost:5555 (via docker compose up -d)');
+  } else {
+    info("Prisma Studio: http://localhost:5555 (run 'pnpm db:studio' in backend/)");
+  }
 }
