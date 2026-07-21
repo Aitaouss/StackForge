@@ -39,6 +39,26 @@ You will be prompted for:
 - Docker support
 - Automatic dependency installation
 
+### Non-interactive mode
+
+Skip prompts entirely with `-y/--yes`, or pass individual flags to skip only those prompts:
+
+```bash
+# Defaults: PostgreSQL + Docker + auto-install
+npx create-stackforge-app@latest my-app -y
+
+# Custom, no prompts
+npx create-stackforge-app@latest my-app -y --database sqlite --no-docker --no-install
+```
+
+| Flag | Description |
+| ---- | ----------- |
+| `-d, --database <type>` | Database: `postgresql` or `sqlite` |
+| `--docker` / `--no-docker` | Generate or skip Docker support |
+| `--install` / `--no-install` | Install dependencies automatically or skip |
+| `-y, --yes` | Skip all prompts and use defaults |
+| `-c, --cwd <path>` | Working directory |
+
 ## Generated Project Structure
 
 ```
