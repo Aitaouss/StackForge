@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #09090b;
+  --foreground: #fafafa;
+
+  /* Custom scrollbar — use class .myscroll on scrollable containers */
+  --myscroll-size: 8px;
+  --myscroll-track: rgba(24, 24, 27, 0.6);
+  --myscroll-thumb: rgba(63, 63, 70, 0.95);
+  --myscroll-thumb-hover: rgba(16, 185, 129, 0.55);
+  --myscroll-thumb-active: rgba(45, 212, 191, 0.7);
+  --myscroll-radius: 9999px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+.grid-pattern {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.06) 1px,
+    transparent 0
+  );
+  background-size: 32px 32px;
+}
+
+.glass {
+  @apply border border-white/10 bg-zinc-900/40 backdrop-blur-md;
+}
+
+.myscroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--myscroll-thumb) var(--myscroll-track);
+}
+
+.myscroll::-webkit-scrollbar {
+  width: var(--myscroll-size);
+  height: var(--myscroll-size);
+}
+
+.myscroll::-webkit-scrollbar-track {
+  background: var(--myscroll-track);
+  border-radius: var(--myscroll-radius);
+}
+
+.myscroll::-webkit-scrollbar-thumb {
+  background: var(--myscroll-thumb);
+  border-radius: var(--myscroll-radius);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.myscroll::-webkit-scrollbar-thumb:hover {
+  background: var(--myscroll-thumb-hover);
+  background-clip: padding-box;
+}
+
+.myscroll::-webkit-scrollbar-thumb:active {
+  background: var(--myscroll-thumb-active);
+  background-clip: padding-box;
+}
+
+.myscroll::-webkit-scrollbar-corner {
+  background: var(--myscroll-track);
+}
