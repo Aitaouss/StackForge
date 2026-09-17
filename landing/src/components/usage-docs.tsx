@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CommandBlock } from "./command-block";
 
 export function UsageDocs() {
@@ -8,7 +9,10 @@ export function UsageDocs() {
           How to use create-stackforge-app
         </h2>
         <p className="mt-4 max-w-2xl text-zinc-400">
-          Install nothing globally—run via npx. Generated apps use pnpm workspaces (Node 18+).
+          Install nothing globally—run via npx. Generated apps use pnpm workspaces (Node 18+).{" "}
+          <Link href="/docs" className="text-emerald-400 underline underline-offset-2 hover:text-emerald-300">
+            Full documentation →
+          </Link>
         </p>
 
         <div className="mt-12 space-y-10">

@@ -3,10 +3,10 @@ import Link from "next/link";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
 
 const NAV = [
-  { href: "#features", label: "Features" },
-  { href: "#architecture", label: "Architecture" },
-  { href: "#cli", label: "CLI Flags" },
-  { href: "#usage", label: "Docs" },
+  { href: "/#features", label: "Features" },
+  { href: "/#architecture", label: "Architecture" },
+  { href: "/#cli", label: "CLI Flags" },
+  { href: "/docs", label: "Docs" },
 ] as const;
 
 const NPM_URL = "https://www.npmjs.com/package/create-stackforge-app";
@@ -33,13 +33,13 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Main">
           {NAV.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className="text-sm text-zinc-400 transition-colors hover:text-zinc-100"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

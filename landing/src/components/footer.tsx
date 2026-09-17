@@ -25,9 +25,9 @@ export function Footer() {
           <Link href={GITHUB_URL} className="text-zinc-400 hover:text-emerald-300">
             Source on GitHub
           </Link>
-          <a href="#usage" className="text-zinc-400 hover:text-emerald-300">
+          <Link href="/docs" className="text-zinc-400 hover:text-emerald-300">
             Documentation
-          </a>
+          </Link>
         </nav>
       </div>
       <div className="mx-auto mt-10 max-w-6xl space-y-2 text-center text-xs">

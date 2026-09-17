@@ -327,6 +327,6 @@ Invalid \`--database\` values must be \`postgresql\` or \`sqlite\`.`,
     id: "docs",
     keywords: ["documentation", "docs", "readme", "help", "learn more"],
     questions: ["Where is the documentation?"],
-    answer: `On this page, scroll to **Docs** (#usage) for install and run steps. Full CLI details are in the repo [README](${GITHUB_REPO_URL}) and the npm package page.`,
+    answer: `Read the **[documentation](/docs)** on this site for CLI flags, structure, and troubleshooting. The repo [README](${GITHUB_REPO_URL}) and [npm package](${NPM_PACKAGE_URL}) have the same reference material.`,
   },
 ];
