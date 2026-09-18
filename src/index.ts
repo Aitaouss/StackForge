@@ -8,7 +8,7 @@ const program = new Command();
 program
   .name('create-stackforge-app')
   .description('Scaffold a production-ready full-stack application')
-  .version('1.0.9');
+  .version('1.0.10');
 
 registerCreateCommand(program);
 
