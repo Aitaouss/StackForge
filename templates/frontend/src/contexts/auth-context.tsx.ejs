@@ -1,0 +1,63 @@
+'use client';
+
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useRouter } from 'next/navigation';
+import { clearSession, getStoredUser } from '@/lib/auth-cookie';
+
+export type AuthUser = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type AuthContextValue = {
+  user: AuthUser | null;
+  isLoading: boolean;
+  logout: () => void;
+  setUser: (user: AuthUser) => void;
+};
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const [user, setUserState] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setUserState(getStoredUser());
+    setIsLoading(false);
+  }, []);
+
+  const setUser = useCallback((next: AuthUser) => {
+    setUserState(next);
+  }, []);
+
+  const logout = useCallback(() => {
+    clearSession();
+    setUserState(null);
+    router.push('/login');
+  }, [router]);
+
+  const value = useMemo(
+    () => ({ user, isLoading, logout, setUser }),
+    [user, isLoading, logout, setUser],
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return ctx;
+}

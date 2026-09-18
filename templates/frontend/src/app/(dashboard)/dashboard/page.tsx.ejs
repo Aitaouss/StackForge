@@ -1,0 +1,303 @@
+'use client';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Activity,
+  ArrowUpDown,
+  CheckCircle2,
+  MoreHorizontal,
+  Search,
+  UserPlus,
+  Users,
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { usersService, User } from '@/services/users.service';
+import { useAuth } from '@/contexts/auth-context';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
+type SortKey = 'name' | 'email' | 'createdAt';
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .map((p) => p[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+function MetricCardSkeleton() {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-8 w-8 rounded-md" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-8 w-16" />
+        <Skeleton className="mt-2 h-3 w-32" />
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function DashboardPage() {
+  const { isLoading: authLoading } = useAuth();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [sortKey, setSortKey] = useState<SortKey>('createdAt');
+  const [sortAsc, setSortAsc] = useState(false);
+
+  const loadUsers = useCallback(() => {
+    setLoading(true);
+    usersService
+      .getUsers()
+      .then(setUsers)
+      .catch(() => toast.error('Failed to load users'))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!authLoading) {
+      loadUsers();
+    }
+  }, [authLoading, loadUsers]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = users;
+    if (q) {
+      list = list.filter(
+        (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q),
+      );
+    }
+    return [...list].sort((a, b) => {
+      const av = sortKey === 'createdAt' ? new Date(a.createdAt).getTime() : a[sortKey];
+      const bv = sortKey === 'createdAt' ? new Date(b.createdAt).getTime() : b[sortKey];
+      if (av < bv) return sortAsc ? -1 : 1;
+      if (av > bv) return sortAsc ? 1 : -1;
+      return 0;
+    });
+  }, [users, query, sortKey, sortAsc]);
+
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortAsc((v) => !v);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
+  const totalUsers = users.length;
+  const activeSessions = Math.max(1, Math.round(totalUsers * 0.6));
+
+  return (
+    <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
+        <p className="text-sm text-muted-foreground">
+          Monitor workspace activity and manage team members.
+        </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        {loading ? (
+          <>
+            <MetricCardSkeleton />
+            <MetricCardSkeleton />
+            <MetricCardSkeleton />
+          </>
+        ) : (
+          <>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                <Users className="h-4 w-4 text-emerald-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalUsers}</div>
+                <Badge variant="success" className="mt-2">
+                  +{totalUsers} registered
+                </Badge>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+                <Activity className="h-4 w-4 text-cyan-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{activeSessions}</div>
+                <p className="mt-2 text-xs text-muted-foreground">Estimated from recent activity</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">System Health</CardTitle>
+                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">Operational</div>
+                <Badge variant="success" className="mt-2">
+                  All services up
+                </Badge>
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </div>
+
+      <Card id="users">
+        <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <CardTitle>Users</CardTitle>
+            <p className="text-sm text-muted-foreground">Search, sort, and manage members.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <div className="relative min-w-[200px] flex-1 sm:w-64 sm:flex-none">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search users..."
+                className="pl-9"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => toast.message('Export started', { description: 'CSV download queued.' })}
+            >
+              Export
+            </Button>
+            <Button onClick={() => toast.info('Invite flow', { description: 'Connect your invite API here.' })}>
+              <UserPlus className="mr-2 h-4 w-4" />
+              Invite user
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 w-full" />
+              ))}
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Member</TableHead>
+                  <TableHead>
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 hover:text-foreground"
+                      onClick={() => toggleSort('email')}
+                    >
+                      Email
+                      <ArrowUpDown className="h-3.5 w-3.5" />
+                    </button>
+                  </TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 hover:text-foreground"
+                      onClick={() => toggleSort('createdAt')}
+                    >
+                      Joined
+                      <ArrowUpDown className="h-3.5 w-3.5" />
+                    </button>
+                  </TableHead>
+                  <TableHead className="w-12" />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filtered.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                      No users match your search.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filtered.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9">
+                            <AvatarFallback className="bg-emerald-500/10 text-emerald-400">
+                              {initials(user.name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="font-medium">{user.name}</p>
+                            <Badge variant="secondary" className="mt-0.5">
+                              Member
+                            </Badge>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-mono text-xs text-muted-foreground">
+                        {user.email}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="success">Active</Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" aria-label="Row actions">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => {
+                                navigator.clipboard.writeText(user.email);
+                                toast.success('Email copied');
+                              }}
+                            >
+                              Copy email
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled>View profile</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      <section id="settings" className="rounded-lg border border-dashed border-border/40 p-6 text-sm text-muted-foreground">
+        Settings and team preferences can be configured here.
+      </section>
+    </div>
+  );
+}

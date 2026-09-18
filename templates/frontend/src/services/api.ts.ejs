@@ -27,6 +27,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      document.cookie = 'token=; path=/; max-age=0; SameSite=Lax';
     }
     return Promise.reject(error);
   },

@@ -1,0 +1,91 @@
+import Link from 'next/link';
+import { ArrowRight, Database, Layers, Shield, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+const features = [
+  {
+    icon: Layers,
+    title: 'Full-stack monorepo',
+    description: 'Next.js frontend and NestJS API with shared conventions and typed clients.',
+  },
+  {
+    icon: Shield,
+    title: 'JWT authentication',
+    description: 'Register, login, protected routes, and session handling out of the box.',
+  },
+  {
+    icon: Database,
+    title: 'Prisma ORM',
+    description: 'PostgreSQL or SQLite with migrations and a ready-to-extend schema.',
+  },
+];
+
+export default function MarketingPage() {
+  return (
+    <div className="relative min-h-screen overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 grid-pattern opacity-40" aria-hidden />
+      <div
+        className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[640px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[120px]"
+        aria-hidden
+      />
+
+      <header className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-6 sm:px-6">
+        <div className="flex items-center gap-2 font-semibold">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+            <%= projectName.charAt(0).toUpperCase() %>
+          </span>
+          <%= projectName %>
+        </div>
+        <div className="flex gap-2">
+          <Button variant="ghost" asChild>
+            <Link href="/login">Sign in</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/register">Get started</Link>
+          </Button>
+        </div>
+      </header>
+
+      <main className="relative mx-auto max-w-6xl px-4 pb-20 pt-10 sm:px-6 sm:pt-16">
+        <section className="mx-auto max-w-3xl text-center">
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+            <Sparkles className="h-3.5 w-3.5" />
+            Production-ready starter
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            <%= projectDescription %>
+          </h1>
+          <p className="mt-6 text-lg text-muted-foreground">
+            Ship faster with authentication, API integration, and a polished dashboard UI already
+            in place.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <Button size="lg" asChild>
+              <Link href="/register">
+                Start building
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/login">Sign in to dashboard</Link>
+            </Button>
+          </div>
+        </section>
+
+        <section className="mt-20 grid gap-4 sm:grid-cols-3">
+          {features.map((feature) => (
+            <Card key={feature.title} className="border-border/40 bg-card/60 backdrop-blur-sm">
+              <CardHeader>
+                <feature.icon className="h-8 w-8 text-emerald-400" />
+                <CardTitle className="text-lg">{feature.title}</CardTitle>
+                <CardDescription>{feature.description}</CardDescription>
+              </CardHeader>
+              <CardContent />
+            </Card>
+          ))}
+        </section>
+      </main>
+    </div>
+  );
+}

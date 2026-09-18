@@ -24,6 +24,10 @@ export async function generateFrontend(
     { template: '.env.local.ejs', output: path.join(frontendDir, '.env.local') },
     { template: '.env.local.example.ejs', output: path.join(frontendDir, '.env.local.example') },
     {
+      template: 'src/middleware.ts.ejs',
+      output: path.join(frontendDir, 'src', 'middleware.ts'),
+    },
+    {
       template: 'src/app/globals.css.ejs',
       output: path.join(frontendDir, 'src', 'app', 'globals.css'),
     },
@@ -32,20 +36,60 @@ export async function generateFrontend(
       output: path.join(frontendDir, 'src', 'app', 'layout.tsx'),
     },
     {
-      template: 'src/app/page.tsx.ejs',
-      output: path.join(frontendDir, 'src', 'app', 'page.tsx'),
+      template: 'src/app/(marketing)/page.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(marketing)', 'page.tsx'),
     },
     {
-      template: 'src/app/login/page.tsx.ejs',
-      output: path.join(frontendDir, 'src', 'app', 'login', 'page.tsx'),
+      template: 'src/app/(auth)/layout.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(auth)', 'layout.tsx'),
     },
     {
-      template: 'src/app/register/page.tsx.ejs',
-      output: path.join(frontendDir, 'src', 'app', 'register', 'page.tsx'),
+      template: 'src/app/(auth)/login/page.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(auth)', 'login', 'page.tsx'),
+    },
+    {
+      template: 'src/app/(auth)/register/page.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(auth)', 'register', 'page.tsx'),
+    },
+    {
+      template: 'src/app/(dashboard)/layout.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(dashboard)', 'layout.tsx'),
+    },
+    {
+      template: 'src/app/(dashboard)/dashboard/page.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(dashboard)', 'dashboard', 'page.tsx'),
     },
     {
       template: 'src/lib/utils.ts.ejs',
       output: path.join(frontendDir, 'src', 'lib', 'utils.ts'),
+    },
+    {
+      template: 'src/lib/auth-cookie.ts.ejs',
+      output: path.join(frontendDir, 'src', 'lib', 'auth-cookie.ts'),
+    },
+    {
+      template: 'src/contexts/auth-context.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'contexts', 'auth-context.tsx'),
+    },
+    {
+      template: 'src/components/providers.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'providers.tsx'),
+    },
+    {
+      template: 'src/components/theme-provider.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'theme-provider.tsx'),
+    },
+    {
+      template: 'src/components/theme-toggle.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'theme-toggle.tsx'),
+    },
+    {
+      template: 'src/components/password-input.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'password-input.tsx'),
+    },
+    {
+      template: 'src/components/dashboard-header.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'dashboard-header.tsx'),
     },
     {
       template: 'src/components/ui/button.tsx.ejs',
@@ -62,6 +106,34 @@ export async function generateFrontend(
     {
       template: 'src/components/ui/label.tsx.ejs',
       output: path.join(frontendDir, 'src', 'components', 'ui', 'label.tsx'),
+    },
+    {
+      template: 'src/components/ui/avatar.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'avatar.tsx'),
+    },
+    {
+      template: 'src/components/ui/badge.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'badge.tsx'),
+    },
+    {
+      template: 'src/components/ui/skeleton.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'skeleton.tsx'),
+    },
+    {
+      template: 'src/components/ui/separator.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'separator.tsx'),
+    },
+    {
+      template: 'src/components/ui/dropdown-menu.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'dropdown-menu.tsx'),
+    },
+    {
+      template: 'src/components/ui/table.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'table.tsx'),
+    },
+    {
+      template: 'src/components/ui/sonner.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'ui', 'sonner.tsx'),
     },
     {
       template: 'src/services/api.ts.ejs',
