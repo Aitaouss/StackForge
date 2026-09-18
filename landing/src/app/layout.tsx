@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   title: "StackForge — create-stackforge-app",
   description:
     "Production-ready CLI to scaffold Next.js, NestJS, Prisma, Tailwind, shadcn/ui, JWT auth, and Docker in seconds.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }],
+  },
   openGraph: {
     title: "StackForge — Ship full-stack apps in seconds",
     description:
