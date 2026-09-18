@@ -1,0 +1,28 @@
+const TOKEN_KEY = 'token';
+const USER_KEY = 'user';
+const MAX_AGE = 60 * 60 * 24 * 7;
+
+export function setSession(token: string, user: { id: string; name: string; email: string }) {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  document.cookie = `${TOKEN_KEY}=${encodeURIComponent(token)}; path=/; max-age=${MAX_AGE}; SameSite=Lax`;
+}
+
+export function clearSession() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+  document.cookie = `${TOKEN_KEY}=; path=/; max-age=0; SameSite=Lax`;
+}
+
+export function getStoredUser(): { id: string; name: string; email: string } | null {
+  if (typeof window === 'undefined') return null;
+  const raw = localStorage.getItem(USER_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as { id: string; name: string; email: string };
+  } catch {
+    return null;
+  }
+}

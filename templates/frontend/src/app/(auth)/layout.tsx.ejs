@@ -1,0 +1,46 @@
+import Link from 'next/link';
+import { Sparkles } from 'lucide-react';
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="grid min-h-screen lg:grid-cols-2">
+      <div className="relative hidden overflow-hidden border-r border-border/40 bg-zinc-950 lg:flex lg:flex-col lg:justify-between">
+        <div className="absolute inset-0 grid-pattern opacity-30" aria-hidden />
+        <div
+          className="pointer-events-none absolute left-1/2 top-1/4 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-500/20 blur-[100px]"
+          aria-hidden
+        />
+        <div className="relative p-10">
+          <Link href="/" className="inline-flex items-center gap-2 text-lg font-semibold">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+              <%= projectName.charAt(0).toUpperCase() %>
+            </span>
+            <%= projectName %>
+          </Link>
+          <p className="mt-8 max-w-md text-sm leading-relaxed text-zinc-400">
+            <%= projectDescription %>
+          </p>
+        </div>
+        <blockquote className="relative border-t border-border/40 p-10 text-sm text-zinc-400">
+          <p className="flex items-start gap-2">
+            <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
+            &ldquo;We shipped our MVP in days with this stack—auth, API, and UI already wired.&rdquo;
+          </p>
+          <footer className="mt-3 text-xs text-zinc-500">— Early adopter, full-stack team</footer>
+        </blockquote>
+      </div>
+
+      <div className="flex flex-col">
+        <div className="flex items-center justify-center border-b border-border/40 p-4 lg:hidden">
+          <Link href="/" className="inline-flex items-center gap-2 font-semibold">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-sm text-emerald-400">
+              <%= projectName.charAt(0).toUpperCase() %>
+            </span>
+            <%= projectName %>
+          </Link>
+        </div>
+        <div className="flex flex-1 items-center justify-center p-6 sm:p-10">{children}</div>
+      </div>
+    </div>
+  );
+}
