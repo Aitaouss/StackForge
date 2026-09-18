@@ -1,0 +1,52 @@
+'use client';
+
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useAuth } from '@/contexts/auth-context';
+import { setSession } from '@/lib/auth-cookie';
+import {
+  authService,
+  type LoginData,
+  type RegisterData,
+} from '@/services/auth.service';
+
+function getErrorMessage(error: unknown, fallback: string) {
+  return (
+    (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+    fallback
+  );
+}
+
+export function useLoginMutation() {
+  const router = useRouter();
+  const { setUser } = useAuth();
+
+  return useMutation({
+    mutationFn: (data: LoginData) => authService.login(data),
+    onSuccess: (response) => {
+      setSession(response.accessToken, response.user);
+      setUser(response.user);
+      toast.success('Welcome back');
+      router.push('/dashboard');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Login failed'));
+    },
+  });
+}
+
+export function useRegisterMutation() {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (data: RegisterData) => authService.register(data),
+    onSuccess: () => {
+      toast.success('Account created — sign in to continue');
+      router.push('/login');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Registration failed'));
+    },
+  });
+}

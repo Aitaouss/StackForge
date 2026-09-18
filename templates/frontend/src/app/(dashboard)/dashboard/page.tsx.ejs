@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Activity,
   ArrowUpDown,
@@ -11,8 +11,8 @@ import {
   Users,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { usersService, User } from '@/services/users.service';
 import { useAuth } from '@/contexts/auth-context';
+import { useUsersQuery } from '@/hooks/use-users';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -62,26 +62,20 @@ function MetricCardSkeleton() {
 
 export default function DashboardPage() {
   const { isLoading: authLoading } = useAuth();
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data: users = [],
+    isLoading: loading,
+    isError,
+  } = useUsersQuery(!authLoading);
   const [query, setQuery] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('createdAt');
   const [sortAsc, setSortAsc] = useState(false);
 
-  const loadUsers = useCallback(() => {
-    setLoading(true);
-    usersService
-      .getUsers()
-      .then(setUsers)
-      .catch(() => toast.error('Failed to load users'))
-      .finally(() => setLoading(false));
-  }, []);
-
   useEffect(() => {
-    if (!authLoading) {
-      loadUsers();
+    if (isError) {
+      toast.error('Failed to load users');
     }
-  }, [authLoading, loadUsers]);
+  }, [isError]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

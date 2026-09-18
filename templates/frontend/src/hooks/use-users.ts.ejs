@@ -1,0 +1,17 @@
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '@/lib/query-keys';
+import { usersService } from '@/services/users.service';
+
+/**
+ * useQuery runs the fetch; usersService.getUsers() uses Axios (see services/api.ts).
+ * Axios attaches the JWT from localStorage on each request.
+ */
+export function useUsersQuery(enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.users.list(),
+    queryFn: () => usersService.getUsers(),
+    enabled,
+  });
+}
