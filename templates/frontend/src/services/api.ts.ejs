@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+/**
+ * Shared Axios instance for all API calls.
+ * React Query hooks (useQuery / useMutation) call services that use this client.
+ * The request interceptor adds Authorization: Bearer <token> from localStorage.
+ */
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
   headers: {

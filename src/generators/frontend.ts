@@ -68,8 +68,24 @@ export async function generateFrontend(
       output: path.join(frontendDir, 'src', 'lib', 'auth-cookie.ts'),
     },
     {
+      template: 'src/lib/query-keys.ts.ejs',
+      output: path.join(frontendDir, 'src', 'lib', 'query-keys.ts'),
+    },
+    {
+      template: 'src/hooks/use-users.ts.ejs',
+      output: path.join(frontendDir, 'src', 'hooks', 'use-users.ts'),
+    },
+    {
+      template: 'src/hooks/use-auth-mutations.ts.ejs',
+      output: path.join(frontendDir, 'src', 'hooks', 'use-auth-mutations.ts'),
+    },
+    {
       template: 'src/contexts/auth-context.tsx.ejs',
       output: path.join(frontendDir, 'src', 'contexts', 'auth-context.tsx'),
+    },
+    {
+      template: 'src/components/query-provider.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'query-provider.tsx'),
     },
     {
       template: 'src/components/providers.tsx.ejs',

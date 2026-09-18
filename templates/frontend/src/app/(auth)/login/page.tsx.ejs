@@ -2,12 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Loader2, Lock, Mail } from 'lucide-react';
-import { toast } from 'sonner';
-import { authService } from '@/services/auth.service';
-import { setSession } from '@/lib/auth-cookie';
-import { useAuth } from '@/contexts/auth-context';
+import { useLoginMutation } from '@/hooks/use-auth-mutations';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,31 +11,16 @@ import { PasswordInput } from '@/components/password-input';
 import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { setUser } = useAuth();
+  const loginMutation = useLoginMutation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await authService.login({ email, password });
-      setSession(response.accessToken, response.user);
-      setUser(response.user);
-      toast.success('Welcome back');
-      router.push('/dashboard');
-    } catch (err: unknown) {
-      const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-        'Login failed';
-      toast.error(message);
-    } finally {
-      setLoading(false);
-    }
+    loginMutation.mutate({ email, password });
   };
+
+  const loading = loginMutation.isPending;
 
   return (
     <div className="w-full max-w-sm space-y-8">
