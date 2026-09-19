@@ -28,7 +28,11 @@ export function useLoginMutation() {
       setSession(response.accessToken, response.user);
       setUser(response.user);
       toast.success('Welcome back');
-      router.push('/dashboard');
+      const params = new URLSearchParams(window.location.search);
+      const from = params.get('from');
+      const target =
+        from && from.startsWith('/') && !from.startsWith('//') ? from : '/dashboard';
+      router.push(target);
     },
     onError: (error) => {
       toast.error(getErrorMessage(error, 'Login failed'));

@@ -12,6 +12,8 @@ export interface ProjectConfig {
   targetDir: string;
   /** Recorded in stackforge.json; null when not selected via preset flag. */
   preset: StackforgePreset | null;
+  /** Set during generateProject; written to backend `.env`. */
+  jwtSecret?: string;
 }
 
 export interface PackageJson {

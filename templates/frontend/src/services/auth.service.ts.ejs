@@ -20,6 +20,12 @@ export interface LoginResponse {
   };
 }
 
+export type AuthUser = {
+  id: string;
+  name: string;
+  email: string;
+};
+
 export interface RegisterResponse {
   message: string;
   user: {
@@ -38,6 +44,11 @@ export const authService = {
 
   async login(data: LoginData) {
     const response = await api.post<LoginResponse>('/auth/login', data);
+    return response.data;
+  },
+
+  async getMe() {
+    const response = await api.get<AuthUser>('/auth/me');
     return response.data;
   },
 };

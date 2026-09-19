@@ -1,15 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Activity,
-  ArrowUpDown,
-  CheckCircle2,
-  MoreHorizontal,
-  Search,
-  UserPlus,
-  Users,
-} from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Search, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/auth-context';
 import { useUsersQuery } from '@/hooks/use-users';
@@ -104,7 +96,6 @@ export default function DashboardPage() {
   };
 
   const totalUsers = users.length;
-  const activeSessions = Math.max(1, Math.round(totalUsers * 0.6));
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
@@ -115,50 +106,20 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:max-w-xs">
         {loading ? (
-          <>
-            <MetricCardSkeleton />
-            <MetricCardSkeleton />
-            <MetricCardSkeleton />
-          </>
+          <MetricCardSkeleton />
         ) : (
-          <>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-                <Users className="h-4 w-4 text-emerald-400" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{totalUsers}</div>
-                <Badge variant="success" className="mt-2">
-                  +{totalUsers} registered
-                </Badge>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
-                <Activity className="h-4 w-4 text-cyan-400" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{activeSessions}</div>
-                <p className="mt-2 text-xs text-muted-foreground">Estimated from recent activity</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">System Health</CardTitle>
-                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">Operational</div>
-                <Badge variant="success" className="mt-2">
-                  All services up
-                </Badge>
-              </CardContent>
-            </Card>
-          </>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <Users className="h-4 w-4 text-emerald-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{totalUsers}</div>
+              <p className="mt-2 text-xs text-muted-foreground">From the protected users API</p>
+            </CardContent>
+          </Card>
         )}
       </div>
 
@@ -168,26 +129,14 @@ export default function DashboardPage() {
             <CardTitle>Users</CardTitle>
             <p className="text-sm text-muted-foreground">Search, sort, and manage members.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <div className="relative min-w-[200px] flex-1 sm:w-64 sm:flex-none">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search users..."
-                className="pl-9"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => toast.message('Export started', { description: 'CSV download queued.' })}
-            >
-              Export
-            </Button>
-            <Button onClick={() => toast.info('Invite flow', { description: 'Connect your invite API here.' })}>
-              <UserPlus className="mr-2 h-4 w-4" />
-              Invite user
-            </Button>
+          <div className="relative min-w-[200px] sm:w-64">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search users..."
+              className="pl-9"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
         </CardHeader>
         <CardContent>
@@ -276,7 +225,6 @@ export default function DashboardPage() {
                             >
                               Copy email
                             </DropdownMenuItem>
-                            <DropdownMenuItem disabled>View profile</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -289,9 +237,6 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      <section id="settings" className="rounded-lg border border-dashed border-border/40 p-6 text-sm text-muted-foreground">
-        Settings and team preferences can be configured here.
-      </section>
     </div>
   );
 }

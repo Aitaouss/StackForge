@@ -9,7 +9,8 @@ import {
   useState,
 } from 'react';
 import { useRouter } from 'next/navigation';
-import { clearSession, getStoredUser } from '@/lib/auth-cookie';
+import { authService } from '@/services/auth.service';
+import { clearSession } from '@/lib/auth-cookie';
 
 export type AuthUser = {
   id: string;
@@ -32,8 +33,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setUserState(getStoredUser());
-    setIsLoading(false);
+    let cancelled = false;
+
+    async function hydrate() {
+      const hasToken =
+        typeof window !== 'undefined' && Boolean(localStorage.getItem('token'));
+      if (!hasToken) {
+        if (!cancelled) setIsLoading(false);
+        return;
+      }
+
+      try {
+        const profile = await authService.getMe();
+        if (!cancelled) setUserState(profile);
+      } catch {
+        clearSession();
+        if (!cancelled) setUserState(null);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    hydrate();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const setUser = useCallback((next: AuthUser) => {

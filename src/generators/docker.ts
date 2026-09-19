@@ -18,7 +18,7 @@ export async function generateDockerFiles(
       config.database === 'postgresql'
         ? 'postgresql://postgres:postgres@postgres:5432/app'
         : 'file:./dev.db',
-    jwtSecret: 'supersecret',
+    jwtSecret: config.jwtSecret,
   };
 
   await renderTemplate({

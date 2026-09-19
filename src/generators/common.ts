@@ -14,8 +14,9 @@ export async function generateCommonFiles(
     database: config.database,
     databaseUrl:
       config.database === 'postgresql'
-        ? 'postgresql://postgres:postgres@localhost:5432/app'
+        ? 'postgresql://postgres:postgres@localhost:5433/app'
         : 'file:./dev.db',
+    jwtSecret: config.jwtSecret,
   };
 
   await renderTemplate({
