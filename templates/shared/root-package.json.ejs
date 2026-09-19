@@ -7,6 +7,9 @@
   "scripts": {
     "dev": "concurrently \"pnpm --filter ./backend dev\" \"pnpm --filter ./frontend dev\"",
     "build": "pnpm --filter ./backend build && pnpm --filter ./frontend build",
+    "lint": "pnpm --filter ./backend run lint && pnpm --filter ./frontend run lint",
+    "typecheck": "pnpm --filter ./backend run typecheck && pnpm --filter ./frontend run typecheck",
+    "test": "pnpm --filter ./backend run test",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down"
   },

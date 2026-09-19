@@ -4,7 +4,11 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
-## create-stackforge-app 1.0.10 (current templates)
+## create-stackforge-app 1.0.10+ (Phase 1B templates on `phase-1b-production-baseline`)
+
+Generated apps include: Prisma migrations, Zod env validation, `/health`, throttling, Helmet, unit + e2e tests, and `.github/workflows/ci.yml`.
+
+## create-stackforge-app 1.0.10 (baseline)
 
 | Component | Version / note |
 |-----------|----------------|

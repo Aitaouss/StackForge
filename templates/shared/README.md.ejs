@@ -69,12 +69,14 @@ docker compose up -d postgres
 
 > **PostgreSQL port:** Docker Compose maps Postgres to **localhost:5433** (see `backend/.env` `DATABASE_URL`). Use port **5432** only if you run Postgres directly on the host without that mapping.
 
-2. Apply database migrations:
+2. Apply database migrations (an initial migration is included):
 
 ```bash
 cd backend
-pnpm prisma migrate dev
+pnpm run db:deploy
 ```
+
+For local development you can also run `pnpm run db:migrate` to create new migrations.
 
 3. Start the development servers:
 
@@ -122,6 +124,7 @@ docker compose up -d
 | POST   | /auth/register | Register a new user      | No        |
 | POST   | /auth/login    | Authenticate a user      | No        |
 | GET    | /auth/me       | Current authenticated user | Yes     |
+| GET    | /health        | API + database health    | No        |
 | GET    | /users         | List all users           | Yes       |
 | GET    | /users/:id     | Get a user by ID         | Yes       |
 

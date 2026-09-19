@@ -81,26 +81,42 @@ try {
     await fs.writeFile(envPath, env);
   }
 
-  console.log('[smoke] prisma generate + db push…');
+  console.log('[smoke] prisma generate + migrate deploy…');
   await execa('pnpm', ['exec', 'prisma', 'generate'], { cwd: backendDir, stdio: 'inherit' });
-  await execa('pnpm', ['exec', 'prisma', 'db', 'push', '--accept-data-loss'], {
-    cwd: backendDir,
+  await execa('pnpm', ['run', 'db:deploy'], { cwd: backendDir, stdio: 'inherit' });
+
+  console.log('[smoke] backend lint + typecheck + test…');
+  await execa('pnpm', ['--filter', './backend', 'run', 'lint'], { cwd: appDir, stdio: 'inherit' });
+  await execa('pnpm', ['--filter', './backend', 'run', 'typecheck'], {
+    cwd: appDir,
     stdio: 'inherit',
   });
-
-  console.log('[smoke] backend build…');
-  await execa('pnpm', ['--filter', './backend', 'run', 'build'], {
+  await execa('pnpm', ['--filter', './backend', 'run', 'test'], { cwd: appDir, stdio: 'inherit' });
+  await execa('pnpm', ['--filter', './backend', 'run', 'test:e2e'], {
     cwd: appDir,
     stdio: 'inherit',
   });
 
-  console.log('[smoke] frontend build…');
+  console.log('[smoke] frontend lint + typecheck…');
+  await execa('pnpm', ['--filter', './frontend', 'run', 'lint'], {
+    cwd: appDir,
+    stdio: 'inherit',
+  });
+  await execa('pnpm', ['--filter', './frontend', 'run', 'typecheck'], {
+    cwd: appDir,
+    stdio: 'inherit',
+  });
+
+  console.log('[smoke] build backend + frontend…');
+  await execa('pnpm', ['--filter', './backend', 'run', 'build'], {
+    cwd: appDir,
+    stdio: 'inherit',
+  });
   await execa('pnpm', ['--filter', './frontend', 'run', 'build'], {
     cwd: appDir,
     stdio: 'inherit',
   });
 
-  // Lint / test / typecheck expand in Phase 1B when configs and tests exist in templates.
   console.log('\n[smoke] PASS:', database);
 } catch (err) {
   console.error('\n[smoke] FAIL:', database);

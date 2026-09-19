@@ -11,11 +11,30 @@ import {
   type RegisterData,
 } from '@/services/auth.service';
 
-function getErrorMessage(error: unknown, fallback: string) {
-  return (
-    (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
-    fallback
-  );
+function getErrorMessage(error: unknown, fallback: string): string {
+  const data = (error as { response?: { data?: unknown } })?.response?.data;
+  if (!data || typeof data !== 'object') {
+    return fallback;
+  }
+
+  const message = (data as { message?: unknown }).message;
+  if (typeof message === 'string') {
+    return message;
+  }
+  if (Array.isArray(message)) {
+    return message.filter((part): part is string => typeof part === 'string').join(', ');
+  }
+  if (message && typeof message === 'object' && 'message' in message) {
+    const nested = (message as { message?: unknown }).message;
+    if (typeof nested === 'string') {
+      return nested;
+    }
+    if (Array.isArray(nested)) {
+      return nested.filter((part): part is string => typeof part === 'string').join(', ');
+    }
+  }
+
+  return fallback;
 }
 
 export function useLoginMutation() {
