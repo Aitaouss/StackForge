@@ -104,6 +104,7 @@ export async function promptProjectConfig(
     docker: options.docker ?? answers.docker,
     installDependencies: options.installDependencies ?? answers.installDependencies,
     targetDir: resolveTargetDir(projectName, cwd),
+    preset: null,
   };
 }
 
@@ -131,5 +132,6 @@ async function buildNonInteractiveConfig(
     docker: options.docker ?? DEFAULTS.docker,
     installDependencies: options.installDependencies ?? DEFAULTS.installDependencies,
     targetDir,
+    preset: null,
   };
 }
