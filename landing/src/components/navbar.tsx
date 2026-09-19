@@ -1,6 +1,7 @@
 import { Anvil, ExternalLink, Github, Star } from "lucide-react";
 import Link from "next/link";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
+import { TrackedGitHubLink } from "./tracked-github-link";
 import { TrackedNpmLink } from "./tracked-npm-link";
 
 const NAV = [
@@ -9,8 +10,6 @@ const NAV = [
   { href: "/#cli", label: "CLI Flags" },
   { href: "/docs", label: "Docs" },
 ] as const;
-
-const GITHUB_URL = "https://github.com/Aitaouss/StackForge";
 
 type NavbarProps = {
   weeklyDownloads?: number | null;
@@ -47,16 +46,14 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
           {weeklyDownloads != null && (
             <NpmDownloadsBadge downloads={weeklyDownloads} compact className="hidden lg:inline-flex" />
           )}
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <TrackedGitHubLink
+            source="navbar"
             className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:border-white/20 hover:bg-white/10"
           >
             <Github className="h-3.5 w-3.5" aria-hidden />
             <Star className="h-3 w-3 text-amber-400" aria-hidden />
             <span className="hidden sm:inline">GitHub</span>
-          </a>
+          </TrackedGitHubLink>
           <TrackedNpmLink
             source="navbar"
             className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-red-500/50 hover:bg-red-500/20"

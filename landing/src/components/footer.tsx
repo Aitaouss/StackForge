@@ -1,8 +1,7 @@
 import { Anvil } from "lucide-react";
 import Link from "next/link";
+import { TrackedGitHubLink } from "./tracked-github-link";
 import { TrackedNpmLink } from "./tracked-npm-link";
-
-const GITHUB_URL = "https://github.com/Aitaouss/StackForge";
 
 export function Footer() {
   return (
@@ -22,9 +21,9 @@ export function Footer() {
           <TrackedNpmLink source="footer" className="text-zinc-400 hover:text-emerald-300">
             npm package
           </TrackedNpmLink>
-          <Link href={GITHUB_URL} className="text-zinc-400 hover:text-emerald-300">
+          <TrackedGitHubLink source="footer" className="text-zinc-400 hover:text-emerald-300">
             Source on GitHub
-          </Link>
+          </TrackedGitHubLink>
           <Link href="/docs" className="text-zinc-400 hover:text-emerald-300">
             Documentation
           </Link>
