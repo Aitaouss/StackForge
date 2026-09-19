@@ -1,0 +1,40 @@
+import { ConflictException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { AuthService } from './auth.service';
+import { PrismaService } from '../prisma/prisma.service';
+
+describe('AuthService', () => {
+  let service: AuthService;
+  const prisma = {
+    user: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+    },
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        AuthService,
+        { provide: PrismaService, useValue: prisma },
+        { provide: JwtService, useValue: { sign: jest.fn(() => 'token') } },
+      ],
+    }).compile();
+
+    service = module.get(AuthService);
+    jest.clearAllMocks();
+  });
+
+  it('register throws when email exists', async () => {
+    prisma.user.findUnique.mockResolvedValue({ id: '1' });
+
+    await expect(
+      service.register({
+        name: 'Test',
+        email: 't@example.com',
+        password: 'password123',
+      }),
+    ).rejects.toBeInstanceOf(ConflictException);
+  });
+});

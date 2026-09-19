@@ -54,6 +54,16 @@ export async function generateCommonFiles(
     data,
   });
 
+  await renderTemplate({
+    templateDir: sharedTemplateDir,
+    templateName: 'github/workflows/ci.yml.ejs',
+    outputPath: path.join(config.targetDir, '.github', 'workflows', 'ci.yml'),
+    data: {
+      ...data,
+      database: config.database,
+    },
+  });
+
   await writeJson(path.join(config.targetDir, 'stackforge.json'), {
     schemaVersion: 1,
     stackforgeVersion: getStackforgeVersion(),

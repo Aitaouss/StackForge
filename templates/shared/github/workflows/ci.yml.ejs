@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+<% if (database === 'postgresql') { %>
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+<% } %>
+
+    env:
+<% if (database === 'postgresql') { %>
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/app
+<% } else { %>
+      DATABASE_URL: file:./dev.db
+<% } %>
+      JWT_SECRET: ci-jwt-secret-at-least-32-characters-long
+      FRONTEND_URL: http://localhost:3002
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Prisma generate
+        working-directory: backend
+        run: pnpm exec prisma generate
+
+      - name: Apply migrations
+        working-directory: backend
+        run: pnpm run db:deploy
+
+      - name: Lint backend
+        run: pnpm --filter ./backend run lint
+
+      - name: Lint frontend
+        run: pnpm --filter ./frontend run lint
+
+      - name: Typecheck backend
+        run: pnpm --filter ./backend run typecheck
+
+      - name: Typecheck frontend
+        run: pnpm --filter ./frontend run typecheck
+
+      - name: Test backend
+        run: pnpm --filter ./backend run test
+
+      - name: E2E backend
+        run: pnpm --filter ./backend run test:e2e
+
+      - name: Build
+        run: pnpm run build

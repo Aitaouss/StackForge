@@ -36,7 +36,7 @@ services:
         condition: service_healthy
 <% } %>
     command: >
-      sh -c "pnpm --filter ./backend run db:push && node backend/dist/main"
+      sh -c "pnpm --filter ./backend run db:deploy && node backend/dist/main"
 
 <% if (database === 'postgresql') { %>
   prisma-studio:

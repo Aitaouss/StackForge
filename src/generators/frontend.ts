@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import path from 'path';
 import { ProjectConfig } from '../types/index.js';
 import { renderTemplate, getTemplatePath } from '../utils/file.js';
@@ -180,4 +181,9 @@ export async function generateFrontend(
       data,
     });
   }
+
+  await fs.copy(
+    path.join(templateDir, '.eslintrc.json'),
+    path.join(frontendDir, '.eslintrc.json'),
+  );
 }
