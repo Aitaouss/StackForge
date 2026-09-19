@@ -1,6 +1,7 @@
 import path from 'path';
 import { ProjectConfig } from '../types/index.js';
-import { renderTemplate, getTemplatePath } from '../utils/file.js';
+import { renderTemplate, getTemplatePath, writeJson } from '../utils/file.js';
+import { getStackforgeVersion } from '../utils/stackforge-version.js';
 
 export async function generateCommonFiles(
   config: ProjectConfig,
@@ -49,6 +50,32 @@ export async function generateCommonFiles(
     templateDir: sharedTemplateDir,
     templateName: 'root-gitignore.ejs',
     outputPath: path.join(config.targetDir, '.gitignore'),
+    data,
+  });
+
+  await writeJson(path.join(config.targetDir, 'stackforge.json'), {
+    schemaVersion: 1,
+    stackforgeVersion: getStackforgeVersion(),
+    preset: config.preset,
+    database: config.database,
+    docker: config.docker,
+    features: {},
+  });
+
+  await renderTemplate({
+    templateDir: sharedTemplateDir,
+    templateName: 'AGENTS.md.ejs',
+    outputPath: path.join(config.targetDir, 'AGENTS.md'),
+    data: {
+      ...data,
+      stackforgeVersion: getStackforgeVersion(),
+    },
+  });
+
+  await renderTemplate({
+    templateDir: sharedTemplateDir,
+    templateName: 'dot-stackforge/README.md.ejs',
+    outputPath: path.join(config.targetDir, '.stackforge', 'README.md'),
     data,
   });
 }

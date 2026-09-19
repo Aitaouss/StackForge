@@ -65,6 +65,9 @@ npx create-stackforge-app@latest my-app -y --database sqlite --no-docker --no-in
 my-app/
 ├── backend/          # NestJS application
 ├── frontend/         # Next.js application
+├── stackforge.json   # StackForge project manifest (schema v1)
+├── AGENTS.md         # Architecture notes for humans and AI tools
+├── .stackforge/      # Reserved for StackForge tooling metadata
 ├── docker-compose.yml
 ├── README.md
 └── .env.example
@@ -91,6 +94,17 @@ pnpm run build
 ```bash
 node ./bin/create-stackforge-app.js
 ```
+
+### Smoke-test generated apps (maintainers)
+
+After changing templates or the CLI:
+
+```bash
+pnpm run smoke          # SQLite + PostgreSQL generates
+pnpm run smoke:sqlite   # SQLite only
+```
+
+See [Phases-stack-forge.md](./Phases-stack-forge.md), [docs/file-ownership.md](./docs/file-ownership.md), and [docs/tested-stack.md](./docs/tested-stack.md).
 
 ## License
 

@@ -15,7 +15,10 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "clean": "rm -rf dist",
-    "prepublishOnly": "pnpm run clean && pnpm run build"
+    "prepublishOnly": "pnpm run clean && pnpm run build",
+    "smoke:sqlite": "pnpm run build && node scripts/smoke-generated-app.mjs sqlite",
+    "smoke:postgresql": "pnpm run build && node scripts/smoke-generated-app.mjs postgresql",
+    "smoke": "pnpm run smoke:sqlite && pnpm run smoke:postgresql"
   },
   "keywords": [
     "cli",
