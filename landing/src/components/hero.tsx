@@ -1,12 +1,11 @@
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { CommandBlock } from "./command-block";
+import { TrackedNpmLink } from "./tracked-npm-link";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
 import { TerminalDemo } from "./terminal-demo";
 
 const PRIMARY_CMD = "npx create-stackforge-app@latest";
-const NPM_URL = "https://www.npmjs.com/package/create-stackforge-app";
-
 type HeroProps = {
   weeklyDownloads?: number | null;
 };
@@ -51,15 +50,13 @@ export function Hero({ weeklyDownloads }: HeroProps) {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href={NPM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <TrackedNpmLink
+            source="hero"
             className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-zinc-950 transition hover:scale-[1.02] hover:bg-emerald-400"
           >
             View on npm
             <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
+          </TrackedNpmLink>
           <Link
             href="/docs"
             className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-zinc-200 transition hover:border-white/20 hover:bg-white/10"

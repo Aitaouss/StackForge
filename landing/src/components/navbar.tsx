@@ -1,6 +1,7 @@
 import { Anvil, ExternalLink, Github, Star } from "lucide-react";
 import Link from "next/link";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
+import { TrackedNpmLink } from "./tracked-npm-link";
 
 const NAV = [
   { href: "/#features", label: "Features" },
@@ -9,7 +10,6 @@ const NAV = [
   { href: "/docs", label: "Docs" },
 ] as const;
 
-const NPM_URL = "https://www.npmjs.com/package/create-stackforge-app";
 const GITHUB_URL = "https://github.com/Aitaouss/StackForge";
 
 type NavbarProps = {
@@ -57,15 +57,13 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
             <Star className="h-3 w-3 text-amber-400" aria-hidden />
             <span className="hidden sm:inline">GitHub</span>
           </a>
-          <a
-            href={NPM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <TrackedNpmLink
+            source="navbar"
             className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-red-500/50 hover:bg-red-500/20"
           >
             npm
             <ExternalLink className="h-3 w-3 opacity-70" aria-hidden />
-          </a>
+          </TrackedNpmLink>
         </div>
       </div>
     </header>

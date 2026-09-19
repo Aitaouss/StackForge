@@ -1,7 +1,7 @@
 import { Anvil } from "lucide-react";
 import Link from "next/link";
+import { TrackedNpmLink } from "./tracked-npm-link";
 
-const NPM_URL = "https://www.npmjs.com/package/create-stackforge-app";
 const GITHUB_URL = "https://github.com/Aitaouss/StackForge";
 
 export function Footer() {
@@ -19,9 +19,9 @@ export function Footer() {
           </p>
         </div>
         <nav className="flex flex-col gap-2 text-sm" aria-label="Footer">
-          <Link href={NPM_URL} className="text-zinc-400 hover:text-emerald-300">
+          <TrackedNpmLink source="footer" className="text-zinc-400 hover:text-emerald-300">
             npm package
-          </Link>
+          </TrackedNpmLink>
           <Link href={GITHUB_URL} className="text-zinc-400 hover:text-emerald-300">
             Source on GitHub
           </Link>
