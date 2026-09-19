@@ -67,6 +67,8 @@ This starts PostgreSQL, Prisma Studio, the backend, and the frontend. The databa
 docker compose up -d postgres
 ```
 
+> **PostgreSQL port:** Docker Compose maps Postgres to **localhost:5433** (see `backend/.env` `DATABASE_URL`). Use port **5432** only if you run Postgres directly on the host without that mapping.
+
 2. Apply database migrations:
 
 ```bash
@@ -119,6 +121,7 @@ docker compose up -d
 |--------|----------------|--------------------------|-----------|
 | POST   | /auth/register | Register a new user      | No        |
 | POST   | /auth/login    | Authenticate a user      | No        |
+| GET    | /auth/me       | Current authenticated user | Yes     |
 | GET    | /users         | List all users           | Yes       |
 | GET    | /users/:id     | Get a user by ID         | Yes       |
 
@@ -129,9 +132,13 @@ docker compose up -d
 - `pnpm docker:up` - Start Docker services
 - `pnpm docker:down` - Stop Docker services
 
+### Docker builds
+
+Run `pnpm install` at the project root **before** `docker compose build` so `pnpm-lock.yaml` exists (required when you used `--no-install` during create).
+
 ## Authentication
 
-The application uses JWT-based authentication. After logging in, the access token is stored in `localStorage` and automatically attached to API requests via an Axios interceptor.
+The application uses JWT-based authentication. After logging in, the access token is stored in `localStorage` (and a cookie for Next.js middleware) and attached to API requests via Axios. The dashboard loads the current user from `GET /auth/me`.
 
 ## License
 

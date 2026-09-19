@@ -7,43 +7,48 @@ import { generateFrontend } from './frontend.js';
 import { generateCommonFiles } from './common.js';
 import { generateDockerFiles } from './docker.js';
 import { ensureEmptyDir } from '../utils/file.js';
+import { generateJwtSecret } from '../utils/jwt-secret.js';
 import { spinner, success, info, error } from '../utils/logger.js';
 
 export async function generateProject(config: ProjectConfig): Promise<void> {
+  const projectConfig: ProjectConfig = {
+    ...config,
+    jwtSecret: config.jwtSecret ?? generateJwtSecret(),
+  };
   const createSpinner = spinner('Creating project directory...');
   createSpinner.start();
 
   try {
-    await ensureEmptyDir(config.targetDir);
-    createSpinner.succeed(`Created project directory: ${config.projectName}`);
+    await ensureEmptyDir(projectConfig.targetDir);
+    createSpinner.succeed(`Created project directory: ${projectConfig.projectName}`);
   } catch (err) {
     createSpinner.fail('Failed to create project directory');
     throw err;
   }
 
   try {
-    await runStep('Generating backend files...', () => generateBackend(config));
-    await runStep('Generating frontend files...', () => generateFrontend(config));
-    await runStep('Generating shared files...', () => generateCommonFiles(config));
-    await runStep('Generating Docker files...', () => generateDockerFiles(config));
+    await runStep('Generating backend files...', () => generateBackend(projectConfig));
+    await runStep('Generating frontend files...', () => generateFrontend(projectConfig));
+    await runStep('Generating shared files...', () => generateCommonFiles(projectConfig));
+    await runStep('Generating Docker files...', () => generateDockerFiles(projectConfig));
   } catch (err) {
-    await cleanup(config.targetDir);
+    await cleanup(projectConfig.targetDir);
     throw err;
   }
 
-  if (config.installDependencies) {
+  if (projectConfig.installDependencies) {
     try {
       await runStep('Installing root dependencies...', () =>
-        installDependencies(config.targetDir),
+        installDependencies(projectConfig.targetDir),
       );
       await runStep('Installing backend dependencies...', () =>
-        installDependencies(path.join(config.targetDir, 'backend')),
+        installDependencies(path.join(projectConfig.targetDir, 'backend')),
       );
       await runStep('Installing frontend dependencies...', () =>
-        installDependencies(path.join(config.targetDir, 'frontend')),
+        installDependencies(path.join(projectConfig.targetDir, 'frontend')),
       );
       await runStep('Generating Prisma client...', () =>
-        runPrismaGenerate(path.join(config.targetDir, 'backend')),
+        runPrismaGenerate(path.join(projectConfig.targetDir, 'backend')),
       );
     } catch (err) {
       error(
@@ -53,7 +58,7 @@ export async function generateProject(config: ProjectConfig): Promise<void> {
     }
   }
 
-  printSuccess(config);
+  printSuccess(projectConfig);
 }
 
 async function runStep<T>(
@@ -110,10 +115,14 @@ function printSuccess(config: ProjectConfig): void {
   }
 
   if (config.database === 'postgresql') {
-    info('  docker compose up -d');
+    info('  docker compose up -d postgres');
     info('  cd backend && pnpm prisma migrate dev');
   } else {
     info('  cd backend && pnpm prisma migrate dev');
+  }
+
+  if (config.docker && !config.installDependencies) {
+    info('  Run pnpm install at the project root before docker compose build (requires pnpm-lock.yaml).');
   }
 
   info('  pnpm dev');

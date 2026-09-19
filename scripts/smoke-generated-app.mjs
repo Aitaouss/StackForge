@@ -73,6 +73,14 @@ try {
   await execa('pnpm', ['install'], { cwd: appDir, stdio: 'inherit' });
 
   const backendDir = path.join(appDir, 'backend');
+
+  if (database === 'postgresql' && process.env.GITHUB_ACTIONS === 'true') {
+    const envPath = path.join(backendDir, '.env');
+    let env = await fs.readFile(envPath, 'utf8');
+    env = env.replace('localhost:5433', 'localhost:5432');
+    await fs.writeFile(envPath, env);
+  }
+
   console.log('[smoke] prisma generate + db push…');
   await execa('pnpm', ['exec', 'prisma', 'generate'], { cwd: backendDir, stdio: 'inherit' });
   await execa('pnpm', ['exec', 'prisma', 'db', 'push', '--accept-data-loss'], {

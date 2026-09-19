@@ -14,9 +14,9 @@ export async function generateBackend(
     database: config.database,
     databaseUrl:
       config.database === 'postgresql'
-        ? 'postgresql://postgres:postgres@localhost:5432/app'
+        ? 'postgresql://postgres:postgres@localhost:5433/app'
         : 'file:./dev.db',
-    jwtSecret: 'supersecret',
+    jwtSecret: config.jwtSecret,
   };
 
   const files: { template: string; output: string }[] = [
