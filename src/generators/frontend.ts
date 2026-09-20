@@ -61,6 +61,14 @@ export async function generateFrontend(
       output: path.join(frontendDir, 'src', 'app', '(dashboard)', 'dashboard', 'page.tsx'),
     },
     {
+      template: 'src/app/(dashboard)/profile/page.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(dashboard)', 'profile', 'page.tsx'),
+    },
+    {
+      template: 'src/app/(dashboard)/settings/page.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'app', '(dashboard)', 'settings', 'page.tsx'),
+    },
+    {
       template: 'src/lib/utils.ts.ejs',
       output: path.join(frontendDir, 'src', 'lib', 'utils.ts'),
     },
@@ -79,6 +87,14 @@ export async function generateFrontend(
     {
       template: 'src/hooks/use-auth-mutations.ts.ejs',
       output: path.join(frontendDir, 'src', 'hooks', 'use-auth-mutations.ts'),
+    },
+    {
+      template: 'src/hooks/use-user-mutations.ts.ejs',
+      output: path.join(frontendDir, 'src', 'hooks', 'use-user-mutations.ts'),
+    },
+    {
+      template: 'src/hooks/use-profile-mutations.ts.ejs',
+      output: path.join(frontendDir, 'src', 'hooks', 'use-profile-mutations.ts'),
     },
     {
       template: 'src/contexts/auth-context.tsx.ejs',
@@ -107,6 +123,10 @@ export async function generateFrontend(
     {
       template: 'src/components/dashboard-header.tsx.ejs',
       output: path.join(frontendDir, 'src', 'components', 'dashboard-header.tsx'),
+    },
+    {
+      template: 'src/components/user-admin-panel.tsx.ejs',
+      output: path.join(frontendDir, 'src', 'components', 'user-admin-panel.tsx'),
     },
     {
       template: 'src/components/ui/button.tsx.ejs',

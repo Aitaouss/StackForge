@@ -1,0 +1,122 @@
+'use client';
+
+import Link from 'next/link';
+import { Loader2, Monitor, Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useState } from 'react';
+import { useChangePasswordMutation } from '@/hooks/use-profile-mutations';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/password-input';
+
+const THEMES = [
+  { value: 'light', label: 'Light', icon: Sun },
+  { value: 'dark', label: 'Dark', icon: Moon },
+  { value: 'system', label: 'System', icon: Monitor },
+] as const;
+
+export default function SettingsPage() {
+  const { theme, setTheme } = useTheme();
+  const changePassword = useChangePasswordMutation();
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    changePassword.mutate(
+      { currentPassword, newPassword },
+      {
+        onSuccess: () => {
+          setCurrentPassword('');
+          setNewPassword('');
+        },
+      },
+    );
+  };
+
+  return (
+    <div className="mx-auto max-w-lg space-y-6 px-4 py-8 sm:px-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+        <p className="text-sm text-muted-foreground">Theme and account security.</p>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Appearance</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-2">
+          {THEMES.map((item) => (
+            <Button
+              key={item.value}
+              type="button"
+              variant={theme === item.value ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setTheme(item.value)}
+            >
+              <item.icon className="mr-2 h-4 w-4" />
+              {item.label}
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Password</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="current-password">Current password</Label>
+              <PasswordInput
+                id="current-password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                required
+                minLength={6}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="new-password">New password</Label>
+              <PasswordInput
+                id="new-password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                minLength={6}
+              />
+            </div>
+            <Button type="submit" disabled={changePassword.isPending}>
+              {changePassword.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                'Change password'
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Account</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Update your display name and email on the{' '}
+            <Link href="/dashboard/profile" className="text-emerald-400 hover:underline">
+              profile page
+            </Link>
+            .
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

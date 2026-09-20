@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Patch,
   Body,
   HttpCode,
   HttpStatus,
@@ -14,6 +15,8 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -47,5 +50,28 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   me(@Request() req: { user: { id: string; name: string; email: string } }) {
     return req.user;
+  }
+
+  @Patch('profile')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update the authenticated user profile' })
+  updateProfile(
+    @Request() req: { user: { id: string } },
+    @Body() dto: UpdateProfileDto,
+  ) {
+    return this.authService.updateProfile(req.user.id, dto);
+  }
+
+  @Patch('password')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Change the authenticated user password' })
+  changePassword(
+    @Request() req: { user: { id: string } },
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(req.user.id, dto);
   }
 }

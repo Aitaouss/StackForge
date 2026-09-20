@@ -128,6 +128,14 @@ export async function generateBackend(
       output: path.join(backendDir, 'src', 'auth', 'dto', 'login.dto.ts'),
     },
     {
+      template: 'src/auth/dto/update-profile.dto.ts.ejs',
+      output: path.join(backendDir, 'src', 'auth', 'dto', 'update-profile.dto.ts'),
+    },
+    {
+      template: 'src/auth/dto/change-password.dto.ts.ejs',
+      output: path.join(backendDir, 'src', 'auth', 'dto', 'change-password.dto.ts'),
+    },
+    {
       template: 'src/users/users.module.ts.ejs',
       output: path.join(backendDir, 'src', 'users', 'users.module.ts'),
     },
@@ -142,6 +150,10 @@ export async function generateBackend(
     {
       template: 'src/users/dto/create-user.dto.ts.ejs',
       output: path.join(backendDir, 'src', 'users', 'dto', 'create-user.dto.ts'),
+    },
+    {
+      template: 'src/users/dto/update-user.dto.ts.ejs',
+      output: path.join(backendDir, 'src', 'users', 'dto', 'update-user.dto.ts'),
     },
     {
       template: 'prisma/schema.prisma.ejs',

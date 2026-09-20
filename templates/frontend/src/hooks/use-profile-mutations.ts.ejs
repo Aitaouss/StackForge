@@ -1,0 +1,57 @@
+'use client';
+
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useAuth } from '@/contexts/auth-context';
+import { setSession } from '@/lib/auth-cookie';
+import {
+  authService,
+  type ChangePasswordData,
+  type UpdateProfileData,
+} from '@/services/auth.service';
+
+function getErrorMessage(error: unknown, fallback: string): string {
+  const data = (error as { response?: { data?: unknown } })?.response?.data;
+  if (!data || typeof data !== 'object') {
+    return fallback;
+  }
+  const message = (data as { message?: unknown }).message;
+  if (typeof message === 'string') {
+    return message;
+  }
+  if (Array.isArray(message)) {
+    return message.filter((part): part is string => typeof part === 'string').join(', ');
+  }
+  return fallback;
+}
+
+export function useUpdateProfileMutation() {
+  const { setUser } = useAuth();
+
+  return useMutation({
+    mutationFn: (data: UpdateProfileData) => authService.updateProfile(data),
+    onSuccess: (user) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        setSession(token, user);
+      }
+      setUser(user);
+      toast.success('Profile updated');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Failed to update profile'));
+    },
+  });
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({
+    mutationFn: (data: ChangePasswordData) => authService.changePassword(data),
+    onSuccess: () => {
+      toast.success('Password updated');
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, 'Failed to change password'));
+    },
+  });
+}

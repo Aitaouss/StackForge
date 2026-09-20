@@ -7,6 +7,18 @@ export interface User {
   createdAt: string;
 }
 
+export type CreateUserInput = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export type UpdateUserInput = {
+  name?: string;
+  email?: string;
+  password?: string;
+};
+
 export const usersService = {
   async getUsers() {
     const response = await api.get<User[]>('/users');
@@ -16,5 +28,19 @@ export const usersService = {
   async getUser(id: string) {
     const response = await api.get<User>(`/users/${id}`);
     return response.data;
+  },
+
+  async createUser(data: CreateUserInput) {
+    const response = await api.post<User>('/users', data);
+    return response.data;
+  },
+
+  async updateUser(id: string, data: UpdateUserInput) {
+    const response = await api.patch<User>(`/users/${id}`, data);
+    return response.data;
+  },
+
+  async deleteUser(id: string) {
+    await api.delete(`/users/${id}`);
   },
 };

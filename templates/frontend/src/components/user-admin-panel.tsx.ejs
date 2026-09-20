@@ -1,0 +1,128 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/password-input';
+import type { User } from '@/services/users.service';
+import {
+  useCreateUserMutation,
+  useUpdateUserMutation,
+} from '@/hooks/use-user-mutations';
+
+type Props = {
+  mode: 'create' | 'edit';
+  user?: User;
+  onClose: () => void;
+};
+
+export function UserAdminPanel({ mode, user, onClose }: Props) {
+  const createMutation = useCreateUserMutation();
+  const updateMutation = useUpdateUserMutation();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (mode === 'edit' && user) {
+      setName(user.name);
+      setEmail(user.email);
+      setPassword('');
+    } else {
+      setName('');
+      setEmail('');
+      setPassword('');
+    }
+  }, [mode, user]);
+
+  const pending = createMutation.isPending || updateMutation.isPending;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mode === 'create') {
+      createMutation.mutate(
+        { name, email, password },
+        {
+          onSuccess: () => onClose(),
+        },
+      );
+      return;
+    }
+    if (!user) return;
+    updateMutation.mutate(
+      {
+        id: user.id,
+        data: {
+          name,
+          email,
+          ...(password ? { password } : {}),
+        },
+      },
+      { onSuccess: () => onClose() },
+    );
+  };
+
+  return (
+    <Card className="border-emerald-500/20">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <CardTitle>{mode === 'create' ? 'Add user' : 'Edit user'}</CardTitle>
+        <Button type="button" variant="ghost" size="sm" onClick={onClose}>
+          Cancel
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="admin-user-name">Name</Label>
+            <Input
+              id="admin-user-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="admin-user-email">Email</Label>
+            <Input
+              id="admin-user-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2 sm:col-span-2">
+            <Label htmlFor="admin-user-password">
+              {mode === 'create' ? 'Password' : 'New password (optional)'}
+            </Label>
+            <PasswordInput
+              id="admin-user-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required={mode === 'create'}
+              minLength={6}
+              placeholder={mode === 'edit' ? 'Leave blank to keep current' : ''}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <Button type="submit" disabled={pending}>
+              {pending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : mode === 'create' ? (
+                'Create user'
+              ) : (
+                'Save changes'
+              )}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
