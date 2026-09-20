@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowUpDown, MoreHorizontal, Search, Users } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Plus, Search, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuth } from '@/contexts/auth-context';
 import { useUsersQuery } from '@/hooks/use-users';
+import { useDeleteUserMutation } from '@/hooks/use-user-mutations';
+import { UserAdminPanel } from '@/components/user-admin-panel';
+import type { User } from '@/services/users.service';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -52,8 +55,15 @@ function MetricCardSkeleton() {
   );
 }
 
+type PanelState =
+  | { mode: 'closed' }
+  | { mode: 'create' }
+  | { mode: 'edit'; user: User };
+
 export default function DashboardPage() {
-  const { isLoading: authLoading } = useAuth();
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const deleteUser = useDeleteUserMutation();
+  const [panel, setPanel] = useState<PanelState>({ mode: 'closed' });
   const {
     data: users = [],
     isLoading: loading,
@@ -123,12 +133,30 @@ export default function DashboardPage() {
         )}
       </div>
 
+      {panel.mode !== 'closed' && (
+        <UserAdminPanel
+          mode={panel.mode}
+          user={panel.mode === 'edit' ? panel.user : undefined}
+          onClose={() => setPanel({ mode: 'closed' })}
+        />
+      )}
+
       <Card id="users">
         <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <CardTitle>Users</CardTitle>
             <p className="text-sm text-muted-foreground">Search, sort, and manage members.</p>
           </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Button
+              type="button"
+              size="sm"
+              className="shrink-0"
+              onClick={() => setPanel({ mode: 'create' })}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Add user
+            </Button>
           <div className="relative min-w-[200px] sm:w-64">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -137,6 +165,7 @@ export default function DashboardPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
+          </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -218,12 +247,32 @@ export default function DashboardPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem
+                              onClick={() => setPanel({ mode: 'edit', user })}
+                            >
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
                               onClick={() => {
                                 navigator.clipboard.writeText(user.email);
                                 toast.success('Email copied');
                               }}
                             >
                               Copy email
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="text-destructive focus:text-destructive"
+                              disabled={currentUser?.id === user.id || deleteUser.isPending}
+                              onClick={() => {
+                                if (
+                                  window.confirm(
+                                    `Delete ${user.name}? This cannot be undone.`,
+                                  )
+                                ) {
+                                  deleteUser.mutate(user.id);
+                                }
+                              }}
+                            >
+                              Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

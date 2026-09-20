@@ -6,6 +6,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -64,5 +65,51 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    await this.findOne(id);
+
+    if (updateUserDto.email) {
+      const existing = await this.prisma.user.findUnique({
+        where: { email: updateUserDto.email },
+      });
+      if (existing && existing.id !== id) {
+        throw new ConflictException('Email already registered');
+      }
+    }
+
+    const data: {
+      name?: string;
+      email?: string;
+      password?: string;
+    } = {};
+
+    if (updateUserDto.name !== undefined) {
+      data.name = updateUserDto.name;
+    }
+    if (updateUserDto.email !== undefined) {
+      data.email = updateUserDto.email;
+    }
+    if (updateUserDto.password) {
+      data.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  async remove(id: string) {
+    await this.findOne(id);
+    await this.prisma.user.delete({ where: { id } });
+    return { message: 'User deleted successfully' };
   }
 }

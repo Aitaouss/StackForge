@@ -4,6 +4,10 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
+## create-stackforge-app 1.2.0 (Phase 1C — in progress on `phase-1c-starter-product`)
+
+User CRUD UI, profile/settings pages, change password, and Pino HTTP logging with requestId and userId.
+
 ## create-stackforge-app 1.1.1 (Docker Postgres fix)
 
 Fixes `docker compose up --build` for PostgreSQL: migrations in image, correct `dist/main.js` build, runtime dependencies.

@@ -36,6 +36,16 @@ export interface RegisterResponse {
   };
 }
 
+export type UpdateProfileData = {
+  name?: string;
+  email?: string;
+};
+
+export type ChangePasswordData = {
+  currentPassword: string;
+  newPassword: string;
+};
+
 export const authService = {
   async register(data: RegisterData) {
     const response = await api.post<RegisterResponse>('/auth/register', data);
@@ -49,6 +59,16 @@ export const authService = {
 
   async getMe() {
     const response = await api.get<AuthUser>('/auth/me');
+    return response.data;
+  },
+
+  async updateProfile(data: UpdateProfileData) {
+    const response = await api.patch<AuthUser>('/auth/profile', data);
+    return response.data;
+  },
+
+  async changePassword(data: ChangePasswordData) {
+    const response = await api.patch<{ message: string }>('/auth/password', data);
     return response.data;
   },
 };
