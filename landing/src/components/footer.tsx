@@ -2,6 +2,7 @@ import { Anvil } from "lucide-react";
 import Link from "next/link";
 import { TrackedGitHubLink } from "./tracked-github-link";
 import { TrackedNpmLink } from "./tracked-npm-link";
+import { CLI_VERSION } from "@/data/product";
 
 export function Footer() {
   return (
@@ -13,8 +14,8 @@ export function Footer() {
             <span className="font-semibold">StackForge</span>
           </div>
           <p className="mt-3 max-w-sm text-sm text-zinc-500">
-            MIT License · create-stackforge-app v1.0.8 · Scaffold production full-stack apps with
-            Next.js, NestJS, and Prisma.
+            MIT License · create-stackforge-app v{CLI_VERSION} · Scaffold production full-stack apps
+            with Next.js, NestJS, Prisma, Docker, and CI templates.
           </p>
         </div>
         <nav className="flex flex-col gap-2 text-sm" aria-label="Footer">

@@ -1,9 +1,10 @@
 import {
+  Activity,
   Box,
   Database,
   Layers,
   ShieldCheck,
-  Sparkles,
+  TestTube2,
   Terminal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -13,38 +14,46 @@ const FEATURES = [
     icon: Layers,
     title: "Full-stack monorepo",
     description:
-      "pnpm workspaces wire Next.js 14 (App Router) and NestJS with a clean separation between frontend and API.",
+      "pnpm workspaces wire Next.js 14 (App Router) and NestJS 10 with shared scripts: dev, lint, typecheck, test, and build.",
     className: "md:col-span-2",
   },
   {
     icon: ShieldCheck,
-    title: "Turnkey authentication",
+    title: "Auth you can trust",
     description:
-      "JWT registration, login, guards, and protected users API—ready to extend for your product.",
+      "Bcrypt passwords, random JWT_SECRET per project, /auth/me hydration, login redirects, and protected users API.",
   },
   {
     icon: Database,
-    title: "Prisma + multi-DB",
+    title: "Prisma migrations",
     description:
-      "PostgreSQL or SQLite with migrations, Prisma Studio in Docker for PostgreSQL setups.",
+      "PostgreSQL or SQLite with migrate deploy, Docker Postgres on :5433, and Prisma Studio in compose.",
   },
   {
-    icon: Sparkles,
-    title: "Production UI",
-    description: "Tailwind CSS and shadcn/ui components with Lucide icons pre-configured.",
+    icon: Activity,
+    title: "Production baseline",
+    description:
+      "GET /health, Zod env validation, Helmet, rate limits, request IDs, and consistent API error responses.",
+  },
+  {
+    icon: TestTube2,
+    title: "Tests & CI template",
+    description:
+      "Jest unit tests, Supertest e2e, ESLint on frontend and backend, plus .github/workflows/ci.yml in every app.",
   },
   {
     icon: Box,
-    title: "Containerization",
+    title: "Docker that runs",
     description:
-      "Optional docker-compose for database, backend, frontend, and Prisma Studio services.",
+      "docker compose up --build for Postgres, API, Next.js, and Studio—fixed in v1.1.1 for production start.",
     className: "md:col-span-2",
   },
   {
     icon: Terminal,
-    title: "CI-friendly CLI",
+    title: "CLI & manifest",
     description:
-      "Non-interactive flags for pipelines: -y, --database, --docker, --install, and --cwd.",
+      "Non-interactive flags (-y, --database, --docker), stackforge.json, and AGENTS.md for tooling and extend workflows.",
+    className: "md:col-span-2",
   },
 ];
 
@@ -57,7 +66,8 @@ export function Features() {
             Everything you need to start shipping
           </h2>
           <p className="mt-4 text-zinc-400">
-            One command generates a typed full-stack foundation—no weeks of boilerplate wiring.
+            One command generates a typed full-stack foundation—auth, data layer, security, tests,
+            and deploy paths included.
           </p>
         </div>
 

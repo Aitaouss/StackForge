@@ -4,6 +4,7 @@ import { CommandBlock } from "./command-block";
 import { TrackedNpmLink } from "./tracked-npm-link";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
 import { TerminalDemo } from "./terminal-demo";
+import { CLI_VERSION, STACKFORGE_TAGLINE } from "@/data/product";
 
 const PRIMARY_CMD = "npx create-stackforge-app@latest";
 type HeroProps = {
@@ -31,7 +32,7 @@ export function Hero({ weeklyDownloads }: HeroProps) {
           <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
             <p className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-300 shadow-glow-sm">
               <Sparkles className="h-3.5 w-3.5" aria-hidden />
-              Version 1.0.8 · Production-ready fullstack scaffolding
+              Version {CLI_VERSION} · {STACKFORGE_TAGLINE}
             </p>
             {weeklyDownloads != null && <NpmDownloadsBadge downloads={weeklyDownloads} />}
           </div>
@@ -40,8 +41,8 @@ export function Hero({ weeklyDownloads }: HeroProps) {
           </h1>
           <p className="mt-6 text-pretty text-lg text-zinc-400 sm:text-xl">
             The opinionated CLI that scaffolds typed, end-to-end architectures. Next.js App
-            Router, NestJS API, Prisma ORM, shadcn/ui, JWT auth, Docker, and pnpm workspaces—out
-            of the box.
+            Router, NestJS API, Prisma migrations, shadcn/ui, JWT auth, health checks, tests,
+            Docker Compose, and generated GitHub Actions CI—out of the box.
           </p>
         </div>
 

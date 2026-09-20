@@ -3,8 +3,10 @@ import Link from "next/link";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
 import { TrackedGitHubLink } from "./tracked-github-link";
 import { TrackedNpmLink } from "./tracked-npm-link";
+import { CLI_VERSION } from "@/data/product";
 
 const NAV = [
+  { href: "/#stack", label: "Stack" },
   { href: "/#features", label: "Features" },
   { href: "/#architecture", label: "Architecture" },
   { href: "/#cli", label: "CLI Flags" },
@@ -26,7 +28,7 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
           <span className="font-semibold tracking-tight text-zinc-50">StackForge</span>
           <span className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-zinc-900 px-2 py-0.5 text-[10px] font-medium text-zinc-400 sm:inline-flex">
             <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-emerald-500" />
-            v1.0.8
+            v{CLI_VERSION}
           </span>
         </Link>
 

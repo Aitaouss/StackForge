@@ -1,6 +1,7 @@
 import { Architecture } from "@/components/architecture";
 import { CliFlags } from "@/components/cli-flags";
 import { Features } from "@/components/features";
+import { TechStack } from "@/components/tech-stack";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
 import { Navbar } from "@/components/navbar";
@@ -17,6 +18,7 @@ export default async function HomePage() {
       <Navbar weeklyDownloads={weeklyDownloads} />
       <main>
         <Hero weeklyDownloads={weeklyDownloads} />
+        <TechStack />
         <Features />
         <Architecture />
         <CliFlags />
