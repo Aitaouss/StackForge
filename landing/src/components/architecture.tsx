@@ -1,28 +1,30 @@
 const TREE = `my-app/
-├── backend/           # NestJS + JWT + Prisma
+├── backend/              # NestJS + health + auth
+│   ├── prisma/migrations/
+│   ├── src/health/
 │   ├── src/auth/
-│   ├── src/users/
-│   └── prisma/schema.prisma
-├── frontend/          # Next.js 14 App Router
+│   └── test/             # e2e (Supertest)
+├── frontend/             # Next.js 14 App Router
 │   ├── src/app/
 │   └── src/components/ui/
+├── .github/workflows/ci.yml
+├── stackforge.json
 ├── docker-compose.yml
-├── pnpm-workspace.yaml
-├── README.md
-└── .env.example`;
+├── AGENTS.md
+└── pnpm-workspace.yaml`;
 
 const POINTS = [
   {
     title: "Typed API boundary",
-    body: "Axios services on the frontend talk to NestJS controllers with DTO validation on every route.",
+    body: "React Query + Axios on the frontend; NestJS DTOs, Swagger at /docs, and structured errors on the API.",
   },
   {
     title: "Auth end-to-end",
-    body: "Register and login pages, JWT strategy, guards, and protected user endpoints included.",
+    body: "Register and login UI, JWT guards, /auth/me hydration, cookie-aware middleware, and hashed passwords in the DB.",
   },
   {
     title: "Deploy your way",
-    body: "Run locally with pnpm dev or bring up PostgreSQL and services with docker compose up -d.",
+    body: "pnpm dev with SQLite or PostgreSQL locally—or docker compose up --build for the full stack including migrations.",
   },
 ];
 
