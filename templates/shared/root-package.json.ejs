@@ -7,14 +7,14 @@
   "scripts": {
 <% if (includeWeb) { %>
     "dev": "concurrently \"pnpm --filter ./apps/api dev\" \"pnpm --filter ./apps/web dev\"",
-    "build": "pnpm --filter ./apps/api build && pnpm --filter ./apps/web build",
-    "lint": "pnpm --filter ./apps/api run lint && pnpm --filter ./apps/web run lint",
-    "typecheck": "pnpm --filter ./apps/api run typecheck && pnpm --filter ./apps/web run typecheck",
+    "build": "pnpm --filter ./packages/contracts run build && pnpm --filter ./apps/api build && pnpm --filter ./apps/web build",
+    "lint": "pnpm --filter ./packages/contracts run typecheck && pnpm --filter ./apps/api run lint && pnpm --filter ./apps/web run lint",
+    "typecheck": "pnpm --filter ./packages/contracts run typecheck && pnpm --filter ./apps/api run typecheck && pnpm --filter ./apps/web run typecheck",
 <% } else { %>
     "dev": "pnpm --filter ./apps/api dev",
-    "build": "pnpm --filter ./apps/api build",
-    "lint": "pnpm --filter ./apps/api run lint",
-    "typecheck": "pnpm --filter ./apps/api run typecheck",
+    "build": "pnpm --filter ./packages/contracts run build && pnpm --filter ./apps/api build",
+    "lint": "pnpm --filter ./packages/contracts run typecheck && pnpm --filter ./apps/api run lint",
+    "typecheck": "pnpm --filter ./packages/contracts run typecheck && pnpm --filter ./apps/api run typecheck",
 <% } %>
     "test": "pnpm --filter ./apps/api run test",
     "docker:up": "docker compose up -d",

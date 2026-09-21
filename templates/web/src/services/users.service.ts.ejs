@@ -1,23 +1,11 @@
 import api from './api';
+import type {
+  CreateUserInput,
+  UpdateUserInput,
+  User,
+} from '<%= scope %>/contracts';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
-
-export type CreateUserInput = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-export type UpdateUserInput = {
-  name?: string;
-  email?: string;
-  password?: string;
-};
+export type { User, CreateUserInput, UpdateUserInput };
 
 export const usersService = {
   async getUsers() {

@@ -1,58 +1,29 @@
 import api from './api';
+import type {
+  AuthUser,
+  ChangePasswordInput,
+  LoginInput,
+  LoginResponse,
+  MessageResponse,
+  RegisterInput,
+  RegisterResponse,
+  UpdateProfileInput,
+} from '<%= scope %>/contracts';
 
-export interface RegisterData {
-  name: string;
-  email: string;
-  password: string;
-}
+export type LoginData = LoginInput;
+export type RegisterData = RegisterInput;
+export type UpdateProfileData = UpdateProfileInput;
+export type ChangePasswordData = ChangePasswordInput;
 
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  accessToken: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
-
-export type AuthUser = {
-  id: string;
-  name: string;
-  email: string;
-};
-
-export interface RegisterResponse {
-  message: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    createdAt: string;
-  };
-}
-
-export type UpdateProfileData = {
-  name?: string;
-  email?: string;
-};
-
-export type ChangePasswordData = {
-  currentPassword: string;
-  newPassword: string;
-};
+export type { AuthUser };
 
 export const authService = {
-  async register(data: RegisterData) {
+  async register(data: RegisterInput) {
     const response = await api.post<RegisterResponse>('/auth/register', data);
     return response.data;
   },
 
-  async login(data: LoginData) {
+  async login(data: LoginInput) {
     const response = await api.post<LoginResponse>('/auth/login', data);
     return response.data;
   },
@@ -62,13 +33,13 @@ export const authService = {
     return response.data;
   },
 
-  async updateProfile(data: UpdateProfileData) {
+  async updateProfile(data: UpdateProfileInput) {
     const response = await api.patch<AuthUser>('/auth/profile', data);
     return response.data;
   },
 
-  async changePassword(data: ChangePasswordData) {
-    const response = await api.patch<{ message: string }>('/auth/password', data);
+  async changePassword(data: ChangePasswordInput) {
+    const response = await api.patch<MessageResponse>('/auth/password', data);
     return response.data;
   },
 };

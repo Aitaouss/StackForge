@@ -9,14 +9,11 @@ import {
   useState,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import type { AuthUser } from '<%= scope %>/contracts';
 import { authService } from '@/services/auth.service';
 import { clearSession } from '@/lib/auth-cookie';
 
-export type AuthUser = {
-  id: string;
-  name: string;
-  email: string;
-};
+export type { AuthUser };
 
 type AuthContextValue = {
   user: AuthUser | null;
