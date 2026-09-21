@@ -8,4 +8,4 @@ export const RELEASE_NOTES_URL = "https://github.com/Aitaouss/StackForge/release
 export const PRIMARY_INSTALL_CMD = "npx create-stackforge-app@latest";
 
 export const STACKFORGE_TAGLINE =
-  "apps/web + apps/api monorepo — presets, manifest v2, stackforge doctor, auth, CRUD, tests, Docker, and CI.";
+  "apps/web + apps/api monorepo — shared Zod contracts, presets, manifest v2, stackforge doctor, auth, tests, Docker, and CI.";

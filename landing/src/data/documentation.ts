@@ -12,7 +12,7 @@ export const documentationSections: DocSection[] = [
     id: "introduction",
     title: "Introduction",
     paragraphs: [
-      "create-stackforge-app scaffolds a production-ready pnpm monorepo: apps/web (Next.js 14 App Router), apps/api (NestJS), packages/* shared config, Prisma, PostgreSQL or SQLite, Tailwind + shadcn/ui, JWT auth, optional Docker, and generated CI.",
+      "create-stackforge-app scaffolds a production-ready pnpm monorepo: apps/web (Next.js 14 App Router), apps/api (NestJS), packages/contracts (shared Zod types), other shared packages, Prisma, PostgreSQL or SQLite, Tailwind + shadcn/ui, JWT auth, optional Docker, and generated CI.",
       "The same npm package ships stackforge doctor and stackforge info for generated projects. Run create with npx—no global install. Node.js 18+.",
     ],
   },
@@ -89,16 +89,21 @@ export const documentationSections: DocSection[] = [
 ├── apps/
 │   ├── api/          # NestJS
 │   └── web/          # Next.js (omitted for --preset api)
-├── packages/         # typescript-config, eslint-config, ui stub
+├── packages/
+│   ├── contracts/    # Zod schemas + shared API types
+│   ├── typescript-config/
+│   ├── eslint-config/
+│   └── ui/           # shared stub
 ├── stackforge.json   # schema v2
 ├── docker-compose.yml
 ├── AGENTS.md
 └── pnpm-workspace.yaml`,
     ],
     list: [
+      "packages/contracts — shared Zod schemas; Nest DTOs and web types stay aligned",
       "JWT auth: register, login, /auth/me (dashboard & minimal include web auth UI)",
       "Prisma schema and migrations under apps/api",
-      "Optional Prisma Studio in Docker (PostgreSQL)",
+      "Optional Prisma Studio in Docker (PostgreSQL, http://127.0.0.1:5555)",
       "Projects from 1.2.x used frontend/ and backend/ (manifest v1) — see repo docs/MIGRATION-monorepo.md",
     ],
   },
@@ -114,23 +119,13 @@ export const documentationSections: DocSection[] = [
     id: "run-generated",
     title: "Run the generated app",
     commands: [
-      "cd my-app && pnpm install && pnpm dev",
+      "cd my-app && pnpm install && pnpm dev   # from project root — builds & watches contracts",
       "cd my-app && docker compose up -d",
       "cd my-app && npx stackforge doctor",
     ],
     paragraphs: [
       "Use docker compose when you enabled Docker during scaffolding (especially with PostgreSQL).",
       "Migrations and env files live under apps/api/.",
-    ],
-  },
-  {
-    id: "develop-cli",
-    title: "Develop the CLI (StackForge repo)",
-    commands: [
-      "pnpm install",
-      "pnpm run build",
-      "node ./bin/create-stackforge-app.js",
-      "node ./bin/stackforge.js doctor",
     ],
   },
   {
@@ -141,19 +136,6 @@ export const documentationSections: DocSection[] = [
       "Directory already exists and is not empty → choose another project name or clear the folder",
       "Invalid --database → use postgresql or sqlite only",
       "Invalid --preset → use dashboard, minimal, or api only",
-    ],
-  },
-  {
-    id: "landing-site",
-    title: "Landing site (this website)",
-    paragraphs: [
-      "The marketing site lives in the landing/ directory. Run it locally with:",
-    ],
-    commands: ["cd landing", "pnpm install", "pnpm dev"],
-    list: [
-      "Home: product overview, CLI demo, npm weekly downloads",
-      "/docs: full documentation (this page)",
-      "StackForge Assistant chatbot: local knowledge base, no external API",
     ],
   },
 ];

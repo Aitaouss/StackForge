@@ -19,13 +19,14 @@ export const STACK_LOGOS: StackLogo[] = [
   { name: "Docker", slug: "docker", color: "2496ED", role: "Compose stack" },
   { name: "pnpm", slug: "pnpm", color: "F69220", role: "Monorepo" },
   { name: "Tailwind CSS", slug: "tailwindcss", color: "06B6D4", role: "Styling" },
-  { name: "Zod", slug: "zod", color: "3E67B1", role: "Env validation" },
+  { name: "Zod", slug: "zod", color: "3E67B1", role: "Contracts + env" },
   { name: "Jest", slug: "jest", color: "C21325", role: "Unit & e2e tests" },
   { name: "ESLint", slug: "eslint", color: "4B32C3", role: "Linting" },
   { name: "GitHub Actions", slug: "githubactions", color: "FFFFFF", role: "Generated CI" },
 ];
 
 export const SHIPPED_CAPABILITIES = [
+  "packages/contracts — shared Zod schemas for API requests, responses, and web types",
   "JWT auth: register, login, /auth/me session hydration, protected routes",
   "Bcrypt password hashing and per-project JWT_SECRET",
   "Prisma migrations (PostgreSQL & SQLite) with db:deploy",
@@ -33,7 +34,7 @@ export const SHIPPED_CAPABILITIES = [
   "Zod-validated environment, Helmet, throttling, request IDs",
   "shadcn/ui + Tailwind dashboard, React Query, Axios API client",
   "Backend unit tests, Supertest e2e, ESLint & typecheck scripts",
-  "docker compose: Postgres, apps/api, apps/web, Prisma Studio",
+  "Multi-stage Docker images: Postgres, apps/api, apps/web, Prisma Studio (127.0.0.1)",
   "Presets: dashboard (full), minimal (auth + simple UI), api (NestJS-only)",
   "stackforge.json v2, stackforge doctor & info, AGENTS.md, generated CI",
 ] as const;

@@ -4,6 +4,7 @@ import {
   Activity,
   Box,
   Database,
+  FileCode2,
   Layers,
   ShieldCheck,
   TestTube2,
@@ -21,19 +22,25 @@ const FEATURES = [
     title: "Full-stack monorepo",
     description:
       "pnpm workspaces under apps/web and apps/api plus packages/* — shared dev, lint, typecheck, test, and build scripts.",
-    className: "md:col-span-2",
+    className: "sm:col-span-2",
+  },
+  {
+    icon: FileCode2,
+    title: "Shared Zod contracts",
+    description:
+      "packages/contracts keeps NestJS DTO validation and web API types aligned—one source of truth for auth and users.",
   },
   {
     icon: ShieldCheck,
-    title: "Auth you can trust",
+    title: "Secure auth baseline",
     description:
-      "Bcrypt passwords, random JWT_SECRET per project, /auth/me hydration, login redirects, and protected users API.",
+      "End-to-end JWT authentication: bcrypt passwords, /auth/me hydration, login redirects, and protected users API.",
   },
   {
     icon: Database,
     title: "Prisma migrations",
     description:
-      "PostgreSQL or SQLite with migrate deploy, Docker Postgres on :5433, and Prisma Studio in compose.",
+      "PostgreSQL or SQLite with migrate deploy, Docker Postgres on :5433, and Prisma Studio in compose (localhost-only).",
   },
   {
     icon: Activity,
@@ -51,15 +58,13 @@ const FEATURES = [
     icon: Box,
     title: "Docker that runs",
     description:
-      "docker compose up --build for Postgres, apps/api, apps/web, and Studio — paths aligned in v1.3.0.",
-    className: "md:col-span-2",
+      "Multi-stage production images for API and web, PostgreSQL health checks, migrations, and localhost-only Prisma Studio.",
   },
   {
     icon: Terminal,
     title: "CLI, presets & manifest",
     description:
       "--preset dashboard | minimal | api, stackforge.json v2, stackforge doctor/info, and AGENTS.md for tooling.",
-    className: "md:col-span-2",
   },
 ];
 
@@ -83,13 +88,13 @@ export function Features() {
             Everything you need to start shipping
           </h2>
           <p className="mt-4 text-zinc-400">
-            One command generates a typed full-stack foundation—auth, data layer, security, tests,
-            and deploy paths included.
+            One command generates a typed full-stack foundation—shared contracts, auth, data layer,
+            security, tests, and deploy paths included.
           </p>
         </Reveal>
 
         <motion.div
-          className="mt-12 grid gap-4 sm:grid-cols-2 md:grid-cols-3"
+          className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
           initial={reduceMotion ? false : "hidden"}
           whileInView={reduceMotion ? undefined : "visible"}
           viewport={{ once: true, amount: 0.08 }}

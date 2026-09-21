@@ -28,7 +28,11 @@ export function DocsContent() {
             Documentation
           </h1>
           <p className="mt-4 max-w-2xl text-zinc-400">
-            Official guide for the create-stackforge-app CLI and the StackForge landing site.
+            Official guide for the create-stackforge-app CLI and generated monorepos. Maintainers:{" "}
+            <a href="/contributing" className="text-emerald-400 underline underline-offset-2">
+              contributing
+            </a>
+            .
           </p>
         </header>
 
@@ -59,8 +63,8 @@ export function DocsContent() {
               </div>
             ))}
             {section.table && (
-              <div className="mt-4 overflow-hidden rounded-xl border border-white/10">
-                <table className="w-full text-left text-sm">
+              <div className="myscroll mt-4 overflow-x-auto rounded-xl border border-white/10">
+                <table className="w-full min-w-[520px] text-left text-sm">
                   <thead className="bg-zinc-900/80 text-zinc-400">
                     <tr>
                       <th className="px-4 py-3 font-medium">Flag</th>

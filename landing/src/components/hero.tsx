@@ -76,9 +76,10 @@ export function Hero() {
           </HeroFade>
           <HeroFade delay={0.2}>
             <p className="mt-6 w-full text-pretty text-lg leading-relaxed text-zinc-400 sm:text-xl">
-              The opinionated CLI that scaffolds typed, end-to-end architectures. Next.js App
-              Router, NestJS API, Prisma migrations, shadcn/ui, JWT auth, health checks, tests,
-              Docker Compose, and generated GitHub Actions CI—out of the box.
+              The opinionated CLI that scaffolds typed, end-to-end architectures. Shared Zod
+              contracts, Next.js App Router, NestJS API, Prisma migrations, shadcn/ui, JWT auth,
+              health checks, tests, optional production Docker images, and generated GitHub Actions
+              CI—out of the box.
             </p>
           </HeroFade>
         </div>

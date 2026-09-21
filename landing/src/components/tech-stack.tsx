@@ -66,7 +66,7 @@ export function TechStack() {
               <p className="mt-3 text-sm font-semibold text-zinc-400 transition duration-300 group-hover:text-zinc-100">
                 {item.name}
               </p>
-              <p className="mt-1 text-xs text-zinc-600 transition duration-300 group-hover:text-zinc-500">
+              <p className="mt-1 text-xs text-zinc-500 transition duration-300 group-hover:text-zinc-400">
                 {item.role}
               </p>
             </motion.li>
@@ -74,9 +74,10 @@ export function TechStack() {
         </motion.ul>
 
         <Reveal className="mt-16 glass rounded-xl p-6 sm:p-8" delay={0.1}>
-          <h3 className="text-lg font-semibold text-zinc-100">Included in every generated app</h3>
+          <h3 className="text-lg font-semibold text-zinc-100">Included based on your preset</h3>
           <p className="mt-2 text-sm text-zinc-400">
-            Not just logos—working code, configs, and scripts you can run on day one.
+            Not just logos—working code, configs, and scripts. Web, Docker, and dashboard pieces
+            depend on preset and options you choose at scaffold time.
           </p>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2">
             {SHIPPED_CAPABILITIES.map((line, index) => (
