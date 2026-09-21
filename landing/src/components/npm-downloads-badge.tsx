@@ -19,7 +19,7 @@ export function NpmDownloadsBadge({
     <span
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border border-red-500/25 bg-red-500/10 font-medium text-red-200/90",
-        compact ? "px-2 py-0.5 text-[10px]" : "px-3 py-1 text-xs",
+        compact ? "h-7 rounded-md px-2 text-[10px]" : "px-3 py-1 text-xs",
         className,
       )}
       title="npm downloads in the last 7 days (api.npmjs.org)"

@@ -1,5 +1,11 @@
 import path from 'path';
 import { ProjectConfig } from '../types/index.js';
+import {
+  APPS_API,
+  APPS_WEB,
+  featuresForPreset,
+  resolvePreset,
+} from '../layout.js';
 import { renderTemplate, getTemplatePath, writeJson } from '../utils/file.js';
 import { getStackforgeVersion } from '../utils/stackforge-version.js';
 
@@ -7,6 +13,8 @@ export async function generateCommonFiles(
   config: ProjectConfig,
 ): Promise<void> {
   const sharedTemplateDir = getTemplatePath('shared');
+  const preset = resolvePreset(config);
+  const features = featuresForPreset(preset);
 
   const data = {
     projectName: config.projectName,
@@ -17,6 +25,8 @@ export async function generateCommonFiles(
         ? 'postgresql://postgres:postgres@localhost:5433/app'
         : 'file:./dev.db',
     jwtSecret: config.jwtSecret,
+    includeWeb: features.web,
+    preset,
   };
 
   await renderTemplate({
@@ -65,12 +75,21 @@ export async function generateCommonFiles(
   });
 
   await writeJson(path.join(config.targetDir, 'stackforge.json'), {
-    schemaVersion: 1,
+    schemaVersion: 2,
     stackforgeVersion: getStackforgeVersion(),
-    preset: config.preset,
+    preset,
     database: config.database,
     docker: config.docker,
-    features: {},
+    apps: {
+      web: features.web ? APPS_WEB : null,
+      api: APPS_API,
+    },
+    orm: 'prisma',
+    features: {
+      userAdmin: features.userAdmin,
+      profile: features.profilePages,
+      web: features.web,
+    },
   });
 
   await renderTemplate({

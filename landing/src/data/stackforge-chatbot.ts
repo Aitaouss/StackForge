@@ -16,10 +16,10 @@ export const CHATBOT_FALLBACK_ANSWER =
 
 export const SUGGESTED_QUESTIONS = [
   "What is StackForge?",
-  "What stack can it generate?",
+  "What are the CLI presets?",
   "How do I create a new project?",
   "Does it support Docker?",
-  "Can I choose Prisma?",
+  "What is stackforge doctor?",
   "What does the generated project include?",
 ] as const;
 
@@ -34,7 +34,7 @@ export const stackforgeKnowledge: ChatbotKnowledgeItem[] = [
     id: "what-is",
     keywords: ["stackforge", "what is", "about", "create-stackforge-app", "cli", "tool", "scaffold"],
     questions: ["What is StackForge?", "What does StackForge do?"],
-    answer: `StackForge is the **create-stackforge-app** CLI—a scaffolding tool that generates a production-ready full-stack monorepo. You get a Next.js 14 frontend, NestJS backend, Prisma ORM, JWT auth, Tailwind + shadcn/ui, optional Docker, and pnpm workspaces in one flow.
+    answer: `StackForge is the **create-stackforge-app** CLI—a scaffolding tool that generates a production-ready pnpm monorepo with **apps/web** (Next.js 14), **apps/api** (NestJS), shared **packages/**, Prisma, JWT auth, Tailwind + shadcn/ui, optional Docker, **stackforge.json v2**, and **stackforge doctor** / **info**.
 
 Run it with:
 
@@ -126,19 +126,21 @@ cd my-app && docker compose up -d
       "project structure",
     ],
     questions: ["What does the generated project include?", "What does StackForge generate?"],
-    answer: `Generated layout:
+    answer: `Generated layout (v1.3.0+):
 
 \`\`\`
 my-app/
-├── backend/          # NestJS + Prisma + JWT auth
-├── frontend/         # Next.js App Router + shadcn/ui
+├── apps/api/         # NestJS + Prisma + JWT
+├── apps/web/         # Next.js (not included for --preset api)
+├── packages/         # typescript-config, eslint-config, ui stub
+├── stackforge.json   # manifest v2
 ├── docker-compose.yml
 ├── pnpm-workspace.yaml
-├── README.md
-└── .env.example
+├── AGENTS.md
+└── README.md
 \`\`\`
 
-Includes auth pages (login/register), protected users API, Prisma schema, and env examples.`,
+**dashboard** preset includes full auth UI, user admin, profile, and settings. **minimal** is auth + simple dashboard. **api** is NestJS-only.`,
   },
   {
     id: "customization",
@@ -162,7 +164,8 @@ Includes auth pages (login/register), protected users API, Prisma schema, and en
 
 CLI flags skip prompts:
 
-- \`-y, --yes\` — all defaults
+- \`-y, --yes\` — all defaults (preset **dashboard**)
+- \`-p, --preset dashboard|minimal|api\`
 - \`-d, --database postgresql|sqlite\`
 - \`--docker\` / \`--no-docker\`
 - \`--install\` / \`--no-install\`
@@ -180,7 +183,7 @@ npx create-stackforge-app@latest my-app -y --database sqlite --no-docker
     questions: ["Does it support Docker?", "Does StackForge support Docker?"],
     answer: `Yes—optional Docker support during scaffolding.
 
-When enabled, the CLI generates \`docker-compose.yml\`, Dockerfiles for frontend/backend, and related config. With **PostgreSQL**, compose can run Postgres, backend, frontend, and Prisma Studio.
+When enabled, the CLI generates \`docker-compose.yml\`, Dockerfiles under apps/api and apps/web, and related config. With **PostgreSQL**, compose can run Postgres, API, web (if preset includes it), and Prisma Studio.
 
 Start services:
 
@@ -202,7 +205,7 @@ Skip Docker with \`--no-docker\` or answer "No" at the prompt.`,
       "protected",
     ],
     questions: ["Does StackForge generate authentication?"],
-    answer: `Yes. The backend includes a JWT auth module (register, login, strategy, guards). The frontend ships login/register pages and services wired to the API, plus a protected users endpoint flow out of the box.`,
+    answer: `Yes. **apps/api** includes JWT auth (register, login, strategy, guards). When the preset includes web, **apps/web** ships login/register and services wired to the API. The **dashboard** preset adds user admin and profile/settings; **minimal** keeps auth with a simpler dashboard; **api** is API-only.`,
   },
   {
     id: "prisma-database",
@@ -222,7 +225,7 @@ Skip Docker with \`--no-docker\` or answer "No" at the prompt.`,
       "What database can I use?",
       "Does it configure PostgreSQL?",
     ],
-    answer: `**Prisma** is included in every generated backend. You pick the database at scaffold time:
+    answer: `**Prisma** lives in **apps/api**. You pick the database at scaffold time:
 
 - **PostgreSQL** — needs Docker or a local Postgres instance
 - **SQLite** — lightweight, no extra services
@@ -264,11 +267,19 @@ npx create-stackforge-app@latest
 
 Useful flags:
 
-- \`-y, --yes\` — skip prompts (PostgreSQL + Docker + install)
+- \`-y, --yes\` — skip prompts (PostgreSQL + Docker + install + preset dashboard)
+- \`-p, --preset dashboard|minimal|api\`
 - \`-d, --database <postgresql|sqlite>\`
 - \`--docker\` / \`--no-docker\`
 - \`--install\` / \`--no-install\`
 - \`-c, --cwd <path>\`
+
+In a generated project:
+
+\`\`\`
+npx stackforge doctor
+npx stackforge info
+\`\`\`
 
 Develop the CLI locally (repo root):
 
@@ -321,7 +332,40 @@ corepack prepare pnpm@9 --activate
 
 If scaffolding fails because the target folder **already exists and is not empty**, pick a new project name or remove the directory.
 
-Invalid \`--database\` values must be \`postgresql\` or \`sqlite\`.`,
+Invalid \`--database\` values must be \`postgresql\` or \`sqlite\`.
+
+Invalid \`--preset\` values must be \`dashboard\`, \`minimal\`, or \`api\`.`,
+  },
+  {
+    id: "presets",
+    keywords: ["preset", "presets", "minimal", "api preset", "dashboard preset"],
+    questions: ["What are the CLI presets?", "What is --preset minimal?"],
+    answer: `**Presets** (v1.3.0+):
+
+- **dashboard** — default; apps/web + apps/api with user CRUD UI, profile, settings
+- **minimal** — apps/web + apps/api with auth and a simple dashboard (no user admin)
+- **api** — apps/api only (no Next.js app); full NestJS API
+
+Example:
+
+\`\`\`
+npx create-stackforge-app@latest my-api -y --preset api
+\`\`\`
+
+Omit \`--preset\` or use \`dashboard\` for the full stack.`,
+  },
+  {
+    id: "doctor",
+    keywords: ["doctor", "info", "stackforge doctor", "diagnose", "health check"],
+    questions: ["What is stackforge doctor?"],
+    answer: `**stackforge doctor** and **stackforge info** ship in the same npm package as create-stackforge-app. Run them from your generated project root:
+
+\`\`\`
+npx stackforge doctor
+npx stackforge info
+\`\`\`
+
+Doctor checks Node, pnpm, \`stackforge.json\`, apps paths, env, and JWT secret. Info prints manifest and dependency versions for support.`,
   },
   {
     id: "docs",

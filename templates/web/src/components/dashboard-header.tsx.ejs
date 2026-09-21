@@ -1,0 +1,130 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { BookOpen, ChevronRight, LogOut, Settings, User } from 'lucide-react';
+import { useAuth } from '@/contexts/auth-context';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
+
+const NAV = [
+  { href: '/dashboard', label: 'Overview' },
+<% if (includeProfilePages) { %>
+  { href: '/dashboard/profile', label: 'Profile' },
+  { href: '/dashboard/settings', label: 'Settings' },
+<% } %>
+] as const;
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+export function DashboardHeader() {
+  const pathname = usePathname();
+  const { user, logout } = useAuth();
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/40 bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-sm font-bold text-emerald-400">
+              <%= projectName.charAt(0).toUpperCase() %>
+            </span>
+            <span className="hidden font-semibold sm:inline"><%= projectName %></span>
+          </Link>
+          <Separator orientation="vertical" className="hidden h-6 sm:block" />
+          <Badge variant="secondary" className="hidden sm:inline-flex">
+            Production
+          </Badge>
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Dashboard">
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={
+                  pathname === item.href
+                    ? 'rounded-md bg-muted px-3 py-1.5 text-sm text-foreground'
+                    : 'rounded-md px-3 py-1.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground'
+                }
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <Button variant="ghost" size="icon" asChild aria-label="Documentation">
+            <a href="https://stack-forge.aitaouss.me/" target="_blank" rel="noopener noreferrer">
+              <BookOpen className="h-4 w-4" />
+            </a>
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
+                <Avatar className="h-9 w-9">
+                  <AvatarFallback className="bg-emerald-500/15 text-emerald-400">
+                    {user ? initials(user.name) : '??'}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium">{user?.name ?? 'Account'}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+<% if (includeProfilePages) { %>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/profile">
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/settings">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+<% } %>
+              <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+      <div className="mx-auto flex max-w-6xl items-center gap-1 px-4 pb-3 text-xs text-muted-foreground sm:px-6">
+        <Link href="/dashboard" className="hover:text-foreground">
+          Dashboard
+        </Link>
+        <ChevronRight className="h-3 w-3" />
+        <span className="text-foreground">Overview</span>
+      </div>
+    </header>
+  );
+}

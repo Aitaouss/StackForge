@@ -33,7 +33,7 @@ export function TechStack() {
             Built with the stack you already trust
           </h2>
           <p className="mt-4 text-zinc-400">
-            StackForge wires familiar tools into one generate command—typed frontend, secure API,
+            StackForge wires familiar tools into one generate command—apps/web, apps/api,
             database, containers, and CI templates aligned with what we ship on npm today.
           </p>
         </Reveal>

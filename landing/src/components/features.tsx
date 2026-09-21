@@ -20,7 +20,7 @@ const FEATURES = [
     icon: Layers,
     title: "Full-stack monorepo",
     description:
-      "pnpm workspaces wire Next.js 14 (App Router) and NestJS 10 with shared scripts: dev, lint, typecheck, test, and build.",
+      "pnpm workspaces under apps/web and apps/api plus packages/* — shared dev, lint, typecheck, test, and build scripts.",
     className: "md:col-span-2",
   },
   {
@@ -45,20 +45,20 @@ const FEATURES = [
     icon: TestTube2,
     title: "Tests & CI template",
     description:
-      "Jest unit tests, Supertest e2e, ESLint on frontend and backend, plus .github/workflows/ci.yml in every app.",
+      "Jest unit tests, Supertest e2e, ESLint on web and API, plus .github/workflows/ci.yml in every app.",
   },
   {
     icon: Box,
     title: "Docker that runs",
     description:
-      "docker compose up --build for Postgres, API, Next.js, and Studio—fixed in v1.1.1 for production start.",
+      "docker compose up --build for Postgres, apps/api, apps/web, and Studio — paths aligned in v1.3.0.",
     className: "md:col-span-2",
   },
   {
     icon: Terminal,
-    title: "CLI & manifest",
+    title: "CLI, presets & manifest",
     description:
-      "Non-interactive flags (-y, --database, --docker), stackforge.json, and AGENTS.md for tooling and extend workflows.",
+      "--preset dashboard | minimal | api, stackforge.json v2, stackforge doctor/info, and AGENTS.md for tooling.",
     className: "md:col-span-2",
   },
 ];

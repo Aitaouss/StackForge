@@ -1,0 +1,64 @@
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { LoggerModule } from 'nestjs-pino';
+import { randomUUID } from 'crypto';
+import { AuthModule } from './auth/auth.module';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { validateEnv } from './config/env.schema';
+import { HealthModule } from './health/health.module';
+<% if (includeUserAdmin) { %>import { UsersModule } from './users/users.module';
+<% } %>import { PrismaModule } from './prisma/prisma.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: (config) => validateEnv(config),
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.LOG_LEVEL ?? 'info',
+        genReqId: (req, res) => {
+          const incoming = req.headers['x-request-id'];
+          const requestId =
+            typeof incoming === 'string' && incoming.length > 0
+              ? incoming
+              : randomUUID();
+          req.headers['x-request-id'] = requestId;
+          res.setHeader('x-request-id', requestId);
+          return requestId;
+        },
+        customProps: (req) => ({
+          userId: (req as { user?: { id: string } }).user?.id,
+        }),
+        redact: ['req.headers.authorization'],
+        transport:
+          process.env.NODE_ENV === 'development'
+            ? { target: 'pino-pretty', options: { singleLine: true, colorize: true } }
+            : undefined,
+      },
+    }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60_000,
+        limit: 100,
+      },
+    ]),
+    PrismaModule,
+    HealthModule,
+    AuthModule,
+<% if (includeUserAdmin) { %>    UsersModule,
+<% } %>  ],
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
+  ],
+})
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
+  }
+}
