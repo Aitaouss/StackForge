@@ -85,3 +85,6 @@ jobs:
 
       - name: Smoke generate (PostgreSQL)
         run: node scripts/smoke-generated-app.mjs postgresql
+
+      - name: Smoke Docker and Prisma Studio
+        run: node scripts/smoke-docker-generated-app.mjs

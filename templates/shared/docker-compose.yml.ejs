@@ -43,16 +43,16 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+      target: studio
     container_name: <%= projectName %>-prisma-studio
     environment:
       DATABASE_URL: <%= dockerDatabaseUrl %>
+      PGSSLMODE: disable
     ports:
-      - "5555:5555"
+      - "127.0.0.1:5555:5555"
     depends_on:
       postgres:
         condition: service_healthy
-    command: >
-      sh -c "pnpm --filter ./apps/api exec prisma studio --port 5555 --hostname 0.0.0.0 --browser none"
 
 <% } %>
 <% if (includeWeb) { %>

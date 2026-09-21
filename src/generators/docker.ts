@@ -20,7 +20,7 @@ export async function generateDockerFiles(
     database: config.database,
     dockerDatabaseUrl:
       config.database === 'postgresql'
-        ? 'postgresql://postgres:postgres@postgres:5432/app'
+        ? 'postgresql://postgres:postgres@postgres:5432/app?sslmode=disable'
         : 'file:./dev.db',
     jwtSecret: config.jwtSecret,
     includeWeb: features.web,

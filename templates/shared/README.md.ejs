@@ -72,7 +72,7 @@ cd apps/api
 pnpm run db:deploy
 ```
 
-3. Start dev servers from the project root:
+3. Start dev servers from the **project root** (builds and watches `packages/contracts`):
 
 ```bash
 pnpm dev
@@ -86,6 +86,8 @@ pnpm prisma migrate dev
 cd ../..
 pnpm dev
 ```
+
+Run `pnpm dev` from the project root so `packages/contracts` is built and watched.
 <% } %>
 
 ## Development URLs
@@ -104,7 +106,7 @@ npx stackforge info
 
 ## Scripts
 
-- `pnpm dev` - Start development servers
+- `pnpm dev` - Start development servers from the root (includes contracts build/watch)
 - `pnpm build` - Build applications
 - `pnpm docker:up` / `pnpm docker:down` - Docker Compose
 

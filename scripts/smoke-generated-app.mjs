@@ -93,6 +93,16 @@ try {
   console.log('[smoke] pnpm install…');
   await execa('pnpm', ['install'], { cwd: appDir, stdio: 'inherit' });
 
+  console.log('[smoke] contracts build…');
+  await execa('pnpm', ['--filter', './packages/contracts', 'run', 'build'], {
+    cwd: appDir,
+    stdio: 'inherit',
+  });
+
+  if (!(await fs.pathExists(path.join(appDir, 'packages', 'contracts', 'dist', 'index.js')))) {
+    throw new Error('Missing packages/contracts/dist after contracts build');
+  }
+
   const apiDir = path.join(appDir, 'apps', 'api');
 
   if (database === 'postgresql' && process.env.GITHUB_ACTIONS === 'true') {
