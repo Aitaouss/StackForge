@@ -3,11 +3,12 @@ import Link from "next/link";
 import { TrackedGitHubLink } from "./tracked-github-link";
 import { TrackedNpmLink } from "./tracked-npm-link";
 import { CLI_VERSION } from "@/data/product";
+import { Reveal } from "@/components/motion/reveal";
 
 export function Footer() {
   return (
     <footer className="border-t border-white/10 px-4 py-12 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+      <Reveal className="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex items-center gap-2 text-zinc-100">
             <Anvil className="h-5 w-5 text-emerald-400" aria-hidden />
@@ -29,13 +30,13 @@ export function Footer() {
             Documentation
           </Link>
         </nav>
-      </div>
-      <div className="mx-auto mt-10 max-w-6xl space-y-2 text-center text-xs">
+      </Reveal>
+      <Reveal delay={0.08} className="mx-auto mt-10 max-w-6xl space-y-2 text-center text-xs">
         <p className="text-zinc-400">© 2026 Aimen Taoussi. All rights reserved.</p>
         <p className="text-zinc-400">
           Generated projects require Node.js ≥18. Use corepack to enable pnpm before install.
         </p>
-      </div>
+      </Reveal>
     </footer>
   );
 }
