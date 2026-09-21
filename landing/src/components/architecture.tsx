@@ -5,6 +5,7 @@ const TREE = `my-app/
 │   ├── api/              # NestJS + Prisma + JWT
 │   └── web/              # Next.js 14 App Router
 ├── packages/
+│   ├── contracts/        # Zod schemas + shared API types
 │   ├── typescript-config/
 │   ├── eslint-config/
 │   └── ui/               # shared stub
@@ -16,15 +17,15 @@ const TREE = `my-app/
 
 const POINTS = [
   {
-    title: "Typed API boundary",
-    body: "React Query + Axios in apps/web; NestJS DTOs, Swagger at /docs, and structured errors in apps/api.",
+    title: "Shared contracts",
+    body: "packages/contracts defines Zod schemas and inferred types—nestjs-zod DTOs in apps/api and typed services in apps/web.",
   },
   {
-    title: "Auth end-to-end",
-    body: "Register and login UI, JWT guards, /auth/me hydration, cookie-aware middleware, and hashed passwords in the DB.",
+    title: "Authentication included",
+    body: "Register and login UI, JWT guards, /auth/me hydration, middleware, and hashed passwords—a secure baseline you can extend.",
   },
   {
-    title: "Presets & maintain",
+    title: "Presets & diagnostics",
     body: "dashboard, minimal, or api-only scaffolds; then npx stackforge doctor and stackforge info inside the project.",
   },
 ];
@@ -38,8 +39,8 @@ export function Architecture() {
             Architecture at a glance
           </h2>
           <p className="mt-4 text-zinc-400">
-            A pnpm workspace with apps/ and packages/ so the web app, API, and shared config stay
-            easy to navigate.
+            A pnpm workspace with apps/ and packages/ so the web app, API, contracts, and shared
+            config stay easy to navigate.
           </p>
         </Reveal>
 

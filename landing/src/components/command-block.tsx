@@ -18,7 +18,9 @@ export function CommandBlock({ command, className, elevated }: CommandBlockProps
         className,
       )}
     >
-      <code className="font-mono text-sm text-emerald-300/90 sm:text-base">{command}</code>
+      <code className="min-w-0 break-all font-mono text-xs text-emerald-300/90 sm:break-normal sm:text-sm md:text-base">
+        {command}
+      </code>
       <CopyButton text={command} />
     </div>
   );

@@ -47,6 +47,19 @@ export function StackForgeChatbot() {
     }
   }, [open, greeted]);
 
+  useEffect(() => {
+    if (open) return;
+
+    const hideHint = () => setHintVisible(false);
+    const timeout = window.setTimeout(hideHint, 6000);
+    window.addEventListener("scroll", hideHint, { passive: true });
+
+    return () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener("scroll", hideHint);
+    };
+  }, [open]);
+
   const submitQuestion = useCallback(
     (question: string) => {
       const trimmed = question.trim();
@@ -81,7 +94,7 @@ export function StackForgeChatbot() {
     <>
       {!open && (
         <div
-          className="fixed bottom-8 right-6 z-30 flex max-w-[calc(100vw-3rem)] items-end gap-3 sm:bottom-10 sm:right-8"
+          className="fixed bottom-4 right-4 z-30 flex max-w-[calc(100vw-2rem)] items-end gap-3 sm:bottom-10 sm:right-8"
           role="group"
           aria-label="StackForge chatbot launcher"
         >

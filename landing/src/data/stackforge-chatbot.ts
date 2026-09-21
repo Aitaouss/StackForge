@@ -34,7 +34,7 @@ export const stackforgeKnowledge: ChatbotKnowledgeItem[] = [
     id: "what-is",
     keywords: ["stackforge", "what is", "about", "create-stackforge-app", "cli", "tool", "scaffold"],
     questions: ["What is StackForge?", "What does StackForge do?"],
-    answer: `StackForge is the **create-stackforge-app** CLI—a scaffolding tool that generates a production-ready pnpm monorepo with **apps/web** (Next.js 14), **apps/api** (NestJS), shared **packages/**, Prisma, JWT auth, Tailwind + shadcn/ui, optional Docker, **stackforge.json v2**, and **stackforge doctor** / **info**.
+    answer: `StackForge is the **create-stackforge-app** CLI—a scaffolding tool that generates a production-ready pnpm monorepo with **apps/web** (Next.js 14), **apps/api** (NestJS), **packages/contracts** (shared Zod types), Prisma, JWT auth, Tailwind + shadcn/ui, optional Docker, **stackforge.json v2**, and **stackforge doctor** / **info**.
 
 Run it with:
 
@@ -70,8 +70,9 @@ npx create-stackforge-app@latest
 - **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui, Lucide, Axios
 - **Backend:** NestJS, JWT authentication (register, login, guards)
 - **Data:** Prisma ORM with **PostgreSQL** or **SQLite**
+- **Contracts:** Zod in **packages/contracts** — Nest DTOs and web API types stay aligned
 - **Tooling:** pnpm workspaces, optional Docker / docker-compose
-- **Extras:** Prisma Studio service when using Docker + PostgreSQL
+- **Extras:** Prisma Studio (localhost-only) when using Docker + PostgreSQL
 
 Package: [create-stackforge-app on npm](${NPM_PACKAGE_URL})`,
   },
@@ -126,13 +127,17 @@ cd my-app && docker compose up -d
       "project structure",
     ],
     questions: ["What does the generated project include?", "What does StackForge generate?"],
-    answer: `Generated layout (v1.3.0+):
+    answer: `Generated layout (v1.4+):
 
 \`\`\`
 my-app/
 ├── apps/api/         # NestJS + Prisma + JWT
 ├── apps/web/         # Next.js (not included for --preset api)
-├── packages/         # typescript-config, eslint-config, ui stub
+├── packages/
+│   ├── contracts/    # Zod schemas + shared API types
+│   ├── typescript-config/
+│   ├── eslint-config/
+│   └── ui/
 ├── stackforge.json   # manifest v2
 ├── docker-compose.yml
 ├── pnpm-workspace.yaml
@@ -141,6 +146,17 @@ my-app/
 \`\`\`
 
 **dashboard** preset includes full auth UI, user admin, profile, and settings. **minimal** is auth + simple dashboard. **api** is NestJS-only.`,
+  },
+  {
+    id: "contracts",
+    keywords: ["contracts", "zod", "shared types", "dto", "packages/contracts", "type safety"],
+    questions: ["What are shared contracts?", "Does StackForge use Zod for API types?"],
+    answer: `**packages/contracts** holds Zod schemas and inferred TypeScript types for auth and users.
+
+- **apps/api** uses **nestjs-zod** DTOs derived from the same schemas
+- **apps/web** imports types from contracts—no duplicate \`User\` interfaces in services
+
+Run **pnpm dev** from the project root so contracts build and watch alongside API and web.`,
   },
   {
     id: "customization",
@@ -183,15 +199,15 @@ npx create-stackforge-app@latest my-app -y --database sqlite --no-docker
     questions: ["Does it support Docker?", "Does StackForge support Docker?"],
     answer: `Yes—optional Docker support during scaffolding.
 
-When enabled, the CLI generates \`docker-compose.yml\`, Dockerfiles under apps/api and apps/web, and related config. With **PostgreSQL**, compose can run Postgres, API, web (if preset includes it), and Prisma Studio.
+When enabled, the CLI generates \`docker-compose.yml\` and multi-stage Dockerfiles for **apps/api** and **apps/web**. With **PostgreSQL**, compose runs Postgres (health checks), API, web (when included), and **Prisma Studio** on **http://127.0.0.1:5555**.
 
 Start services:
 
 \`\`\`
-docker compose up -d
+docker compose up --build
 \`\`\`
 
-Skip Docker with \`--no-docker\` or answer "No" at the prompt.`,
+Run \`pnpm install\` at the project root before building if you used \`--no-install\`. Skip Docker with \`--no-docker\`.`,
   },
   {
     id: "auth",
@@ -281,11 +297,7 @@ npx stackforge doctor
 npx stackforge info
 \`\`\`
 
-Develop the CLI locally (repo root):
-
-\`\`\`
-pnpm install && pnpm run build && node ./bin/create-stackforge-app.js
-\`\`\``,
+Maintainers: see **[Contributing](/contributing)** on this site or the GitHub repo README.`,
   },
   {
     id: "manual-vs",

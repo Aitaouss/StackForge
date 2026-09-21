@@ -15,6 +15,7 @@ const STEPS = [
   },
   {
     title: "3. Run the generated app",
+    body: "Run development commands from the project root so packages/contracts is built and watched.",
     blocks: [
       { command: "cd my-app && pnpm install && pnpm dev" },
       { command: "cd my-app && docker compose up -d" },
@@ -22,15 +23,15 @@ const STEPS = [
     footer: "Use Docker when you scaffolded with Docker support and PostgreSQL.",
   },
   {
-    title: "4. Develop the CLI itself",
-    body: "From the StackForge repository root, build and run the local binary.",
+    title: "4. Verify and customize",
+    body: "Check diagnostics, then extend auth, API routes, or UI from the monorepo baseline.",
     blocks: [
-      { command: "pnpm install" },
-      { command: "pnpm run build" },
-      { command: "node ./bin/create-stackforge-app.js" },
+      { command: "cd my-app && npx stackforge doctor" },
+      { command: "cd my-app && npx stackforge info" },
     ],
+    footerLink: true,
   },
-] as const;
+];
 
 export function UsageDocs() {
   return (
@@ -70,6 +71,15 @@ export function UsageDocs() {
                 </div>
                 {"footer" in step && step.footer ? (
                   <p className="mt-3 text-sm text-zinc-500">{step.footer}</p>
+                ) : null}
+                {"footerLink" in step && step.footerLink ? (
+                  <p className="mt-3 text-sm text-zinc-500">
+                    Read{" "}
+                    <Link href="/docs" className="text-emerald-400 underline underline-offset-2">
+                      full documentation
+                    </Link>{" "}
+                    for presets, contracts, and Docker.
+                  </p>
                 ) : null}
               </div>
             </Reveal>

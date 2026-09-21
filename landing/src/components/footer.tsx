@@ -29,6 +29,9 @@ export function Footer() {
           <Link href="/docs" className="text-zinc-400 hover:text-emerald-300">
             Documentation
           </Link>
+          <Link href="/contributing" className="text-zinc-400 hover:text-emerald-300">
+            Contributing
+          </Link>
         </nav>
       </Reveal>
       <Reveal delay={0.08} className="mx-auto mt-10 max-w-6xl space-y-2 text-center text-xs">
