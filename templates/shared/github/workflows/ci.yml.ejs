@@ -48,30 +48,34 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Prisma generate
-        working-directory: backend
+        working-directory: apps/api
         run: pnpm exec prisma generate
 
       - name: Apply migrations
-        working-directory: backend
+        working-directory: apps/api
         run: pnpm run db:deploy
 
-      - name: Lint backend
-        run: pnpm --filter ./backend run lint
+      - name: Lint API
+        run: pnpm --filter ./apps/api run lint
 
-      - name: Lint frontend
-        run: pnpm --filter ./frontend run lint
+<% if (includeWeb) { %>
+      - name: Lint web
+        run: pnpm --filter ./apps/web run lint
+<% } %>
 
-      - name: Typecheck backend
-        run: pnpm --filter ./backend run typecheck
+      - name: Typecheck API
+        run: pnpm --filter ./apps/api run typecheck
 
-      - name: Typecheck frontend
-        run: pnpm --filter ./frontend run typecheck
+<% if (includeWeb) { %>
+      - name: Typecheck web
+        run: pnpm --filter ./apps/web run typecheck
+<% } %>
 
-      - name: Test backend
-        run: pnpm --filter ./backend run test
+      - name: Test API
+        run: pnpm --filter ./apps/api run test
 
-      - name: E2E backend
-        run: pnpm --filter ./backend run test:e2e
+      - name: E2E API
+        run: pnpm --filter ./apps/api run test:e2e
 
       - name: Build
         run: pnpm run build

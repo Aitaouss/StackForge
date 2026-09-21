@@ -5,7 +5,7 @@ import {
   resolveTargetDir,
   sanitizeProjectName,
 } from '../utils/validation.js';
-import { DatabaseType, ProjectConfig } from '../types/index.js';
+import { DatabaseType, ProjectConfig, StackforgePreset } from '../types/index.js';
 
 interface PromptAnswers {
   projectName: string;
@@ -20,6 +20,7 @@ export interface PromptOptions {
   docker?: boolean;
   installDependencies?: boolean;
   yes?: boolean;
+  preset?: StackforgePreset;
 }
 
 const DEFAULTS = {
@@ -28,6 +29,7 @@ const DEFAULTS = {
   database: 'postgresql' as DatabaseType,
   docker: true,
   installDependencies: true,
+  preset: 'dashboard' as StackforgePreset,
 };
 
 export async function promptProjectConfig(
@@ -104,7 +106,7 @@ export async function promptProjectConfig(
     docker: options.docker ?? answers.docker,
     installDependencies: options.installDependencies ?? answers.installDependencies,
     targetDir: resolveTargetDir(projectName, cwd),
-    preset: null,
+    preset: options.preset ?? DEFAULTS.preset,
   };
 }
 
@@ -132,6 +134,6 @@ async function buildNonInteractiveConfig(
     docker: options.docker ?? DEFAULTS.docker,
     installDependencies: options.installDependencies ?? DEFAULTS.installDependencies,
     targetDir,
-    preset: null,
+    preset: options.preset ?? DEFAULTS.preset,
   };
 }

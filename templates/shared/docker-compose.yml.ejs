@@ -18,11 +18,11 @@ services:
       retries: 5
 
 <% } %>
-  backend:
+  api:
     build:
       context: .
-      dockerfile: backend/Dockerfile
-    container_name: <%= projectName %>-backend
+      dockerfile: apps/api/Dockerfile
+    container_name: <%= projectName %>-api
     environment:
       DATABASE_URL: <%= dockerDatabaseUrl %>
       JWT_SECRET: <%= jwtSecret %>
@@ -36,13 +36,13 @@ services:
         condition: service_healthy
 <% } %>
     command: >
-      sh -c "pnpm --filter ./backend run db:deploy && pnpm --filter ./backend run start:prod"
+      sh -c "pnpm --filter ./apps/api run db:deploy && pnpm --filter ./apps/api run start:prod"
 
 <% if (database === 'postgresql') { %>
   prisma-studio:
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: apps/api/Dockerfile
     container_name: <%= projectName %>-prisma-studio
     environment:
       DATABASE_URL: <%= dockerDatabaseUrl %>
@@ -52,24 +52,26 @@ services:
       postgres:
         condition: service_healthy
     command: >
-      sh -c "pnpm --filter ./backend exec prisma studio --port 5555 --hostname 0.0.0.0 --browser none"
+      sh -c "pnpm --filter ./apps/api exec prisma studio --port 5555 --hostname 0.0.0.0 --browser none"
 
 <% } %>
-  frontend:
+<% if (includeWeb) { %>
+  web:
     build:
       context: .
-      dockerfile: frontend/Dockerfile
+      dockerfile: apps/web/Dockerfile
       args:
         - NEXT_PUBLIC_API_URL=http://localhost:3001
-    container_name: <%= projectName %>-frontend
+    container_name: <%= projectName %>-web
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3001
       PORT: 3002
     ports:
       - "3002:3002"
     depends_on:
-      - backend
+      - api
 
+<% } %>
 <% if (database === 'postgresql') { %>
 volumes:
   postgres_data:

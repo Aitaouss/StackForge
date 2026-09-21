@@ -1,6 +1,5 @@
 export type DatabaseType = 'postgresql' | 'sqlite';
 
-/** Preset name when using `--preset` (Phase 2+). Null until presets are exposed in CLI. */
 export type StackforgePreset = 'minimal' | 'api' | 'dashboard' | 'saas';
 
 export interface ProjectConfig {
@@ -10,9 +9,9 @@ export interface ProjectConfig {
   docker: boolean;
   installDependencies: boolean;
   targetDir: string;
-  /** Recorded in stackforge.json; null when not selected via preset flag. */
-  preset: StackforgePreset | null;
-  /** Set during generateProject; written to backend `.env`. */
+  /** Resolved preset (defaults to dashboard). */
+  preset?: StackforgePreset;
+  /** Set during generateProject; written to apps/api `.env`. */
   jwtSecret?: string;
 }
 

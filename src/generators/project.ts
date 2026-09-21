@@ -2,8 +2,10 @@ import fs from 'fs-extra';
 import path from 'path';
 import execa from 'execa';
 import { ProjectConfig } from '../types/index.js';
-import { generateBackend } from './backend.js';
-import { generateFrontend } from './frontend.js';
+import { apiDir, featuresForPreset, resolvePreset } from '../layout.js';
+import { generateApi } from './api.js';
+import { generateWeb } from './web.js';
+import { generatePackages } from './packages.js';
 import { generateCommonFiles } from './common.js';
 import { generateDockerFiles } from './docker.js';
 import { ensureEmptyDir } from '../utils/file.js';
@@ -13,8 +15,10 @@ import { spinner, success, info, error } from '../utils/logger.js';
 export async function generateProject(config: ProjectConfig): Promise<void> {
   const projectConfig: ProjectConfig = {
     ...config,
+    preset: resolvePreset(config),
     jwtSecret: config.jwtSecret ?? generateJwtSecret(),
   };
+  const features = featuresForPreset(projectConfig.preset!);
   const createSpinner = spinner('Creating project directory...');
   createSpinner.start();
 
@@ -27,8 +31,11 @@ export async function generateProject(config: ProjectConfig): Promise<void> {
   }
 
   try {
-    await runStep('Generating backend files...', () => generateBackend(projectConfig));
-    await runStep('Generating frontend files...', () => generateFrontend(projectConfig));
+    await runStep('Generating shared packages...', () => generatePackages(projectConfig));
+    await runStep('Generating API (NestJS)...', () => generateApi(projectConfig));
+    if (features.web) {
+      await runStep('Generating web (Next.js)...', () => generateWeb(projectConfig));
+    }
     await runStep('Generating shared files...', () => generateCommonFiles(projectConfig));
     await runStep('Generating Docker files...', () => generateDockerFiles(projectConfig));
   } catch (err) {
@@ -38,17 +45,11 @@ export async function generateProject(config: ProjectConfig): Promise<void> {
 
   if (projectConfig.installDependencies) {
     try {
-      await runStep('Installing root dependencies...', () =>
+      await runStep('Installing dependencies...', () =>
         installDependencies(projectConfig.targetDir),
       );
-      await runStep('Installing backend dependencies...', () =>
-        installDependencies(path.join(projectConfig.targetDir, 'backend')),
-      );
-      await runStep('Installing frontend dependencies...', () =>
-        installDependencies(path.join(projectConfig.targetDir, 'frontend')),
-      );
       await runStep('Generating Prisma client...', () =>
-        runPrismaGenerate(path.join(projectConfig.targetDir, 'backend')),
+        runPrismaGenerate(apiDir(projectConfig.targetDir)),
       );
     } catch (err) {
       error(
@@ -58,7 +59,7 @@ export async function generateProject(config: ProjectConfig): Promise<void> {
     }
   }
 
-  printSuccess(projectConfig);
+  printSuccess(projectConfig, features.web);
 }
 
 async function runStep<T>(
@@ -102,23 +103,24 @@ async function cleanup(targetDir: string): Promise<void> {
   }
 }
 
-function printSuccess(config: ProjectConfig): void {
+function printSuccess(config: ProjectConfig, includeWeb: boolean): void {
   success(`Successfully created ${config.projectName}`);
   info(`Location: ${config.targetDir}`);
+  info(`Preset: ${config.preset}`);
   info('');
   info('Next steps:');
   info(`  cd ${config.projectName}`);
 
   if (!config.installDependencies) {
     info('  pnpm install');
-    info('  cd backend && pnpm prisma generate');
+    info('  cd apps/api && pnpm prisma generate');
   }
 
   if (config.database === 'postgresql') {
     info('  docker compose up -d postgres');
-    info('  cd backend && pnpm prisma migrate dev');
+    info('  cd apps/api && pnpm prisma migrate dev');
   } else {
-    info('  cd backend && pnpm prisma migrate dev');
+    info('  cd apps/api && pnpm prisma migrate dev');
   }
 
   if (config.docker && !config.installDependencies) {
@@ -127,12 +129,15 @@ function printSuccess(config: ProjectConfig): void {
 
   info('  pnpm dev');
   info('');
-  info('Frontend: http://localhost:3002');
-  info('Backend API: http://localhost:3001');
+  if (includeWeb) {
+    info('Web: http://localhost:3002');
+  }
+  info('API: http://localhost:3001');
   info('API Docs: http://localhost:3001/docs');
+  info('Diagnostics: npx stackforge doctor');
   if (config.database === 'postgresql' && config.docker) {
     info('Prisma Studio: http://localhost:5555 (via docker compose up -d)');
   } else {
-    info("Prisma Studio: http://localhost:5555 (run 'pnpm db:studio' in backend/)");
+    info("Prisma Studio: http://localhost:5555 (run 'pnpm db:studio' in apps/api/)");
   }
 }

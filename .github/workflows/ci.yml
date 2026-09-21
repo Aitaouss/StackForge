@@ -47,8 +47,8 @@ jobs:
       - name: Build CLI
         run: pnpm run build
 
-      - name: Smoke generate (SQLite)
-        run: node scripts/smoke-generated-app.mjs sqlite
+      - name: Smoke generate (SQLite, all presets)
+        run: node scripts/smoke-all-presets.mjs
 
   smoke-postgresql:
     needs: build-cli

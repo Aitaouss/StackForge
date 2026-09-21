@@ -49,29 +49,45 @@ npx create-stackforge-app@latest my-app -y
 
 # Custom, no prompts
 npx create-stackforge-app@latest my-app -y --database sqlite --no-docker --no-install
+
+# Presets (Phase 2)
+npx create-stackforge-app@latest my-api -y --preset api
+npx create-stackforge-app@latest my-app -y --preset minimal
 ```
 
 | Flag | Description |
 | ---- | ----------- |
 | `-d, --database <type>` | Database: `postgresql` or `sqlite` |
+| `-p, --preset <name>` | `dashboard` (default), `minimal`, or `api` |
 | `--docker` / `--no-docker` | Generate or skip Docker support |
 | `--install` / `--no-install` | Install dependencies automatically or skip |
 | `-y, --yes` | Skip all prompts and use defaults |
 | `-c, --cwd <path>` | Working directory |
 
+Inside a generated project:
+
+```bash
+npx stackforge doctor
+npx stackforge info
+```
+
 ## Generated Project Structure
 
 ```
 my-app/
-├── backend/          # NestJS application
-├── frontend/         # Next.js application
-├── stackforge.json   # StackForge project manifest (schema v1)
+├── apps/
+│   ├── api/          # NestJS application
+│   └── web/          # Next.js application (not included for `--preset api`)
+├── packages/         # shared eslint-config, typescript-config, ui stub
+├── stackforge.json   # StackForge project manifest (schema v2)
 ├── AGENTS.md         # Architecture notes for humans and AI tools
 ├── .stackforge/      # Reserved for StackForge tooling metadata
 ├── docker-compose.yml
 ├── README.md
 └── .env.example
 ```
+
+Projects created with **1.2.x** used `frontend/` + `backend/` (manifest v1). See [docs/MIGRATION-monorepo.md](./docs/MIGRATION-monorepo.md).
 
 ## Development
 

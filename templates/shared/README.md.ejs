@@ -2,24 +2,28 @@
 
 <%= projectDescription %>
 
+**Preset:** `<%= preset %>`
+
 ## Stack
 
-- **Frontend:** [Next.js](https://nextjs.org/) (App Router) + TypeScript + Tailwind CSS + shadcn/ui
-- **Backend:** [NestJS](https://nestjs.com/) + TypeScript + Prisma + JWT
+<% if (includeWeb) { %>- **Web:** [Next.js](https://nextjs.org/) (App Router) + TypeScript + Tailwind CSS + shadcn/ui
+<% } %>- **API:** [NestJS](https://nestjs.com/) + TypeScript + Prisma + JWT
 - **Database:** <%= database === 'postgresql' ? 'PostgreSQL' : 'SQLite' %>
 - **HTTP Client:** Axios
-- **Package Manager:** pnpm
+- **Package Manager:** pnpm (workspace monorepo)
 - **Containerization:** Docker (optional)
 
 ## Project Structure
 
 ```
 <%= projectName %>
-├── backend/          # NestJS application
-├── frontend/         # Next.js application
+├── apps/
+│   ├── api/          # NestJS application
+<% if (includeWeb) { %>│   └── web/          # Next.js application
+<% } %>├── packages/         # shared eslint-config, typescript-config, ui stub
+├── stackforge.json
 ├── docker-compose.yml
-├── README.md
-└── .env.example
+└── README.md
 ```
 
 ## Getting Started
@@ -40,108 +44,71 @@ pnpm install
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and update the values:
+API env lives in `apps/api/.env` (see `apps/api/.env.example`).
 
-```bash
-cp .env.example .env
-```
+<% if (includeWeb) { %>Web env: `apps/web/.env.local` (see `.env.local.example`).
 
-<% if (database === 'postgresql') { %>
+<% } %><% if (database === 'postgresql') { %>
 ### Option 1: Run with Docker
-
-Start all services:
 
 ```bash
 docker compose up -d
 ```
 
-This starts PostgreSQL, Prisma Studio, the backend, and the frontend. The database schema is applied automatically on first start.
-
-> **Prisma Studio** (visual database editor) is available at http://localhost:5555
-
 ### Option 2: Run Locally
 
-1. Start PostgreSQL (or use the Docker Compose file for just the database):
+1. Start PostgreSQL:
 
 ```bash
 docker compose up -d postgres
 ```
 
-> **PostgreSQL port:** Docker Compose maps Postgres to **localhost:5433** (see `backend/.env` `DATABASE_URL`). Use port **5432** only if you run Postgres directly on the host without that mapping.
+> **PostgreSQL port:** Docker maps Postgres to **localhost:5433** (`apps/api/.env` `DATABASE_URL`).
 
-2. Apply database migrations (an initial migration is included):
+2. Apply migrations:
 
 ```bash
-cd backend
+cd apps/api
 pnpm run db:deploy
 ```
 
-For local development you can also run `pnpm run db:migrate` to create new migrations.
-
-3. Start the development servers:
+3. Start dev servers from the project root:
 
 ```bash
-# From the project root
 pnpm dev
 ```
 <% } else { %>
 ### Run Locally
 
-1. Set up the database:
-
 ```bash
-cd backend
+cd apps/api
 pnpm prisma migrate dev
-```
-
-2. Start the development servers:
-
-```bash
-# From the project root
+cd ../..
 pnpm dev
-```
-
-> **Tip:** Run `pnpm db:studio` inside `backend/` to open Prisma Studio (visual database editor) at http://localhost:5555
-
-### Run with Docker
-
-```bash
-docker compose up -d
 ```
 <% } %>
 
 ## Development URLs
 
-- Frontend: http://localhost:3002
-- Backend API: http://localhost:3001
+<% if (includeWeb) { %>- Web: http://localhost:3002
+<% } %>- API: http://localhost:3001
 - API Docs: http://localhost:3001/docs
-- Prisma Studio: http://localhost:5555<% if (database === 'postgresql') { %> (with `docker compose up -d`)<% } else { %> (run `pnpm db:studio` in `backend/`)<% } %>
+- Prisma Studio: http://localhost:5555
 
-## API Endpoints
+## Diagnostics
 
-| Method | Endpoint        | Description              | Protected |
-|--------|----------------|--------------------------|-----------|
-| POST   | /auth/register | Register a new user      | No        |
-| POST   | /auth/login    | Authenticate a user      | No        |
-| GET    | /auth/me       | Current authenticated user | Yes     |
-| GET    | /health        | API + database health    | No        |
-| GET    | /users         | List all users           | Yes       |
-| GET    | /users/:id     | Get a user by ID         | Yes       |
+```bash
+npx stackforge doctor
+npx stackforge info
+```
 
 ## Scripts
 
-- `pnpm dev` - Start frontend and backend in development mode
-- `pnpm build` - Build both applications
-- `pnpm docker:up` - Start Docker services
-- `pnpm docker:down` - Stop Docker services
+- `pnpm dev` - Start development servers
+- `pnpm build` - Build applications
+- `pnpm docker:up` / `pnpm docker:down` - Docker Compose
 
-### Docker builds
-
-Run `pnpm install` at the project root **before** `docker compose build` so `pnpm-lock.yaml` exists (required when you used `--no-install` during create).
-
-## Authentication
-
-The application uses JWT-based authentication. After logging in, the access token is stored in `localStorage` (and a cookie for Next.js middleware) and attached to API requests via Axios. The dashboard loads the current user from `GET /auth/me`.
+Run `pnpm install` at the project root before `docker compose build` if you used `--no-install` during create.
 
 ## License
 

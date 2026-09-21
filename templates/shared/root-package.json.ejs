@@ -5,11 +5,18 @@
   "private": true,
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "dev": "concurrently \"pnpm --filter ./backend dev\" \"pnpm --filter ./frontend dev\"",
-    "build": "pnpm --filter ./backend build && pnpm --filter ./frontend build",
-    "lint": "pnpm --filter ./backend run lint && pnpm --filter ./frontend run lint",
-    "typecheck": "pnpm --filter ./backend run typecheck && pnpm --filter ./frontend run typecheck",
-    "test": "pnpm --filter ./backend run test",
+<% if (includeWeb) { %>
+    "dev": "concurrently \"pnpm --filter ./apps/api dev\" \"pnpm --filter ./apps/web dev\"",
+    "build": "pnpm --filter ./apps/api build && pnpm --filter ./apps/web build",
+    "lint": "pnpm --filter ./apps/api run lint && pnpm --filter ./apps/web run lint",
+    "typecheck": "pnpm --filter ./apps/api run typecheck && pnpm --filter ./apps/web run typecheck",
+<% } else { %>
+    "dev": "pnpm --filter ./apps/api dev",
+    "build": "pnpm --filter ./apps/api build",
+    "lint": "pnpm --filter ./apps/api run lint",
+    "typecheck": "pnpm --filter ./apps/api run typecheck",
+<% } %>
+    "test": "pnpm --filter ./apps/api run test",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down"
   },

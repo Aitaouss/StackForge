@@ -2,7 +2,7 @@ import { Command } from 'commander';
 import { promptProjectConfig } from '../prompts/project.js';
 import { generateProject } from '../generators/project.js';
 import { error } from '../utils/logger.js';
-import { DatabaseType } from '../types/index.js';
+import { DatabaseType, StackforgePreset } from '../types/index.js';
 
 interface CreateCommandOptions {
   cwd: string;
@@ -10,7 +10,10 @@ interface CreateCommandOptions {
   docker?: boolean;
   install?: boolean;
   yes?: boolean;
+  preset?: string;
 }
+
+const PRESETS: StackforgePreset[] = ['minimal', 'api', 'dashboard'];
 
 const DATABASE_TYPES: DatabaseType[] = ['postgresql', 'sqlite'];
 
@@ -26,6 +29,18 @@ function parseDatabase(value: string | undefined): DatabaseType | undefined {
   return value as DatabaseType;
 }
 
+function parsePreset(value: string | undefined): StackforgePreset | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (!PRESETS.includes(value as StackforgePreset)) {
+    throw new Error(
+      `Invalid preset "${value}". Valid options: ${PRESETS.join(', ')}.`,
+    );
+  }
+  return value as StackforgePreset;
+}
+
 export function registerCreateCommand(program: Command): void {
   program
     .command('create [project-name]', { isDefault: true })
@@ -37,6 +52,11 @@ export function registerCreateCommand(program: Command): void {
     .option('--install', 'install dependencies automatically')
     .option('--no-install', 'skip dependency installation')
     .option('-y, --yes', 'skip all prompts and use defaults')
+    .option(
+      '-p, --preset <preset>',
+      'project preset (minimal, api, dashboard)',
+      'dashboard',
+    )
     .action(async (projectName: string | undefined, options: CreateCommandOptions) => {
       try {
         const config = await promptProjectConfig(projectName, options.cwd, {
@@ -44,6 +64,7 @@ export function registerCreateCommand(program: Command): void {
           docker: options.docker,
           installDependencies: options.install,
           yes: options.yes,
+          preset: parsePreset(options.preset),
         });
         await generateProject(config);
       } catch (err) {

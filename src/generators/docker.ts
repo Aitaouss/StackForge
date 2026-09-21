@@ -1,5 +1,6 @@
 import path from 'path';
 import { ProjectConfig } from '../types/index.js';
+import { featuresForPreset, resolvePreset } from '../layout.js';
 import { renderTemplate, getTemplatePath } from '../utils/file.js';
 
 export async function generateDockerFiles(
@@ -11,6 +12,9 @@ export async function generateDockerFiles(
 
   const sharedTemplateDir = getTemplatePath('shared');
 
+  const preset = resolvePreset(config);
+  const features = featuresForPreset(preset);
+
   const data = {
     projectName: config.projectName,
     database: config.database,
@@ -19,6 +23,7 @@ export async function generateDockerFiles(
         ? 'postgresql://postgres:postgres@postgres:5432/app'
         : 'file:./dev.db',
     jwtSecret: config.jwtSecret,
+    includeWeb: features.web,
   };
 
   await renderTemplate({
