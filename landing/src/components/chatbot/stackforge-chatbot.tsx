@@ -81,13 +81,13 @@ export function StackForgeChatbot() {
     <>
       {!open && (
         <div
-          className="fixed bottom-5 right-5 z-40 flex max-w-[calc(100vw-2.5rem)] items-end gap-3 sm:bottom-6 sm:right-6"
+          className="fixed bottom-8 right-6 z-30 flex max-w-[calc(100vw-3rem)] items-end gap-3 sm:bottom-10 sm:right-8"
           role="group"
           aria-label="StackForge chatbot launcher"
         >
           {hintVisible && (
             <div className="relative mb-1 hidden max-w-[220px] animate-fade-in sm:block">
-              <div className="glass rounded-2xl rounded-br-md border-emerald-500/20 px-3.5 py-2.5 shadow-glow-sm">
+              <div className="glass rounded-2xl rounded-br-md border border-white/60 bg-zinc-950/80 px-3.5 py-2.5 shadow-glow-sm backdrop-blur-md">
                 <div className="flex items-start gap-2">
                   <Bot className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" aria-hidden />
                   <div className="min-w-0 pr-5">
@@ -149,7 +149,7 @@ export function StackForgeChatbot() {
           open
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none translate-y-4 opacity-0",
-          "inset-x-0 bottom-0 h-[min(85vh,640px)] rounded-t-2xl sm:inset-auto sm:bottom-24 sm:right-6 sm:h-[560px] sm:w-[400px] sm:rounded-2xl",
+          "inset-x-0 bottom-0 h-[min(85vh,640px)] rounded-t-2xl sm:inset-auto sm:bottom-28 sm:right-8 sm:h-[560px] sm:w-[400px] sm:rounded-2xl sm:border-white/60",
         )}
       >
         <header className="flex items-center gap-3 border-b border-white/10 px-4 py-3">

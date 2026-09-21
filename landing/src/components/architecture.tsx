@@ -1,16 +1,15 @@
 import { Reveal } from "@/components/motion/reveal";
 
 const TREE = `my-app/
-├── backend/              # NestJS + health + auth
-│   ├── prisma/migrations/
-│   ├── src/health/
-│   ├── src/auth/
-│   └── test/             # e2e (Supertest)
-├── frontend/             # Next.js 14 App Router
-│   ├── src/app/
-│   └── src/components/ui/
+├── apps/
+│   ├── api/              # NestJS + Prisma + JWT
+│   └── web/              # Next.js 14 App Router
+├── packages/
+│   ├── typescript-config/
+│   ├── eslint-config/
+│   └── ui/               # shared stub
 ├── .github/workflows/ci.yml
-├── stackforge.json
+├── stackforge.json       # manifest v2
 ├── docker-compose.yml
 ├── AGENTS.md
 └── pnpm-workspace.yaml`;
@@ -18,15 +17,15 @@ const TREE = `my-app/
 const POINTS = [
   {
     title: "Typed API boundary",
-    body: "React Query + Axios on the frontend; NestJS DTOs, Swagger at /docs, and structured errors on the API.",
+    body: "React Query + Axios in apps/web; NestJS DTOs, Swagger at /docs, and structured errors in apps/api.",
   },
   {
     title: "Auth end-to-end",
     body: "Register and login UI, JWT guards, /auth/me hydration, cookie-aware middleware, and hashed passwords in the DB.",
   },
   {
-    title: "Deploy your way",
-    body: "pnpm dev with SQLite or PostgreSQL locally—or docker compose up --build for the full stack including migrations.",
+    title: "Presets & maintain",
+    body: "dashboard, minimal, or api-only scaffolds; then npx stackforge doctor and stackforge info inside the project.",
   },
 ];
 
@@ -39,8 +38,8 @@ export function Architecture() {
             Architecture at a glance
           </h2>
           <p className="mt-4 text-zinc-400">
-            A deliberate monorepo layout so frontend, backend, and infrastructure stay easy to
-            navigate.
+            A pnpm workspace with apps/ and packages/ so the web app, API, and shared config stay
+            easy to navigate.
           </p>
         </Reveal>
 

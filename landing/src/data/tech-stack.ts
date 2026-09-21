@@ -33,6 +33,7 @@ export const SHIPPED_CAPABILITIES = [
   "Zod-validated environment, Helmet, throttling, request IDs",
   "shadcn/ui + Tailwind dashboard, React Query, Axios API client",
   "Backend unit tests, Supertest e2e, ESLint & typecheck scripts",
-  "docker compose: Postgres, API, Next.js, Prisma Studio (v1.1.1 fixes)",
-  "stackforge.json manifest, AGENTS.md, and .github/workflows/ci.yml in every app",
+  "docker compose: Postgres, apps/api, apps/web, Prisma Studio",
+  "Presets: dashboard (full), minimal (auth + simple UI), api (NestJS-only)",
+  "stackforge.json v2, stackforge doctor & info, AGENTS.md, generated CI",
 ] as const;

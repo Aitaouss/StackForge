@@ -3,6 +3,7 @@ import { Reveal } from "@/components/motion/reveal";
 
 const FLAGS = [
   { flag: "-y, --yes", desc: "Skip all prompts and use defaults (PostgreSQL, Docker, auto-install)" },
+  { flag: "-p, --preset <name>", desc: "dashboard (default), minimal, or api (NestJS-only, no web app)" },
   { flag: "-d, --database <type>", desc: "Database: postgresql or sqlite" },
   { flag: "--docker / --no-docker", desc: "Generate or skip Docker support" },
   { flag: "--install / --no-install", desc: "Install dependencies automatically or skip" },
@@ -11,7 +12,8 @@ const FLAGS = [
 
 const EXAMPLES = [
   "npx create-stackforge-app@latest my-app -y",
-  "npx create-stackforge-app@latest my-app -y --database sqlite --no-docker --no-install",
+  "npx create-stackforge-app@latest my-api -y --preset api",
+  "npx create-stackforge-app@latest my-app -y --preset minimal --database sqlite --no-docker",
 ];
 
 export function CliFlags() {
@@ -55,6 +57,11 @@ export function CliFlags() {
           {EXAMPLES.map((cmd) => (
             <CommandBlock key={cmd} command={cmd} />
           ))}
+          <p className="text-sm text-zinc-500">
+            Inside a generated project:{" "}
+            <code className="text-emerald-300/90">npx stackforge doctor</code> and{" "}
+            <code className="text-emerald-300/90">npx stackforge info</code>.
+          </p>
         </Reveal>
       </div>
     </section>

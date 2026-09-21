@@ -54,13 +54,13 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex h-9 items-center gap-1 rounded-lg border border-white/10 bg-zinc-900/50 p-1">
           {weeklyDownloads != null && (
-            <NpmDownloadsBadge downloads={weeklyDownloads} compact className="hidden lg:inline-flex" />
+            <NpmDownloadsBadge downloads={weeklyDownloads} compact className="hidden sm:inline-flex" />
           )}
           <TrackedGitHubLink
             source="navbar"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-300 transition hover:border-white/20 hover:bg-white/10"
+            className="inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs font-medium text-zinc-300 transition hover:bg-white/5 hover:text-zinc-100"
           >
             <Github className="h-3.5 w-3.5" aria-hidden />
             <Star className="h-3 w-3 text-amber-400" aria-hidden />
@@ -68,7 +68,7 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
           </TrackedGitHubLink>
           <TrackedNpmLink
             source="navbar"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:border-red-500/50 hover:bg-red-500/20"
+            className="inline-flex h-7 items-center gap-1 rounded-md border border-red-500/20 bg-red-500/10 px-2.5 text-xs font-medium text-red-200 transition hover:border-red-500/35 hover:bg-red-500/15"
           >
             npm
             <ExternalLink className="h-3 w-3 opacity-70" aria-hidden />

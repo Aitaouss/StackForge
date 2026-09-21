@@ -17,7 +17,7 @@ export default async function HomePage() {
     <>
       <Navbar weeklyDownloads={weeklyDownloads} />
       <main>
-        <Hero weeklyDownloads={weeklyDownloads} />
+        <Hero />
         <TechStack />
         <Features />
         <Architecture />
