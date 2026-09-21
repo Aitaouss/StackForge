@@ -84,6 +84,9 @@ try {
   if (!(await fs.pathExists(path.join(appDir, 'packages', 'typescript-config', 'base.json')))) {
     throw new Error('Missing packages/typescript-config');
   }
+  if (!(await fs.pathExists(path.join(appDir, 'packages', 'contracts', 'src', 'index.ts')))) {
+    throw new Error('Missing packages/contracts');
+  }
 
   console.log('[smoke] manifest OK:', manifest);
 

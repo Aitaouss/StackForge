@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
@@ -25,13 +25,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+  app.useGlobalPipes(new ZodValidationPipe());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('<%= projectName %> API')

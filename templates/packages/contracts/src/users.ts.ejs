@@ -1,0 +1,33 @@
+import { z } from 'zod';
+
+/** User without timestamps (JWT / session). */
+export const userPublicSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+});
+
+export type UserPublic = z.infer<typeof userPublicSchema>;
+
+/** User returned from CRUD and register. */
+export const userSchema = userPublicSchema.extend({
+  createdAt: z.string(),
+});
+
+export type User = z.infer<typeof userSchema>;
+
+export const createUserInputSchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+export type CreateUserInput = z.infer<typeof createUserInputSchema>;
+
+export const updateUserInputSchema = z.object({
+  name: z.string().min(1).optional(),
+  email: z.string().email().optional(),
+  password: z.string().min(6).optional(),
+});
+
+export type UpdateUserInput = z.infer<typeof updateUserInputSchema>;

@@ -1,14 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { createZodDto } from 'nestjs-zod';
+import { loginInputSchema } from '<%= scope %>/contracts';
 
-export class LoginDto {
-  @ApiProperty({ example: 'john@example.com' })
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({ example: 'securePassword123' })
-  @IsString()
-  @IsNotEmpty()
-  password: string;
-}
+export class LoginDto extends createZodDto(loginInputSchema) {}

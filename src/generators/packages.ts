@@ -46,6 +46,30 @@ export async function generatePackages(config: ProjectConfig): Promise<void> {
       template: 'ui/src/index.ts.ejs',
       output: path.join(packagesRoot, 'ui', 'src', 'index.ts'),
     },
+    {
+      template: 'contracts/package.json.ejs',
+      output: path.join(packagesRoot, 'contracts', 'package.json'),
+    },
+    {
+      template: 'contracts/tsconfig.json.ejs',
+      output: path.join(packagesRoot, 'contracts', 'tsconfig.json'),
+    },
+    {
+      template: 'contracts/src/common.ts.ejs',
+      output: path.join(packagesRoot, 'contracts', 'src', 'common.ts'),
+    },
+    {
+      template: 'contracts/src/users.ts.ejs',
+      output: path.join(packagesRoot, 'contracts', 'src', 'users.ts'),
+    },
+    {
+      template: 'contracts/src/auth.ts.ejs',
+      output: path.join(packagesRoot, 'contracts', 'src', 'auth.ts'),
+    },
+    {
+      template: 'contracts/src/index.ts.ejs',
+      output: path.join(packagesRoot, 'contracts', 'src', 'index.ts'),
+    },
   ];
 
   for (const file of files) {
