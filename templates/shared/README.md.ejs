@@ -9,6 +9,7 @@
 <% if (includeWeb) { %>- **Web:** [Next.js](https://nextjs.org/) (App Router) + TypeScript + Tailwind CSS + shadcn/ui
 <% } %>- **API:** [NestJS](https://nestjs.com/) + TypeScript + Prisma + JWT
 - **Database:** <%= database === 'postgresql' ? 'PostgreSQL' : 'SQLite' %>
+- **Contracts:** shared Zod schemas and types (`packages/contracts`)
 - **HTTP Client:** Axios
 - **Package Manager:** pnpm (workspace monorepo)
 - **Containerization:** Docker (optional)
@@ -20,7 +21,11 @@
 ├── apps/
 │   ├── api/          # NestJS application
 <% if (includeWeb) { %>│   └── web/          # Next.js application
-<% } %>├── packages/         # shared eslint-config, typescript-config, ui stub
+<% } %>├── packages/
+│   ├── contracts/    # Zod schemas + shared API types
+│   ├── eslint-config/
+│   ├── typescript-config/
+│   └── ui/           # shared UI stub
 ├── stackforge.json
 ├── docker-compose.yml
 └── README.md
@@ -95,7 +100,8 @@ Run `pnpm dev` from the project root so `packages/contracts` is built and watche
 <% if (includeWeb) { %>- Web: http://localhost:3002
 <% } %>- API: http://localhost:3001
 - API Docs: http://localhost:3001/docs
-- Prisma Studio: http://localhost:5555
+<% if (database === 'postgresql') { %>- Prisma Studio: http://127.0.0.1:5555 (Docker Compose; localhost only)
+<% } %>
 
 ## Diagnostics
 

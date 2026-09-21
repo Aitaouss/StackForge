@@ -4,7 +4,33 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
-## create-stackforge-app 1.2.0 (Phase 1C — Trust complete)
+## create-stackforge-app 1.4.1
+
+**Docker / contracts patch**
+
+- Fixes generated **Docker** builds with `packages/contracts` (no `prepare` on prod install; explicit contract builds; web runner `--ignore-scripts` + copied `dist`).
+- **Prisma Studio** in Compose: dedicated **`studio`** image stage, Postgres `sslmode=disable`, Studio on **127.0.0.1:5555**.
+- **API** production image: separate **`prod-deps`** install stage.
+- CI: **`smoke-docker-generated-app.mjs`** (compose build, API `/health`, Studio `User.findMany`).
+- Local dev: root **`predev`** + **`contracts` watch** during `pnpm dev` (no root `postinstall`).
+
+## create-stackforge-app 1.4.0 (Phase 3 — Contracts)
+
+- **`packages/contracts`**: Zod schemas + inferred types for auth and users.
+- Nest DTOs via **nestjs-zod**; web imports types from contracts (no duplicate `User` / `AuthUser` in services).
+- See [docs/ADR-001-api-contracts.md](./ADR-001-api-contracts.md).
+
+## create-stackforge-app 1.3.1
+
+- Fix generated **dashboard profile/settings** routes (`/dashboard/profile`, `/dashboard/settings`).
+
+## create-stackforge-app 1.3.0 (Phase 2 — Architecture)
+
+- **`apps/web` + `apps/api`** monorepo; manifest **schema v2**.
+- Presets: **`dashboard`**, **`minimal`**, **`api`** (smoke-tested in CI).
+- **`stackforge doctor`** and **`stackforge info`**.
+
+## create-stackforge-app 1.2.0 (Phase 1C)
 
 User CRUD (API + dashboard UI), profile and settings pages, change password, and Pino HTTP logging (requestId, route, status, duration, userId).
 
@@ -16,21 +42,21 @@ Fixes `docker compose up --build` for PostgreSQL: migrations in image, correct `
 
 Generated apps include: Phase 1A auth/correctness fixes, Prisma migrations, Zod env validation, `/health`, throttling, Helmet, unit + e2e tests, and `.github/workflows/ci.yml`.
 
-## create-stackforge-app 1.0.10 (baseline)
+## Baseline template versions (current)
 
-| Component | Version / note |
-|-----------|----------------|
-| Node.js (CI) | 22.x |
-| pnpm (CI) | 9.x (via `packageManager` in generated root) |
-| Next.js | 14.2.3 (`templates/frontend/package.json.ejs`) |
-| React | 18.3.x |
-| NestJS | 10.3.x |
-| Prisma | 5.12.x |
-| PostgreSQL (CI service) | 16 |
-| SQLite | 3 (via Prisma file provider) |
+| Component                        | Version / note                                 |
+| -------------------------------- | ---------------------------------------------- |
+| Node.js (CI)                     | 22.x                                           |
+| pnpm (CI)                        | 9.x (via `packageManager` in generated root)   |
+| Next.js                          | 14.2.3 (`templates/web/package.json.ejs`)      |
+| React                            | 18.3.x                                         |
+| NestJS                           | 10.3.x                                         |
+| Prisma                           | 5.12.x (resolved to 5.22.x in smoke lockfiles) |
+| PostgreSQL (CI service / Docker) | 16                                             |
+| SQLite                           | 3 (via Prisma file provider)                   |
 
 ## Policy
 
 - Marketing and docs must not claim versions outside this matrix for a given CLI release.
-- Phase 1B will bump template deps; this table must move in the same PR as template bumps.
+- Template dependency bumps must update this file in the same PR.
 - Optional future: `--next-channel stable|lts` (Phase 5).
