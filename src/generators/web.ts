@@ -200,12 +200,12 @@ export async function generateWeb(config: ProjectConfig): Promise<void> {
         output: path.join(webRoot, 'src', 'hooks', 'use-profile-mutations.ts'),
       },
       {
-        template: 'src/app/(dashboard)/profile/page.tsx.ejs',
-        output: path.join(webRoot, 'src', 'app', '(dashboard)', 'profile', 'page.tsx'),
+        template: 'src/app/(dashboard)/dashboard/profile/page.tsx.ejs',
+        output: path.join(webRoot, 'src', 'app', '(dashboard)', 'dashboard', 'profile', 'page.tsx'),
       },
       {
-        template: 'src/app/(dashboard)/settings/page.tsx.ejs',
-        output: path.join(webRoot, 'src', 'app', '(dashboard)', 'settings', 'page.tsx'),
+        template: 'src/app/(dashboard)/dashboard/settings/page.tsx.ejs',
+        output: path.join(webRoot, 'src', 'app', '(dashboard)', 'dashboard', 'settings', 'page.tsx'),
       },
     );
   }
