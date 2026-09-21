@@ -1,5 +1,8 @@
+"use client";
+
 import { Anvil, ExternalLink, Github, Star } from "lucide-react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { NpmDownloadsBadge } from "./npm-downloads-badge";
 import { TrackedGitHubLink } from "./tracked-github-link";
 import { TrackedNpmLink } from "./tracked-npm-link";
@@ -18,8 +21,15 @@ type NavbarProps = {
 };
 
 export function Navbar({ weeklyDownloads }: NavbarProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur-md">
+    <motion.header
+      className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur-md"
+      initial={reduceMotion ? false : { y: -16, opacity: 0 }}
+      animate={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex shrink-0 items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
@@ -65,6 +75,6 @@ export function Navbar({ weeklyDownloads }: NavbarProps) {
           </TrackedNpmLink>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

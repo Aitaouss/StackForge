@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Activity,
   Box,
@@ -7,7 +9,11 @@ import {
   TestTube2,
   Terminal,
 } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Reveal } from "@/components/motion/reveal";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const FEATURES = [
   {
@@ -57,11 +63,22 @@ const FEATURES = [
   },
 ];
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE },
+  },
+};
+
 export function Features() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section id="features" className="border-t border-white/10 px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-bold tracking-tight text-zinc-50 sm:text-4xl">
             Everything you need to start shipping
           </h2>
@@ -69,26 +86,35 @@ export function Features() {
             One command generates a typed full-stack foundation—auth, data layer, security, tests,
             and deploy paths included.
           </p>
-        </div>
+        </Reveal>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <motion.div
+          className="mt-12 grid gap-4 sm:grid-cols-2 md:grid-cols-3"
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.08 }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+          }}
+        >
           {FEATURES.map((feature) => (
-            <article
+            <motion.article
               key={feature.title}
+              variants={reduceMotion ? undefined : cardVariants}
               className={cn(
                 "glass group rounded-xl p-6 transition duration-300 hover:scale-[1.01] hover:border-emerald-500/25 hover:shadow-glow-sm",
                 feature.className,
               )}
             >
               <feature.icon
-                className="h-8 w-8 text-emerald-400/90 transition group-hover:text-emerald-300"
+                className="h-8 w-8 text-emerald-400/90 transition group-hover:scale-105 group-hover:text-emerald-300"
                 aria-hidden
               />
               <h3 className="mt-4 text-lg font-semibold text-zinc-100">{feature.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">{feature.description}</p>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
