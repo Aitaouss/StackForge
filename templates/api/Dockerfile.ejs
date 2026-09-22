@@ -8,12 +8,12 @@ RUN corepack enable && corepack prepare pnpm@9 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages ./packages
 COPY apps/api/package.json ./apps/api/
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 COPY apps/api ./apps/api
 RUN pnpm --filter ./packages/contracts run build
-RUN pnpm --filter ./apps/api run build
 RUN pnpm --filter ./apps/api run db:generate
+RUN pnpm --filter ./apps/api run build
 
 FROM builder AS studio
 

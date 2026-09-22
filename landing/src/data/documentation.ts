@@ -13,7 +13,7 @@ export const documentationSections: DocSection[] = [
     title: "Introduction",
     paragraphs: [
       "create-stackforge-app scaffolds a production-ready pnpm monorepo: apps/web (Next.js 14 App Router), apps/api (NestJS), packages/contracts (shared Zod types), other shared packages, Prisma, PostgreSQL or SQLite, Tailwind + shadcn/ui, JWT auth, optional Docker, and generated CI.",
-      "The same npm package ships stackforge doctor and stackforge info for generated projects. Run create with npx—no global install. Node.js 18+.",
+      "Generated projects include pnpm scripts for stackforge doctor and info (via create-stackforge-app as a dev dependency). Run create with npx—no global install. Node.js 18+.",
     ],
   },
   {
@@ -73,9 +73,9 @@ export const documentationSections: DocSection[] = [
     id: "stackforge-cli",
     title: "stackforge doctor & info",
     paragraphs: [
-      "From the root of a generated project (same create-stackforge-app package on npm):",
+      "From the root of a generated project. Plain npx stackforge does not work—there is no npm package named stackforge; use the scripts below (or the fallback for older scaffolds).",
     ],
-    commands: ["npx stackforge doctor", "npx stackforge info"],
+    commands: ["pnpm run doctor", "pnpm run info"],
     list: [
       "doctor — Node, pnpm, manifest, apps paths, DATABASE_URL, JWT_SECRET, Docker",
       "info — StackForge version, preset, stack versions from package.json files",
@@ -116,17 +116,27 @@ export const documentationSections: DocSection[] = [
     commands: ["corepack enable", "corepack prepare pnpm@9 --activate"],
   },
   {
-    id: "run-generated",
-    title: "Run the generated app",
-    commands: [
-      "cd my-app && pnpm install && pnpm dev   # from project root — builds & watches contracts",
-      "cd my-app && docker compose up -d",
-      "cd my-app && npx stackforge doctor",
-    ],
+    id: "run-local",
+    title: "Run locally",
     paragraphs: [
-      "Use docker compose when you enabled Docker during scaffolding (especially with PostgreSQL).",
-      "Migrations and env files live under apps/api/.",
+      "pnpm install generates the Prisma client automatically. For PostgreSQL with generated Docker support, start Postgres before db:setup; skip that command for SQLite or an existing PostgreSQL server.",
+      "Run pnpm dev from the project root so packages/contracts is built and watched alongside the apps.",
     ],
+    commands: [
+      "cd my-app && pnpm install",
+      "cd my-app && docker compose up -d postgres   # PostgreSQL + generated Docker only",
+      "cd my-app && pnpm run db:setup   # prisma generate + migrate (first time)",
+      "cd my-app && pnpm dev",
+      "cd my-app && pnpm run doctor",
+    ],
+  },
+  {
+    id: "run-docker",
+    title: "Run the full Docker stack",
+    paragraphs: [
+      "Use this path only when Docker support was generated. Compose waits for PostgreSQL and the API container applies existing migrations before startup.",
+    ],
+    commands: ["cd my-app && pnpm install", "cd my-app && docker compose up --build -d"],
   },
   {
     id: "troubleshooting",
@@ -136,6 +146,8 @@ export const documentationSections: DocSection[] = [
       "Directory already exists and is not empty → choose another project name or clear the folder",
       "Invalid --database → use postgresql or sqlite only",
       "Invalid --preset → use dashboard, minimal, or api only",
+      "npx stackforge doctor fails → use pnpm run doctor from the project root, or npx --package=create-stackforge-app@latest stackforge doctor on older scaffolds",
+      "API TypeScript errors about prisma.user → ensure the database is running, then run pnpm run db:setup",
     ],
   },
 ];

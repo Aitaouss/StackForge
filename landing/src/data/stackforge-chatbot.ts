@@ -102,16 +102,20 @@ Non-interactive (defaults: PostgreSQL, Docker, auto-install):
 npx create-stackforge-app@latest my-app -y
 \`\`\`
 
-Then:
+Run locally from the generated project root. For PostgreSQL with generated Docker support, start the database first (skip that line for SQLite or your own PostgreSQL server):
 
 \`\`\`
-cd my-app && pnpm dev
+cd my-app
+pnpm install
+docker compose up -d postgres
+pnpm run db:setup
+pnpm dev
 \`\`\`
 
-Or with Docker:
+Or run the full generated Docker stack (it applies existing migrations automatically):
 
 \`\`\`
-cd my-app && docker compose up -d
+cd my-app && docker compose up --build -d
 \`\`\``,
   },
   {
@@ -246,7 +250,7 @@ Run \`pnpm install\` at the project root before building if you used \`--no-inst
 - **PostgreSQL** — needs Docker or a local Postgres instance
 - **SQLite** — lightweight, no extra services
 
-Prisma schema and client are preconfigured. With Docker + PostgreSQL, Prisma Studio can be exposed via docker-compose.`,
+Prisma schema and client are preconfigured. \`pnpm install\` generates the client, and \`pnpm run db:setup\` generates it again before applying development migrations. Start PostgreSQL before \`db:setup\`. With Docker + PostgreSQL, Prisma Studio is exposed on localhost by Compose.`,
   },
   {
     id: "requirements",
@@ -293,8 +297,8 @@ Useful flags:
 In a generated project:
 
 \`\`\`
-npx stackforge doctor
-npx stackforge info
+pnpm run doctor
+pnpm run info
 \`\`\`
 
 Maintainers: see **[Contributing](/contributing)** on this site or the GitHub repo README.`,
@@ -333,6 +337,9 @@ npm package: [create-stackforge-app](${NPM_PACKAGE_URL})`,
       "problem",
       "empty directory",
       "exists",
+      "prisma client",
+      "prisma.user",
+      "npx stackforge",
     ],
     questions: ["pnpm command not found?"],
     answer: `If generated projects report **pnpm: command not found**, enable Corepack:
@@ -346,7 +353,15 @@ If scaffolding fails because the target folder **already exists and is not empty
 
 Invalid \`--database\` values must be \`postgresql\` or \`sqlite\`.
 
-Invalid \`--preset\` values must be \`dashboard\`, \`minimal\`, or \`api\`.`,
+Invalid \`--preset\` values must be \`dashboard\`, \`minimal\`, or \`api\`.
+
+If the API reports missing \`PrismaClient\` or \`prisma.user\`, start the configured database and run:
+
+\`\`\`
+pnpm run db:setup
+\`\`\`
+
+If \`npx stackforge doctor\` fails, use \`pnpm run doctor\` from a 1.4.2+ generated project, or \`npx --package=create-stackforge-app@latest stackforge doctor\` for an older scaffold.`,
   },
   {
     id: "presets",
@@ -370,12 +385,14 @@ Omit \`--preset\` or use \`dashboard\` for the full stack.`,
     id: "doctor",
     keywords: ["doctor", "info", "stackforge doctor", "diagnose", "health check"],
     questions: ["What is stackforge doctor?"],
-    answer: `**stackforge doctor** and **stackforge info** ship in the same npm package as create-stackforge-app. Run them from your generated project root:
+    answer: `**stackforge doctor** and **stackforge info** are wired into every generated app as pnpm scripts (create-stackforge-app is a dev dependency). From the project root:
 
 \`\`\`
-npx stackforge doctor
-npx stackforge info
+pnpm run doctor
+pnpm run info
 \`\`\`
+
+Plain \`npx stackforge doctor\` fails because there is no npm package named \`stackforge\`. On older scaffolds use \`npx --package=create-stackforge-app@latest stackforge doctor\`.
 
 Doctor checks Node, pnpm, \`stackforge.json\`, apps paths, env, and JWT secret. Info prints manifest and dependency versions for support.`,
   },

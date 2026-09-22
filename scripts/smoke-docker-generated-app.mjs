@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import execa from 'execa';
 import fs from 'fs-extra';
+import net from 'node:net';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -11,10 +12,55 @@ const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'stackforge-docker-smoke
 const appName = 'smoke-docker-postgresql';
 const appDir = path.join(tmpRoot, appName);
 
+async function reserveFreePort() {
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    server.unref();
+    server.once('error', reject);
+    server.listen(0, '0.0.0.0', () => {
+      const address = server.address();
+      if (!address || typeof address === 'string') {
+        server.close();
+        reject(new Error('Unable to reserve a free TCP port'));
+        return;
+      }
+
+      const { port } = address;
+      server.close((error) => (error ? reject(error) : resolve(port)));
+    });
+  });
+}
+
+const reservedPorts = new Set();
+async function reserveDistinctPort() {
+  let port;
+  do {
+    port = await reserveFreePort();
+  } while (reservedPorts.has(port));
+  reservedPorts.add(port);
+  return port;
+}
+
+const ports = {
+  postgres: await reserveDistinctPort(),
+  api: await reserveDistinctPort(),
+  studio: await reserveDistinctPort(),
+  web: await reserveDistinctPort(),
+};
+
+const composeEnv = {
+  ...process.env,
+  POSTGRES_PORT: String(ports.postgres),
+  API_PORT: String(ports.api),
+  PRISMA_STUDIO_PORT: String(ports.studio),
+  WEB_PORT: String(ports.web),
+};
+
 const compose = (args, options = {}) =>
   execa('docker', ['compose', ...args], {
     cwd: appDir,
     stdio: 'inherit',
+    env: composeEnv,
     ...options,
   });
 
@@ -65,7 +111,7 @@ async function waitForOk(url, timeoutMs = 60_000) {
 }
 
 async function studioRequest(requestId, action, data) {
-  const response = await fetch('http://127.0.0.1:5555/api', {
+  const response = await fetch(`http://127.0.0.1:${ports.studio}/api`, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({
@@ -83,7 +129,8 @@ async function studioRequest(requestId, action, data) {
   return response.json();
 }
 
-console.log(`\n[docker-smoke] temp dir: ${tmpRoot}\n`);
+console.log(`\n[docker-smoke] temp dir: ${tmpRoot}`);
+console.log(`[docker-smoke] host ports: ${JSON.stringify(ports)}\n`);
 
 try {
   await execa(
@@ -113,12 +160,12 @@ try {
   console.log('[docker-smoke] start stack…');
   await compose(['up', '-d', 'postgres', 'api', 'prisma-studio', 'web']);
 
-  const health = await waitForJson('http://127.0.0.1:3001/health');
+  const health = await waitForJson(`http://127.0.0.1:${ports.api}/health`);
   if (health.status !== 'ok' || health.database !== 'up') {
     throw new Error(`Unexpected API health response: ${JSON.stringify(health)}`);
   }
 
-  await waitForOk('http://127.0.0.1:5555');
+  await waitForOk(`http://127.0.0.1:${ports.studio}`);
 
   const dmmf = await studioRequest(0, 'getDMMF', null);
   const schemaHash = dmmf?.payload?.data?.schemaHash;

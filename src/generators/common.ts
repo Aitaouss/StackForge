@@ -9,6 +9,10 @@ import {
 import { renderTemplate, getTemplatePath, writeJson } from '../utils/file.js';
 import { getStackforgeVersion } from '../utils/stackforge-version.js';
 
+// doctor/info were published in 1.4.1. Keep the generated diagnostics dependency
+// installable while the next patch is still being tested before publication.
+const STACKFORGE_DIAGNOSTICS_DEPENDENCY = '^1.4.1';
+
 export async function generateCommonFiles(
   config: ProjectConfig,
 ): Promise<void> {
@@ -19,7 +23,10 @@ export async function generateCommonFiles(
   const data = {
     projectName: config.projectName,
     projectDescription: config.projectDescription,
+    stackforgeVersion: getStackforgeVersion(),
+    stackforgeDiagnosticsDependency: STACKFORGE_DIAGNOSTICS_DEPENDENCY,
     database: config.database,
+    docker: config.docker,
     databaseUrl:
       config.database === 'postgresql'
         ? 'postgresql://postgres:postgres@localhost:5433/app'
@@ -96,10 +103,7 @@ export async function generateCommonFiles(
     templateDir: sharedTemplateDir,
     templateName: 'AGENTS.md.ejs',
     outputPath: path.join(config.targetDir, 'AGENTS.md'),
-    data: {
-      ...data,
-      stackforgeVersion: getStackforgeVersion(),
-    },
+    data,
   });
 
   await renderTemplate({

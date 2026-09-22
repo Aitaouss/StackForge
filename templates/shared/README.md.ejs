@@ -12,23 +12,25 @@
 - **Contracts:** shared Zod schemas and types (`packages/contracts`)
 - **HTTP Client:** Axios
 - **Package Manager:** pnpm (workspace monorepo)
-- **Containerization:** Docker (optional)
+<% if (docker) { %>- **Containerization:** Docker Compose
+<% } %>
 
 ## Project Structure
 
 ```
 <%= projectName %>
 ├── apps/
-│   ├── api/          # NestJS application
-<% if (includeWeb) { %>│   └── web/          # Next.js application
+<% if (includeWeb) { %>│   ├── api/          # NestJS application
+│   └── web/          # Next.js application
+<% } else { %>│   └── api/          # NestJS application
 <% } %>├── packages/
 │   ├── contracts/    # Zod schemas + shared API types
 │   ├── eslint-config/
 │   ├── typescript-config/
 │   └── ui/           # shared UI stub
 ├── stackforge.json
-├── docker-compose.yml
-└── README.md
+<% if (docker) { %>├── docker-compose.yml
+<% } %>└── README.md
 ```
 
 ## Getting Started
@@ -37,7 +39,7 @@
 
 - [Node.js](https://nodejs.org/) >= 18
 - [pnpm](https://pnpm.io/) (installed automatically via [corepack](https://nodejs.org/api/corepack.html))
-<% if (database === 'postgresql') { %>- [Docker](https://www.docker.com/) (optional, for PostgreSQL)<% } %>
+<% if (database === 'postgresql' && docker) { %>- [Docker](https://www.docker.com/) (for the generated PostgreSQL and full-stack Compose workflows)<% } else if (database === 'postgresql') { %>- A reachable PostgreSQL server<% } %>
 
 > **Don't have pnpm?** Node.js includes corepack. Run `corepack enable` once, then `pnpm install` will automatically download the correct pnpm version.
 
@@ -47,20 +49,24 @@
 pnpm install
 ```
 
+`postinstall` generates the Prisma client. Root `predev` and `prebuild` run it again as a safety net when install scripts were skipped.
+
 ### Environment Variables
 
 API env lives in `apps/api/.env` (see `apps/api/.env.example`).
 
 <% if (includeWeb) { %>Web env: `apps/web/.env.local` (see `.env.local.example`).
 
-<% } %><% if (database === 'postgresql') { %>
-### Option 1: Run with Docker
+<% } %><% if (database === 'postgresql' && docker) { %>
+### Option 1: Run the Full Stack with Docker
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
 
-### Option 2: Run Locally
+Compose waits for PostgreSQL, applies existing migrations, and starts the API<%= includeWeb ? ', web app,' : '' %> and Prisma Studio.
+
+### Option 2: Run the Apps Locally
 
 1. Start PostgreSQL:
 
@@ -70,14 +76,29 @@ docker compose up -d postgres
 
 > **PostgreSQL port:** Docker maps Postgres to **localhost:5433** (`apps/api/.env` `DATABASE_URL`).
 
-2. Apply migrations:
+2. Generate the Prisma client and apply migrations from the project root:
 
 ```bash
-cd apps/api
-pnpm run db:deploy
+pnpm run db:setup
 ```
 
 3. Start dev servers from the **project root** (builds and watches `packages/contracts`):
+
+```bash
+pnpm dev
+```
+<% } else if (database === 'postgresql') { %>
+### Run Locally
+
+1. Start PostgreSQL and verify `DATABASE_URL` in `apps/api/.env` points to it.
+
+2. Generate the Prisma client and apply migrations:
+
+```bash
+pnpm run db:setup
+```
+
+3. Start dev servers from the **project root**:
 
 ```bash
 pnpm dev
@@ -86,9 +107,7 @@ pnpm dev
 ### Run Locally
 
 ```bash
-cd apps/api
-pnpm prisma migrate dev
-cd ../..
+pnpm run db:setup
 pnpm dev
 ```
 
@@ -100,23 +119,26 @@ Run `pnpm dev` from the project root so `packages/contracts` is built and watche
 <% if (includeWeb) { %>- Web: http://localhost:3002
 <% } %>- API: http://localhost:3001
 - API Docs: http://localhost:3001/docs
-<% if (database === 'postgresql') { %>- Prisma Studio: http://127.0.0.1:5555 (Docker Compose; localhost only)
+<% if (database === 'postgresql' && docker) { %>- Prisma Studio: http://127.0.0.1:5555 (Docker Compose; localhost only)
 <% } %>
 
 ## Diagnostics
 
 ```bash
-npx stackforge doctor
-npx stackforge info
+pnpm run doctor
+pnpm run info
 ```
 
 ## Scripts
 
 - `pnpm dev` - Start development servers from the root (includes contracts build/watch)
 - `pnpm build` - Build applications
-- `pnpm docker:up` / `pnpm docker:down` - Docker Compose
+- `pnpm run db:setup` - Generate the Prisma client and apply development migrations
+- `pnpm run doctor` / `pnpm run info` - Diagnose and describe the generated project
+<% if (docker) { %>- `pnpm docker:up` / `pnpm docker:down` - Docker Compose
 
 Run `pnpm install` at the project root before `docker compose build` if you used `--no-install` during create.
+<% } %>
 
 ## License
 
