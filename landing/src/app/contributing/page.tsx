@@ -44,7 +44,7 @@ export default async function ContributingPage() {
               ))}
               {section.commands?.map((cmd) => (
                 <div key={cmd} className="mt-4">
-                  <CommandBlock command={cmd} />
+                  <CommandBlock command={cmd} variant="bar" />
                 </div>
               ))}
               {section.list ? (

@@ -12,7 +12,8 @@ const NAV = [
   { href: "/#stack", label: "Stack" },
   { href: "/#features", label: "Features" },
   { href: "/#architecture", label: "Architecture" },
-  { href: "/#cli", label: "CLI Flags" },
+  { href: "/build", label: "Command builder" },
+  { href: "/#cli", label: "CLI flags" },
   { href: "/docs", label: "Docs" },
 ] as const;
 

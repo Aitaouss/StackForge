@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { documentationSections } from "@/data/documentation";
 import { CommandBlock } from "./command-block";
 
@@ -32,6 +33,10 @@ export function DocsContent() {
             <a href="/contributing" className="text-emerald-400 underline underline-offset-2">
               contributing
             </a>
+            . Prefer a visual picker?{" "}
+            <Link href="/build" className="text-emerald-400 underline underline-offset-2">
+              Build your command
+            </Link>
             .
           </p>
         </header>
@@ -58,7 +63,7 @@ export function DocsContent() {
                     {cmd}
                   </pre>
                 ) : (
-                  <CommandBlock command={cmd} />
+                  <CommandBlock command={cmd} variant="bar" />
                 )}
               </div>
             ))}
