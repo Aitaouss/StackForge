@@ -36,7 +36,7 @@ export function CopyButton({ text, className, label = "Copy" }: CopyButtonProps)
       {copied ? (
         <>
           <Check className="h-3.5 w-3.5 text-emerald-400" aria-hidden />
-          Copied
+          Copied!
         </>
       ) : (
         <>

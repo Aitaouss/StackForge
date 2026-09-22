@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CommandBlock } from "./command-block";
 import { Reveal } from "@/components/motion/reveal";
 
@@ -25,7 +26,10 @@ export function CliFlags() {
             CLI flags & automation
           </h2>
           <p className="mt-4 text-zinc-400">
-            Use interactive prompts locally, or pass flags in CI and scripts for repeatable scaffolds.
+            Use interactive prompts locally, or pass flags in CI and scripts for repeatable scaffolds.{" "}
+            <Link href="/build" className="text-emerald-400 underline underline-offset-2 hover:text-emerald-300">
+              Build your command →
+            </Link>
           </p>
         </Reveal>
 
@@ -55,7 +59,7 @@ export function CliFlags() {
         <Reveal delay={0.15} className="mt-10 space-y-4">
           <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">Examples</h3>
           {EXAMPLES.map((cmd) => (
-            <CommandBlock key={cmd} command={cmd} />
+            <CommandBlock key={cmd} command={cmd} variant="bar" />
           ))}
           <p className="text-sm text-zinc-500">
             Inside a generated project:{" "}

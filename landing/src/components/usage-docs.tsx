@@ -73,6 +73,7 @@ export function UsageDocs() {
                       key={block.command}
                       command={block.command}
                       elevated={"elevated" in block ? block.elevated : undefined}
+                      variant="bar"
                     />
                   ))}
                 </div>

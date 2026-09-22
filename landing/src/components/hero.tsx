@@ -85,7 +85,7 @@ export function Hero() {
         </div>
 
         <HeroFade delay={0.28} className={`${HERO_CONTENT_WIDTH} mt-10`}>
-          <CommandBlock command={PRIMARY_INSTALL_CMD} elevated />
+          <CommandBlock command={PRIMARY_INSTALL_CMD} elevated variant="bar" />
         </HeroFade>
 
         <HeroFade delay={0.35}>
