@@ -4,6 +4,16 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
+## create-stackforge-app 1.4.2
+
+**First-run Prisma and diagnostics patch**
+
+- Fresh installs generate the Prisma client automatically; root `predev` and `prebuild` provide safety nets when lifecycle scripts are skipped.
+- Root `db:setup` generates the Prisma client and applies development migrations.
+- Generated projects expose `pnpm run doctor` and `pnpm run info` through a compatible `create-stackforge-app` development dependency.
+- Docker builders ignore root lifecycle scripts and generate Prisma only after the schema is copied.
+- Smoke tests verify the install-generated Prisma client and the generated-project diagnostics scripts.
+
 ## create-stackforge-app 1.4.1
 
 **Docker / contracts patch**
@@ -12,7 +22,7 @@ Update this file whenever template dependencies or CI Node/pnpm versions change.
 - **Prisma Studio** in Compose: dedicated **`studio`** image stage, Postgres `sslmode=disable`, Studio on **127.0.0.1:5555**.
 - **API** production image: separate **`prod-deps`** install stage.
 - CI: **`smoke-docker-generated-app.mjs`** (compose build, API `/health`, Studio `User.findMany`).
-- Local dev: root **`predev`** + **`contracts` watch** during `pnpm dev` (no root `postinstall`).
+- Local dev: root **`predev`** + **`contracts` watch** during `pnpm dev`.
 
 ## create-stackforge-app 1.4.0 (Phase 3 — Contracts)
 

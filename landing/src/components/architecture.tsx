@@ -26,7 +26,7 @@ const POINTS = [
   },
   {
     title: "Presets & diagnostics",
-    body: "dashboard, minimal, or api-only scaffolds; then npx stackforge doctor and stackforge info inside the project.",
+    body: "dashboard, minimal, or api-only scaffolds; then pnpm run doctor and pnpm run info inside the project.",
   },
 ];
 

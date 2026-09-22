@@ -1,5 +1,5 @@
 /** Published create-stackforge-app version shown on the landing site. */
-export const CLI_VERSION = "1.4.1";
+export const CLI_VERSION = "1.4.2";
 
 /** Hero / changelog link (GitHub release). */
 /** Prefer /latest until the v{CLI_VERSION} GitHub release is published. */

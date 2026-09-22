@@ -59,8 +59,9 @@ export function CliFlags() {
           ))}
           <p className="text-sm text-zinc-500">
             Inside a generated project:{" "}
-            <code className="text-emerald-300/90">npx stackforge doctor</code> and{" "}
-            <code className="text-emerald-300/90">npx stackforge info</code>.
+            <code className="text-emerald-300/90">pnpm run doctor</code> and{" "}
+            <code className="text-emerald-300/90">pnpm run info</code> from the generated project
+            root.
           </p>
         </Reveal>
       </div>

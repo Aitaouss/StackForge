@@ -81,9 +81,13 @@ npx create-stackforge-app@latest my-app -y --preset minimal
 Inside a generated project:
 
 ```bash
-npx stackforge doctor
-npx stackforge info
+pnpm run db:setup
+pnpm dev
+pnpm run doctor
+pnpm run info
 ```
+
+For PostgreSQL with generated Docker support, run `docker compose up -d postgres` before `pnpm run db:setup`. A full Docker stack uses `docker compose up --build -d` and applies existing migrations automatically.
 
 Run **`pnpm dev` from the project root** so `packages/contracts` is built and watched (do not start only a single app filter unless you have already built contracts).
 

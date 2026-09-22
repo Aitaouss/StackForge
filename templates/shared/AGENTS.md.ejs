@@ -33,10 +33,11 @@ Project metadata: `stackforge.json` (schemaVersion **2**).
 
 ```bash
 pnpm install
+pnpm run db:setup
 pnpm dev
 pnpm build
-npx stackforge doctor
-npx stackforge info
+pnpm run doctor
+pnpm run info
 ```
 
 See root `README.md` for database and Docker setup.

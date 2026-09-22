@@ -113,28 +113,29 @@ function printSuccess(config: ProjectConfig, includeWeb: boolean): void {
 
   if (!config.installDependencies) {
     info('  pnpm install');
-    info('  cd apps/api && pnpm prisma generate');
   }
 
   if (config.database === 'postgresql') {
-    info('  docker compose up -d postgres');
-    info('  cd apps/api && pnpm prisma migrate dev');
-  } else {
-    info('  cd apps/api && pnpm prisma migrate dev');
+    if (config.docker) {
+      info('  docker compose up -d postgres');
+    } else {
+      info('  Start PostgreSQL and verify apps/api/.env DATABASE_URL');
+    }
   }
 
-  if (config.docker && !config.installDependencies) {
-    info('  Run pnpm install at the project root before docker compose build (requires pnpm-lock.yaml).');
-  }
-
+  info('  pnpm run db:setup');
   info('  pnpm dev');
+
+  if (config.docker) {
+    info('  Or run the full stack: docker compose up --build -d');
+  }
   info('');
   if (includeWeb) {
     info('Web: http://localhost:3002');
   }
   info('API: http://localhost:3001');
   info('API Docs: http://localhost:3001/docs');
-  info('Diagnostics: npx stackforge doctor');
+  info('Diagnostics: pnpm run doctor');
   if (config.database === 'postgresql' && config.docker) {
     info('Prisma Studio: http://localhost:5555 (via docker compose up -d)');
   } else {

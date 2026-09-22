@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: app
     ports:
-      - "5433:5432"
+      - "${POSTGRES_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -29,7 +29,7 @@ services:
       PORT: 3001
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3002}
     ports:
-      - "3001:3001"
+      - "${API_PORT:-3001}:3001"
 <% if (database === 'postgresql') { %>
     depends_on:
       postgres:
@@ -49,7 +49,7 @@ services:
       DATABASE_URL: <%= dockerDatabaseUrl %>
       PGSSLMODE: disable
     ports:
-      - "127.0.0.1:5555:5555"
+      - "127.0.0.1:${PRISMA_STUDIO_PORT:-5555}:5555"
     depends_on:
       postgres:
         condition: service_healthy
@@ -67,7 +67,7 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:3001
       PORT: 3002
     ports:
-      - "3002:3002"
+      - "${WEB_PORT:-3002}:3002"
     depends_on:
       - api
 

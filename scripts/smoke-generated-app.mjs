@@ -112,8 +112,21 @@ try {
     await fs.writeFile(envPath, env);
   }
 
-  console.log('[smoke] prisma generate + migrate deploy…');
-  await execa('pnpm', ['exec', 'prisma', 'generate'], { cwd: apiDir, stdio: 'inherit' });
+  console.log('[smoke] verify postinstall-generated Prisma client…');
+  await execa(
+    'pnpm',
+    [
+      '--filter',
+      './apps/api',
+      'exec',
+      'node',
+      '-e',
+      "const client = require('@prisma/client'); if (typeof client.PrismaClient !== 'function') process.exit(1)",
+    ],
+    { cwd: appDir, stdio: 'inherit' },
+  );
+
+  console.log('[smoke] migrate deploy…');
   await execa('pnpm', ['run', 'db:deploy'], { cwd: apiDir, stdio: 'inherit' });
 
   console.log('[smoke] API lint + typecheck + test…');
@@ -153,14 +166,8 @@ try {
   }
 
   console.log('[smoke] stackforge info + doctor…');
-  await execa('node', [path.join(repoRoot, 'bin/stackforge.js'), 'info'], {
-    cwd: appDir,
-    stdio: 'inherit',
-  });
-  await execa('node', [path.join(repoRoot, 'bin/stackforge.js'), 'doctor'], {
-    cwd: appDir,
-    stdio: 'inherit',
-  });
+  await execa('pnpm', ['run', 'info'], { cwd: appDir, stdio: 'inherit' });
+  await execa('pnpm', ['run', 'doctor'], { cwd: appDir, stdio: 'inherit' });
 
   console.log('\n[smoke] PASS:', database, preset);
 } catch (err) {

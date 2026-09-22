@@ -19,6 +19,6 @@ Projects created with **1.2.x** use `frontend/` and `backend/` with `stackforge.
 3. Update root `package.json` scripts to use `pnpm --filter ./apps/api` and `./apps/web`.
 4. Update `pnpm-workspace.yaml` to list `apps/*` and `packages/*`.
 5. Replace `stackforge.json` with schemaVersion **2** and `apps: { "web": "apps/web", "api": "apps/api" }`.
-6. Run `pnpm install`, `pnpm run build`, and `npx stackforge doctor`.
+6. Run `pnpm install`, `pnpm run build`, and `pnpm run doctor`.
 
 There is no automated `stackforge upgrade` for layout yet (Phase 5).
