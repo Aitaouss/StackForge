@@ -1,3 +1,4 @@
+import { typescriptFieldType } from "../field-types.js";
 import type { GenerateResourceContext } from "../types.js";
 
 export function renderModule(ctx: GenerateResourceContext): string {
@@ -107,7 +108,7 @@ ${selectFields}
     await this.findOne(id);
 
     const data: {
-${fields.map((f) => `      ${f.name}?: string;`).join("\n")}
+${fields.map((f) => `      ${f.name}?: ${typescriptFieldType(f.type)};`).join("\n")}
     } = {};
 
 ${updateDataLines}

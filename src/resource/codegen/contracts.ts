@@ -1,18 +1,25 @@
+import {
+  zodCreateField,
+  zodPublicField,
+  zodUpdateField,
+} from '../field-types.js';
 import type { GenerateResourceContext } from '../types.js';
 
 export function renderContractsFile(ctx: GenerateResourceContext): string {
   const { naming, fields } = ctx;
-  const { pascal, singular, plural } = naming;
+  const { pascal, singular } = naming;
 
-  const publicFields = fields.map((f) => `  ${f.name}: z.string(),`).join('\n');
+  const publicFields = fields
+    .map((f) => `  ${f.name}: ${zodPublicField(f.type)},`)
+    .join('\n');
 
   const createRequired = fields
     .filter((f) => f.required)
-    .map((f) => `  ${f.name}: z.string().min(1),`)
+    .map((f) => `  ${f.name}: ${zodCreateField(f.type)},`)
     .join('\n');
 
   const updateOptional = fields
-    .map((f) => `  ${f.name}: z.string().min(1).optional(),`)
+    .map((f) => `  ${f.name}: ${zodUpdateField(f.type)},`)
     .join('\n');
 
   return `import { z } from 'zod';
