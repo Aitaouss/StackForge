@@ -10,6 +10,7 @@
     "prebuild": "pnpm --filter ./apps/api exec prisma generate",
     "doctor": "stackforge doctor",
     "info": "stackforge info",
+    "generate": "stackforge generate",
     "db:setup": "pnpm --filter ./apps/api run db:generate && pnpm --filter ./apps/api run db:migrate",
 <% if (includeWeb) { %>
     "dev": "concurrently \"pnpm --filter ./packages/contracts dev\" \"pnpm --filter ./apps/api dev\" \"pnpm --filter ./apps/web dev\"",

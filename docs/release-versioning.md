@@ -11,9 +11,10 @@
 ## Before every npm publish
 
 1. `pnpm run build` passes.
-2. [Smoke CI](../.github/workflows/ci.yml) passes (PostgreSQL + SQLite generates).
-3. Update [tested-stack.md](./tested-stack.md) if template dependency versions changed.
-4. Release notes mention template/CLI changes (landing-only changes do not require npm publish when `paths-ignore` applies).
+2. Locally (light): `pnpm run smoke:resource` and optionally `pnpm run smoke:sqlite`.
+3. [Smoke CI](../.github/workflows/ci.yml) passes (SQLite presets + resource generator + PostgreSQL + Docker smoke).
+4. Update [tested-stack.md](./tested-stack.md) if template dependency versions changed.
+5. Release notes mention template/CLI changes (landing-only changes do not require npm publish when `paths-ignore` applies).
 
 ## stackforge.json
 

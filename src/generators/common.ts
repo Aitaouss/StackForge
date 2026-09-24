@@ -9,9 +9,9 @@ import {
 import { renderTemplate, getTemplatePath, writeJson } from '../utils/file.js';
 import { getStackforgeVersion } from '../utils/stackforge-version.js';
 
-// doctor/info were published in 1.4.1. Keep the generated diagnostics dependency
-// installable while the next patch is still being tested before publication.
-const STACKFORGE_DIAGNOSTICS_DEPENDENCY = '^1.4.1';
+// New scaffolds pin create-stackforge-app for doctor/info/generate. CI smoke scripts
+// override with file:${repo} until the matching version is on npm (see smoke-link-local-cli.mjs).
+const STACKFORGE_DIAGNOSTICS_DEPENDENCY = '^1.5.0';
 
 export async function generateCommonFiles(
   config: ProjectConfig,

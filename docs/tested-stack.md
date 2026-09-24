@@ -4,6 +4,16 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
+## create-stackforge-app 1.5.0
+
+**Phase 4 — Resource generator (MVP)**
+
+- From a generated project root: **`pnpm exec stackforge g resource <name>`** or **`pnpm run generate -- resource <name>`** (alias **`generate resource`**).
+- Requires **`create-stackforge-app` ^1.5.0** in the project (new scaffolds; upgrade devDependency on older projects).
+- **`--dry-run`**, **`--field name:string:required`** only; default fields for **`post`** (`title`, `content`).
+- **API-only** in MVP: Prisma model + Nest CRUD + `packages/contracts`; no web UI.
+- Smoke: **`pnpm run smoke:resource`** (`scripts/smoke-generate-resource.mjs`).
+
 ## create-stackforge-app 1.4.2
 
 **First-run Prisma and diagnostics patch**

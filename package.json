@@ -1,6 +1,6 @@
 {
   "name": "create-stackforge-app",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Scaffold a production-ready full-stack application with Next.js, NestJS, Prisma, Tailwind, shadcn/ui, JWT and Docker.",
   "main": "dist/src/index.js",
   "bin": {
@@ -21,7 +21,8 @@
     "smoke:postgresql": "pnpm run build && node scripts/smoke-generated-app.mjs postgresql",
     "smoke:docker": "pnpm run build && node scripts/smoke-docker-generated-app.mjs",
     "smoke": "pnpm run smoke:sqlite && pnpm run smoke:postgresql",
-    "smoke:presets": "pnpm run build && node scripts/smoke-all-presets.mjs"
+    "smoke:presets": "pnpm run build && node scripts/smoke-all-presets.mjs",
+    "smoke:resource": "pnpm run build && node scripts/smoke-generate-resource.mjs"
   },
   "keywords": [
     "cli",

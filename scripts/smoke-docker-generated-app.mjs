@@ -5,6 +5,7 @@ import net from 'node:net';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { linkLocalCreateStackforgeApp } from './smoke-link-local-cli.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -150,6 +151,8 @@ try {
     ],
     { cwd: repoRoot, stdio: 'inherit' },
   );
+
+  await linkLocalCreateStackforgeApp(appDir, repoRoot);
 
   console.log('[docker-smoke] pnpm install (create lockfile)…');
   await execa('pnpm', ['install'], { cwd: appDir, stdio: 'inherit' });

@@ -50,6 +50,9 @@ jobs:
       - name: Smoke generate (SQLite, all presets)
         run: node scripts/smoke-all-presets.mjs
 
+      - name: Smoke stackforge g resource (post)
+        run: node scripts/smoke-generate-resource.mjs
+
   smoke-postgresql:
     needs: build-cli
     runs-on: ubuntu-latest
