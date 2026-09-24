@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { registerDoctorCommand } from './commands/doctor.js';
+import { registerGenerateResourceCommand } from './commands/generate-resource.js';
 import { registerInfoCommand } from './commands/info.js';
 import { getStackforgeVersion } from './utils/stackforge-version.js';
 import { error } from './utils/logger.js';
@@ -15,6 +16,7 @@ program
 
 registerInfoCommand(program);
 registerDoctorCommand(program);
+registerGenerateResourceCommand(program);
 
 program.parseAsync(process.argv).catch((err: unknown) => {
   if (err instanceof Error) {

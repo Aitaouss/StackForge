@@ -9,6 +9,7 @@ import fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { linkLocalCreateStackforgeApp } from './smoke-link-local-cli.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -89,6 +90,8 @@ try {
   }
 
   console.log('[smoke] manifest OK:', manifest);
+
+  await linkLocalCreateStackforgeApp(appDir, repoRoot);
 
   console.log('[smoke] pnpm install…');
   await execa('pnpm', ['install'], { cwd: appDir, stdio: 'inherit' });
