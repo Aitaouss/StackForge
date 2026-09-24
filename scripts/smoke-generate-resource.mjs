@@ -83,6 +83,26 @@ try {
     throw new Error("expected --field id:string:required to fail");
   }
 
+  console.log("[smoke:resource] int/float field dry-run…");
+  const numericDryRun = await stackforge(
+    [
+      "g",
+      "resource",
+      "media",
+      "--dry-run",
+      "--field",
+      "medianame:string:required",
+      "--field",
+      "impressions:int:required",
+      "--field",
+      "score:float:required",
+    ],
+    appDir,
+  );
+  if (numericDryRun.exitCode !== 0) {
+    throw new Error("numeric field dry-run failed");
+  }
+
   const beforeDryRun = await readTrackedModifySnapshots(appDir);
 
   console.log("[smoke:resource] pnpm exec stackforge g resource post --dry-run…");

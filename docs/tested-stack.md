@@ -4,6 +4,13 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
+## create-stackforge-app 1.5.2
+
+**Resource generator — numeric field types**
+
+- **`--field` types:** **`string`**, **`int`** (alias **`integer`**), **`float`** (alias **`number`**), **`decimal`**, all **`:required`**.
+- Field names: **`[a-z][a-z0-9_]*`** (underscores allowed, e.g. `media_impressions:int:required`).
+
 ## create-stackforge-app 1.5.1
 
 **Nest `pnpm dev` fix**
@@ -18,7 +25,7 @@ Update this file whenever template dependencies or CI Node/pnpm versions change.
 
 - From a generated project root: **`pnpm exec stackforge g resource <name>`** or **`pnpm run generate -- resource <name>`** (alias **`generate resource`**).
 - Requires **`create-stackforge-app` ^1.5.0** in the project (new scaffolds; upgrade devDependency on older projects).
-- **`--dry-run`**, **`--field name:string:required`** only; default fields for **`post`** (`title`, `content`).
+- **`--dry-run`**; default fields for **`post`** (`title`, `content`) when no **`--field`** flags.
 - **API-only** in MVP: Prisma model + Nest CRUD + `packages/contracts`; no web UI.
 - Smoke: **`pnpm run smoke:resource`** (`scripts/smoke-generate-resource.mjs`).
 

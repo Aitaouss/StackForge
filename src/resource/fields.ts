@@ -1,6 +1,8 @@
+import { normalizeFieldType } from './field-types.js';
 import type { ResourceField } from './types.js';
 
-const FIELD_PATTERN = /^([a-z][a-z0-9]*):string:required$/;
+const FIELD_PATTERN =
+  /^([a-z][a-z0-9_]*):(string|int|integer|float|number|decimal):required$/;
 
 /** Prisma model always includes these; user must not redefine them via --field. */
 const RESERVED_FIELD_NAMES = new Set(['id', 'createdAt', 'updatedAt']);
@@ -10,7 +12,7 @@ export function parseFieldDefinition(raw: string): ResourceField {
   const match = FIELD_PATTERN.exec(trimmed);
   if (!match) {
     throw new Error(
-      `Invalid --field "${raw}". MVP supports only required string fields: name:string:required`,
+      `Invalid --field "${raw}". Use name:type:required where type is string, int, float, or decimal (aliases: integer, number).`,
     );
   }
   const name = match[1];
@@ -21,7 +23,7 @@ export function parseFieldDefinition(raw: string): ResourceField {
   }
   return {
     name,
-    type: 'string',
+    type: normalizeFieldType(match[2]),
     required: true,
   };
 }

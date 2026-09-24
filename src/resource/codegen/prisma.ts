@@ -1,10 +1,13 @@
+import { prismaScalarType } from "../field-types.js";
 import type { GenerateResourceContext } from "../types.js";
 
 export function renderPrismaModelBlock(ctx: GenerateResourceContext): string {
   const { naming, fields } = ctx;
   const { pascal, table } = naming;
 
-  const scalarLines = fields.map((f) => `  ${f.name}     String`).join("\n");
+  const scalarLines = fields
+    .map((f) => `  ${f.name}     ${prismaScalarType(f.type)}`)
+    .join("\n");
 
   return `
 model ${pascal} {

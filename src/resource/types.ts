@@ -1,6 +1,6 @@
 export type ResourceField = {
   name: string;
-  type: "string";
+  type: 'string' | 'int' | 'float' | 'decimal';
   required: boolean;
 };
 

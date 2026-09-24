@@ -21,7 +21,7 @@ export function registerGenerateResourceCommand(program: Command): void {
     .option("-c, --cwd <cwd>", "project root directory", process.cwd())
     .option(
       "--field <def>",
-      "Field: name:string:required",
+      "Field: name:type:required (string|int|float|decimal)",
       (value: string, prev: string[] = []) => [...prev, value],
       [],
     )

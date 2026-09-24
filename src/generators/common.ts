@@ -11,7 +11,7 @@ import { getStackforgeVersion } from '../utils/stackforge-version.js';
 
 // New scaffolds pin create-stackforge-app for doctor/info/generate. CI smoke scripts
 // override with file:${repo} until the matching version is on npm (see smoke-link-local-cli.mjs).
-const STACKFORGE_DIAGNOSTICS_DEPENDENCY = '^1.5.0';
+const STACKFORGE_DIAGNOSTICS_DEPENDENCY = '^1.5.2';
 
 export async function generateCommonFiles(
   config: ProjectConfig,
