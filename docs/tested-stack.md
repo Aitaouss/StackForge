@@ -4,6 +4,14 @@ Versions below are what **StackForge CI** uses when smoke-generating apps. Gener
 
 Update this file whenever template dependencies or CI Node/pnpm versions change.
 
+## create-stackforge-app 1.5.1
+
+**Nest `pnpm dev` fix**
+
+- API dev no longer wipes `dist/` on every `nest start --watch` (`deleteOutDir: false`).
+- Removed TypeScript `incremental` from shared Nest tsconfig to avoid empty compiles after `dist` is cleared.
+- Root `.gitignore` includes `*.tsbuildinfo`.
+
 ## create-stackforge-app 1.5.0
 
 **Phase 4 — Resource generator (MVP)**
