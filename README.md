@@ -1,33 +1,108 @@
-# create-stackforge-app
+<div align="center">
 
-A production-ready CLI scaffolding tool that generates a full-stack application with Next.js (App Router), NestJS, Prisma, PostgreSQL/SQLite, Tailwind CSS, shadcn/ui, JWT authentication, shared API contracts (Zod), Axios, Docker, and pnpm workspaces.
+# 🚀 StackForge
 
-**Releases:** [GitHub Releases](https://github.com/Aitaouss/StackForge/releases)
+### Scaffold production-ready full-stack apps in seconds
 
-## Features
+[![npm version](https://img.shields.io/npm/v/create-stackforge-app?color=brightgreen)](https://www.npmjs.com/package/create-stackforge-app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.4+-blue)](https://www.typescriptlang.org/)
 
-- ⚡ **Next.js 14** with App Router and TypeScript
-- 🛡️ **NestJS** backend with JWT authentication
-- 📜 **Shared contracts** — Zod schemas and types in `packages/contracts` (API + web)
-- 🗄️ **Prisma** ORM with PostgreSQL or SQLite
-- 🎨 **Tailwind CSS** + **shadcn/ui** components
-- 🐳 **Docker** and docker-compose support
-- 🔍 **Prisma Studio** in Docker (PostgreSQL stacks; bound to localhost)
-- 📦 **pnpm** workspaces (`apps/*`, `packages/*`)
-- 🎛️ **Presets** — `dashboard`, `minimal`, or `api`-only
-- 🔧 **`stackforge doctor` / `stackforge info`** in generated projects
-- 🔐 Auth flow: register, login, protected users API
-- 🚀 Run with `docker compose up -d` or **`pnpm dev` from the project root**
+[Quick Start](#-quick-start) • [Features](#-features) • [Documentation](#-usage) • [Project Structure](#-generated-project-structure)
 
-**Node.js:** 18+ supported; **Node 22** is used in StackForge CI.
+<br>
 
-## Usage
+[![StackForge Demo](https://img.shields.io/badge/🎬_View_Demo-Click_Here-orange?style=for-the-badge)](https://github.com/Aitaouss/StackForge)
+
+_Click above to explore a generated project_
+
+---
+
+</div>
+
+## 📖 Overview
+
+**StackForge** is a production-ready CLI scaffolding tool that generates a modern full-stack application with industry-standard technologies. Get a complete development environment with authentication, database integration, Docker support, and beautiful UI components — all configured and ready to run.
+
+Whether you're building a SaaS platform, internal tool, or MVP, StackForge eliminates hours of boilerplate setup so you can focus on building features.
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### Frontend
+
+- ⚡ **Next.js 14** with App Router & TypeScript
+- 🎨 **Tailwind CSS** for styling
+- 🧩 **shadcn/ui** component library
+- 🔄 **Axios** for API communication
+- 📱 Responsive design out of the box
+
+</td>
+<td width="50%">
+
+### Backend
+
+- 🛡️ **NestJS** REST API with TypeScript
+- 🔐 **JWT authentication** (register/login/protected routes)
+- 🗄️ **Prisma** ORM with migrations
+- 🐘 **PostgreSQL** or 🪶 **SQLite** support
+- ✅ Production-ready architecture
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+
+### DevOps & Tooling
+
+- 🐳 **Docker** & docker-compose configuration
+- 🔍 **Prisma Studio** visual database browser (Docker + PostgreSQL)
+- 📦 **pnpm** workspaces for monorepo management
+- 🔄 Hot reload for frontend and backend
+- 🚀 One command to start everything
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer               | Technologies                                           |
+| ------------------- | ------------------------------------------------------ |
+| **Frontend**        | Next.js 14, React, TypeScript, Tailwind CSS, shadcn/ui |
+| **Backend**         | NestJS, Node.js, TypeScript, JWT                       |
+| **Database**        | Prisma ORM, PostgreSQL / SQLite                        |
+| **API Client**      | Axios                                                  |
+| **DevOps**          | Docker, docker-compose                                 |
+| **Package Manager** | pnpm (workspaces)                                      |
+
+---
+
+## 🚀 Quick Start
+
+### Create a New Project
 
 ```bash
 npx create-stackforge-app@latest
 ```
 
-### Requirements for generated projects
+You'll be prompted for:
+
+- Project name
+- Project description
+- Database choice (PostgreSQL or SQLite)
+- Docker support
+- Automatic dependency installation
+
+### Requirements for Generated Projects
 
 The generated projects use [pnpm](https://pnpm.io/) workspaces. Node.js includes [corepack](https://nodejs.org/api/corepack.html), which installs pnpm automatically. If you see a "pnpm: command not found" error, run:
 
@@ -38,119 +113,173 @@ corepack prepare pnpm@9 --activate
 
 Then `pnpm install`, `pnpm dev`, etc. will work.
 
-You will be prompted for:
+---
 
-- Project name
-- Project description
-- Database (PostgreSQL or SQLite)
-- Docker support
-- Automatic dependency installation
+## 📘 Usage
 
-### Presets
+### Interactive Mode (Default)
 
-| Preset                | What you get                                                            |
-| --------------------- | ----------------------------------------------------------------------- |
-| `dashboard` (default) | Web + API: auth, user admin, dashboard, profile/settings                |
-| `minimal`             | Web + API without dashboard profile/settings UI and related API surface |
-| `api`                 | Backend only (`apps/api`); no `apps/web`                                |
+```bash
+npx create-stackforge-app@latest
+```
 
-### Non-interactive mode
+Answer the prompts to customize your project setup.
+
+### Non-Interactive Mode
 
 Skip prompts entirely with `-y/--yes`, or pass individual flags to skip only those prompts:
 
 ```bash
-# Defaults: PostgreSQL + Docker + auto-install
+# Use all defaults: PostgreSQL + Docker + auto-install
 npx create-stackforge-app@latest my-app -y
 
-# Custom, no prompts
+# Custom configuration without prompts
 npx create-stackforge-app@latest my-app -y --database sqlite --no-docker --no-install
-
-npx create-stackforge-app@latest my-api -y --preset api
-npx create-stackforge-app@latest my-app -y --preset minimal
 ```
+
+### CLI Flags
 
 | Flag                         | Description                                |
 | ---------------------------- | ------------------------------------------ |
 | `-d, --database <type>`      | Database: `postgresql` or `sqlite`         |
-| `-p, --preset <name>`        | `dashboard` (default), `minimal`, or `api` |
 | `--docker` / `--no-docker`   | Generate or skip Docker support            |
 | `--install` / `--no-install` | Install dependencies automatically or skip |
 | `-y, --yes`                  | Skip all prompts and use defaults          |
 | `-c, --cwd <path>`           | Working directory                          |
 
-Inside a generated project:
+---
 
-```bash
-pnpm run db:setup
-pnpm dev
-pnpm run doctor
-pnpm run info
-```
-
-For PostgreSQL with generated Docker support, run `docker compose up -d postgres` before `pnpm run db:setup`. A full Docker stack uses `docker compose up --build -d` and applies existing migrations automatically.
-
-Run **`pnpm dev` from the project root** so `packages/contracts` is built and watched (do not start only a single app filter unless you have already built contracts).
-
-## Generated Project Structure
+## 🏗️ Generated Project Structure
 
 ```
 my-app/
-├── apps/
-│   ├── api/          # NestJS application
-│   └── web/          # Next.js application (not included for `--preset api`)
-├── packages/
-│   ├── contracts/    # Zod schemas + shared API types
-│   ├── eslint-config/
-│   ├── typescript-config/
-│   └── ui/           # shared UI stub
-├── stackforge.json   # StackForge project manifest (schema v2)
-├── AGENTS.md         # Architecture notes for humans and AI tools
-├── .stackforge/      # Reserved for StackForge tooling metadata
-├── docker-compose.yml
+├── backend/              # NestJS application
+│   ├── src/
+│   │   ├── auth/        # JWT authentication module
+│   │   ├── users/       # Users module with protected routes
+│   │   └── prisma/      # Prisma client service
+│   ├── prisma/
+│   │   └── schema.prisma
+│   └── package.json
+├── frontend/             # Next.js application
+│   ├── app/
+│   │   ├── login/       # Login page
+│   │   ├── register/    # Registration page
+│   │   └── users/       # Protected users page
+│   ├── components/
+│   │   └── ui/          # shadcn/ui components
+│   └── package.json
+├── docker-compose.yml    # Docker orchestration
 ├── README.md
 └── .env.example
 ```
 
-Projects created with **1.2.x** used `frontend/` + `backend/` (manifest v1). See [docs/MIGRATION-monorepo.md](./docs/MIGRATION-monorepo.md).
+---
 
-PostgreSQL + Docker: **Prisma Studio** is exposed at **http://127.0.0.1:5555** (localhost only).
+## 🎯 Featured Functionality
 
-## Development
+### 🔐 Complete Authentication Flow
 
-### Install dependencies
+- User registration with email and password
+- Secure login with JWT tokens
+- Protected API routes with guards
+- Token-based authentication in frontend
 
-Make sure pnpm is available (see [corepack](https://nodejs.org/api/corepack.html)):
+### 🗄️ Database Management
+
+- Prisma schema pre-configured with User model
+- Database migrations ready to run
+- Prisma Studio integration for visual browsing (Docker + PostgreSQL)
+- Support for PostgreSQL (production) or SQLite (development)
+
+### 🐳 Docker Integration
+
+- Multi-container setup with docker-compose
+- Separate services for frontend, backend, database, and Prisma Studio
+- Environment variables configured
+- One command to start: `docker compose up -d`
+
+### 🎨 Modern UI Components
+
+- Pre-installed shadcn/ui components
+- Tailwind CSS configured with design tokens
+- Dark mode support
+- Responsive layouts
+
+---
+
+## 💻 Local Development
+
+### For This CLI Tool (StackForge)
+
+#### Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-### Build
+#### Build
 
 ```bash
 pnpm run build
 ```
 
-### Run locally
+#### Development Scripts
+
+| Script                    | Description                       |
+| ------------------------- | --------------------------------- |
+| `pnpm run build`          | Compile TypeScript to JavaScript  |
+| `pnpm run watch`          | Watch mode for development        |
+| `pnpm run clean`          | Remove build artifacts            |
+| `pnpm run prepublishOnly` | Clean and build before publishing |
+
+#### Run Locally
 
 ```bash
 node ./bin/create-stackforge-app.js
 ```
 
-### Smoke-test generated apps (maintainers)
+---
 
-After changing templates or the CLI:
+## 📦 What Gets Generated
 
-```bash
-pnpm run smoke              # SQLite + PostgreSQL generate smoke
-pnpm run smoke:sqlite       # SQLite (dashboard preset)
-pnpm run smoke:postgresql   # PostgreSQL (dashboard preset)
-pnpm run smoke:presets      # SQLite: dashboard, minimal, api
-pnpm run smoke:docker       # Docker build + API health + Prisma Studio query
-```
+After running StackForge, you'll have:
 
-See [Phases-stack-forge.md](./Phases-stack-forge.md), [docs/file-ownership.md](./docs/file-ownership.md), and [docs/tested-stack.md](./docs/tested-stack.md).
+✅ Fully configured Next.js frontend with App Router  
+✅ NestJS backend with authentication endpoints  
+✅ Database integration with Prisma ORM  
+✅ JWT authentication working end-to-end  
+✅ Docker setup (if selected)  
+✅ Prisma Studio service (Docker + PostgreSQL)  
+✅ Example protected routes and pages  
+✅ Beautiful UI with shadcn/ui components  
+✅ TypeScript configured across the stack  
+✅ Development and production scripts
 
-## License
+---
 
-MIT
+## 🌐 Connect
+
+<div align="center">
+
+[![GitHub](https://img.shields.io/badge/GitHub-Aitaouss-181717?style=flat&logo=github)](https://github.com/Aitaouss)
+[![Repository](https://img.shields.io/badge/Repository-StackForge-blue?style=flat&logo=github)](https://github.com/Aitaouss/StackForge)
+[![npm](https://img.shields.io/badge/npm-create--stackforge--app-CB3837?style=flat&logo=npm)](https://www.npmjs.com/package/create-stackforge-app)
+
+</div>
+
+---
+
+## 📄 License
+
+MIT © StackForge
+
+---
+
+<div align="center">
+
+**[⬆ back to top](#-stackforge)**
+
+Made with ❤️ by the StackForge team
+
+</div>
