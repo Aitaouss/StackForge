@@ -34,7 +34,7 @@ export async function generateWeb(config: ProjectConfig): Promise<void> {
     { template: 'next.config.js.ejs', output: path.join(webRoot, 'next.config.js') },
     { template: 'next-env.d.ts.ejs', output: path.join(webRoot, 'next-env.d.ts') },
     { template: 'tailwind.config.ts.ejs', output: path.join(webRoot, 'tailwind.config.ts') },
-    { template: 'postcss.config.js.ejs', output: path.join(webRoot, 'postcss.config.js') },
+    { template: 'postcss.config.ts.ejs', output: path.join(webRoot, 'postcss.config.ts') },
     { template: 'components.json.ejs', output: path.join(webRoot, 'components.json') },
     { template: '.env.local.ejs', output: path.join(webRoot, '.env.local') },
     { template: '.env.local.example.ejs', output: path.join(webRoot, '.env.local.example') },

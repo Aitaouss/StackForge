@@ -37,7 +37,7 @@ Whether you're building a SaaS platform, internal tool, or MVP, StackForge elimi
 
 ### Frontend
 
-- ⚡ **Next.js 14** with App Router & TypeScript
+- ⚡ **Next.js 16** with App Router & TypeScript
 - 🎨 **Tailwind CSS** for styling
 - 🧩 **shadcn/ui** component library
 - 🔄 **Axios** for API communication
@@ -77,7 +77,7 @@ Whether you're building a SaaS platform, internal tool, or MVP, StackForge elimi
 
 | Layer               | Technologies                                           |
 | ------------------- | ------------------------------------------------------ |
-| **Frontend**        | Next.js 14, React, TypeScript, Tailwind CSS, shadcn/ui |
+| **Frontend**        | Next.js 16, React 19, TypeScript, Tailwind CSS, shadcn/ui |
 | **Backend**         | NestJS, Node.js, TypeScript, JWT                       |
 | **Database**        | Prisma ORM, PostgreSQL / SQLite                        |
 | **API Client**      | Axios                                                  |
