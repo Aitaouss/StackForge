@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,21 +22,9 @@ type Props = {
 export function UserAdminPanel({ mode, user, onClose }: Props) {
   const createMutation = useCreateUserMutation();
   const updateMutation = useUpdateUserMutation();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(mode === 'edit' && user ? user.name : '');
+  const [email, setEmail] = useState(mode === 'edit' && user ? user.email : '');
   const [password, setPassword] = useState('');
-
-  useEffect(() => {
-    if (mode === 'edit' && user) {
-      setName(user.name);
-      setEmail(user.email);
-      setPassword('');
-    } else {
-      setName('');
-      setEmail('');
-      setPassword('');
-    }
-  }, [mode, user]);
 
   const pending = createMutation.isPending || updateMutation.isPending;
 

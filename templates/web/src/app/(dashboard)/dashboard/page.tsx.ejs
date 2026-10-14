@@ -164,6 +164,7 @@ export default function DashboardPage() {
 
       {panel.mode !== 'closed' && (
         <UserAdminPanel
+          key={panel.mode === 'edit' ? panel.user.id : 'create'}
           mode={panel.mode}
           user={panel.mode === 'edit' ? panel.user : undefined}
           onClose={() => setPanel({ mode: 'closed' })}
