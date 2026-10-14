@@ -1,4 +1,3 @@
-import fs from 'fs-extra';
 import path from 'path';
 import { ProjectConfig } from '../types/index.js';
 import {
@@ -31,16 +30,17 @@ export async function generateWeb(config: ProjectConfig): Promise<void> {
   const files: { template: string; output: string }[] = [
     { template: 'package.json.ejs', output: path.join(webRoot, 'package.json') },
     { template: 'tsconfig.json.ejs', output: path.join(webRoot, 'tsconfig.json') },
-    { template: 'next.config.js.ejs', output: path.join(webRoot, 'next.config.js') },
+    { template: 'next.config.mjs.ejs', output: path.join(webRoot, 'next.config.mjs') },
     { template: 'next-env.d.ts.ejs', output: path.join(webRoot, 'next-env.d.ts') },
+    { template: 'eslint.config.mjs.ejs', output: path.join(webRoot, 'eslint.config.mjs') },
     { template: 'tailwind.config.ts.ejs', output: path.join(webRoot, 'tailwind.config.ts') },
     { template: 'postcss.config.ts.ejs', output: path.join(webRoot, 'postcss.config.ts') },
     { template: 'components.json.ejs', output: path.join(webRoot, 'components.json') },
     { template: '.env.local.ejs', output: path.join(webRoot, '.env.local') },
     { template: '.env.local.example.ejs', output: path.join(webRoot, '.env.local.example') },
     {
-      template: 'src/middleware.ts.ejs',
-      output: path.join(webRoot, 'src', 'middleware.ts'),
+      template: 'src/proxy.ts.ejs',
+      output: path.join(webRoot, 'src', 'proxy.ts'),
     },
     {
       template: 'src/app/globals.css.ejs',
@@ -225,11 +225,6 @@ export async function generateWeb(config: ProjectConfig): Promise<void> {
       data,
     });
   }
-
-  await fs.copy(
-    path.join(templateDir, '.eslintrc.json'),
-    path.join(webRoot, '.eslintrc.json'),
-  );
 }
 
 /** @deprecated use generateWeb */
